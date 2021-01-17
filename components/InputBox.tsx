@@ -8,9 +8,10 @@ interface Props {
     headerText: string,
     saveText?: string,
     headerActionContent?: React.ReactNode;
-    cancelFunction?: () => void
-    deleteFunction?: () => void
-    saveFunction: () => void
+    cancelFunction?: () => void;
+    deleteFunction?: () => void;
+    saveFunction: () => void;
+    'data-cy'?: string;
 }
 export const InputBox: React.FC<Props> = (props) => {
     var saveText = 'Save';
@@ -22,12 +23,12 @@ export const InputBox: React.FC<Props> = (props) => {
 
     var buttons = [];
     if (props.cancelFunction !== undefined) buttons.push(<Col key="cancel"><Button variant="warning" block onClick={handleCancel} >Cancel</Button></Col >);
-    if (props.deleteFunction !== undefined) buttons.push(<Col key="delete"><Button variant="danger" block onClick={handleDelete} >Delete</Button></Col>);
-    if (props.saveFunction !== undefined) buttons.push(<Col key="save"><Button variant="success" block onClick={handleSave}>{saveText}</Button></Col>);
+    if (props.deleteFunction !== undefined) buttons.push(<Col key="delete"><Button id="delete" data-cy="delete-button" variant="danger" block onClick={handleDelete} >Delete</Button></Col>);
+    if (props.saveFunction !== undefined) buttons.push(<Col key="save"><Button variant="success" data-cy="save-button" block onClick={handleSave}>{saveText}</Button></Col>);
 
     return (
-        <div id={props.id} className="inputBox">
-            <div className="header">
+        <div id={props.id} className="inputBox" data-cy={props['data-cy']}>
+            <div className="header" data-cy="header">
                 <Row>
                     <Col xs={8}><i className={props.headerIcon}></i> {props.headerText}</Col>
                     <Col xs={4} style={{ textAlign: 'right' }} >{props.headerActionContent}</Col>
