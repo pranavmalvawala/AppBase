@@ -6,7 +6,7 @@ import { ApiHelper, UserHelper } from "../helpers";
 import { Button, FormControl, Alert } from "react-bootstrap";
 import { useLocation } from "react-router-dom";
 
-interface Props { accessApi?: string, context: UserContextInterface, jwt: string, auth: string, defaultApi: string }
+interface Props { accessApi?: string, context: UserContextInterface, jwt: string, auth: string, defaultApi: string, successCallback?: () => void }
 
 export const LoginPage: React.FC<Props> = (props) => {
     const [welcomeBackName, setWelcomeBackName] = React.useState("");
@@ -14,12 +14,6 @@ export const LoginPage: React.FC<Props> = (props) => {
     const [password, setPassword] = React.useState("");
     const [errors, setErrors] = React.useState([]);
     const [loading, setLoading] = React.useState(false);
-
-    let { from } = (useLocation().state as any) || {
-        from: {
-            pathname: "/",
-        },
-    };
 
     const handleKeyDown = (e: React.KeyboardEvent<any>) => {
         if (e.key === "Enter") {
@@ -67,6 +61,7 @@ export const LoginPage: React.FC<Props> = (props) => {
 
             resp.churches.forEach((c) => {
                 var add = false;
+                console.log(c);
                 c.apis.forEach((api) => {
                     if (api.keyName === props.defaultApi) {
                         add = true;
@@ -77,7 +72,6 @@ export const LoginPage: React.FC<Props> = (props) => {
             });
 
             console.log(UserHelper.churches.length);
-
             if (UserHelper.churches.length > 0) {
                 document.cookie = "jwt=" + jwt;
                 document.cookie = "name=" + resp.user.displayName;
@@ -110,7 +104,10 @@ export const LoginPage: React.FC<Props> = (props) => {
     };
 
     const selectChurch = async () => {
-        await UserHelper.selectChurch(UserHelper.churches[0].id, props.context);
+        console.log("selectChurch");
+        await UserHelper.selectChurch(UserHelper.churches[0].id, props.context, props.defaultApi);
+        if (props.successCallback !== undefined) props.successCallback();
+        else props.context.setUserName(UserHelper.currentChurch.id.toString());
     };
 
     const getWelcomeBack = () => {
