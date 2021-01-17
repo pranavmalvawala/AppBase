@@ -2,6 +2,7 @@ export interface ApiInterface { name: string, keyName?: string, permissions: Rol
 export interface ApplicationInterface { name: string, keyName?: string, permissions: RolePermissionInterface[] }
 export interface ChurchAppInterface { id?: number, churchId?: number, appName?: string }
 export interface ChurchInterface { id?: number, name: string, registrationDate?: Date, apis?: ApiInterface[], apps?: ApplicationInterface[], address1?: string, address2?: string, city?: string, state?: string, zip?: string, country?: string, subDomain?: string }
+export interface ForgotResponse { emailed: boolean }
 export interface LoadCreateUserRequestInterface { userEmail: string, fromEmail?: string, subject?: string, body?: string, userName: string }
 export interface LoginResponseInterface { user: UserInterface, churches: ChurchInterface[], errors: string[] }
 export interface PermissionInterface { apiName?: string, section?: string, action?: string, displaySection?: string, displayAction?: string }
