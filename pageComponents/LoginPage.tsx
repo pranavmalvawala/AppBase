@@ -6,7 +6,7 @@ import { ApiHelper, UserHelper } from "../helpers";
 import { Button, FormControl, Alert } from "react-bootstrap";
 import { useLocation } from "react-router-dom";
 
-interface Props { accessApi?: string, context: UserContextInterface, jwt: string, auth: string }
+interface Props { accessApi?: string, context: UserContextInterface, jwt: string, auth: string, defaultApi: string }
 
 export const LoginPage: React.FC<Props> = (props) => {
     const [welcomeBackName, setWelcomeBackName] = React.useState("");
@@ -68,7 +68,7 @@ export const LoginPage: React.FC<Props> = (props) => {
             resp.churches.forEach((c) => {
                 var add = false;
                 c.apis.forEach((api) => {
-                    if (api.keyName === "AccessApi") {
+                    if (api.keyName === props.defaultApi) {
                         add = true;
                         if (jwt === "") jwt = api.jwt;
                     }
