@@ -1,0 +1,1 @@
+export interface ApiConfig { keyName: string, url: string, jwt: string }

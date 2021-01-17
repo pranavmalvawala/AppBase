@@ -9,23 +9,13 @@ export class UserHelper {
     static currentPermissions: RolePermissionInterface[];
     static churchChanged: boolean = false;
 
-    static selectChurch = async (churchId: number, context: UserContextInterface, apiName: string) => {
-        console.log(apiName);
+    static selectChurch = async (churchId: number, context: UserContextInterface) => {
         var church = null;
         UserHelper.churches.forEach(c => { if (c.id === churchId) church = c; });
         if (church === null) window.location.reload();
         else {
             UserHelper.currentChurch = church;
-            UserHelper.currentChurch.apis.forEach(api => {
-                if (api.keyName === apiName) {
-                    UserHelper.currentPermissions = api.permissions;
-                    ApiHelper.jwt = api.jwt
-                }
-            });
-
-            console.log(UserHelper.currentChurch.name);
-            console.log(UserHelper.currentChurch.id.toString());
-
+            UserHelper.currentChurch.apis.forEach(api => { ApiHelper.setJwt(api.keyName, api.jwt); });
             if (context.churchName !== "") UserHelper.churchChanged = true;
             context.setChurchName(UserHelper.currentChurch.name);
         }
