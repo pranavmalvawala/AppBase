@@ -5,9 +5,8 @@ import { ErrorMessages, } from "../components";
 import { ResetPasswordRequestInterface, ResetPasswordResponseInterface } from '../interfaces';
 import { Button } from 'react-bootstrap';
 
-interface Props { accessApi?: string }
 
-export const ForgotPage: React.FC<Props> = (props) => {
+export const ForgotPage: React.FC = () => {
     const [email, setEmail] = React.useState('');
     const [errors, setErrors] = React.useState([]);
     const [successMessage, setSuccessMessage] = React.useState<React.ReactElement>(null);
@@ -35,7 +34,7 @@ export const ForgotPage: React.FC<Props> = (props) => {
             body: "Please click here to reset your password: <a href=\"" + resetUrl + "\">" + resetUrl + "</a>"
         };
 
-        ApiHelper.apiPostAnonymous(props.accessApi + '/users/forgot', req).then((resp: ResetPasswordResponseInterface) => {
+        ApiHelper.postAnonymous('/users/forgot', req).then((resp: ResetPasswordResponseInterface) => {
             if (resp.emailed) {
                 setErrors([]);
                 setSuccessMessage(<div className="alert alert-success" role="alert">Password reset email sent</div>);

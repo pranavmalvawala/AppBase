@@ -4,9 +4,8 @@ import { ErrorMessages } from "../components";
 import { LoginResponseInterface, UserContextInterface } from "../interfaces";
 import { ApiHelper, UserHelper } from "../helpers";
 import { Button, FormControl, Alert } from "react-bootstrap";
-import { useLocation } from "react-router-dom";
 
-interface Props { accessApi?: string, context: UserContextInterface, jwt: string, auth: string, defaultApi: string, successCallback?: () => void }
+interface Props { accessApi?: string, context: UserContextInterface, jwt: string, auth: string, successCallback?: () => void }
 
 export const LoginPage: React.FC<Props> = (props) => {
     const [welcomeBackName, setWelcomeBackName] = React.useState("");
@@ -41,10 +40,7 @@ export const LoginPage: React.FC<Props> = (props) => {
     };
 
     const init = () => {
-
-        if (props.auth != "") {
-            login({ authGuid: props.auth });
-        }
+        if (props.auth !== "") login({ authGuid: props.auth });
 
         if (props.jwt !== "") {
             setEmail(getCookieValue("email"));
@@ -56,31 +52,22 @@ export const LoginPage: React.FC<Props> = (props) => {
 
     const handleLoginSuccess = (resp: LoginResponseInterface) => {
         if (Object.keys(resp).length !== 0) {
-            var jwt = "";
             UserHelper.churches = [];
 
             resp.churches.forEach((c) => {
                 var add = false;
                 console.log(c);
                 c.apis.forEach((api) => {
-                    if (api.keyName === props.defaultApi) {
-                        add = true;
-                        if (jwt === "") jwt = api.jwt;
-                    }
+                    if (api.keyName === ApiHelper.defaultApi) { add = true; }
                 });
                 if (add) UserHelper.churches.push(c);
             });
-
-            console.log(UserHelper.churches.length);
             if (UserHelper.churches.length > 0) {
-                document.cookie = "jwt=" + jwt;
                 document.cookie = "name=" + resp.user.displayName;
                 document.cookie = "email=" + resp.user.email;
-                ApiHelper.jwt = jwt;
                 UserHelper.user = resp.user;
                 selectChurch();
             }
-
         }
     }
 
@@ -94,7 +81,7 @@ export const LoginPage: React.FC<Props> = (props) => {
 
     const login = (data: any) => {
         setLoading(true);
-        ApiHelper.apiPostAnonymous(props.accessApi + "/users/login", data)
+        ApiHelper.postAnonymous("/users/login", data, "AccessApi")
             .then((resp: LoginResponseInterface) => {
                 if (resp.errors !== undefined) handleLoginErrors(resp.errors);
 
@@ -104,8 +91,7 @@ export const LoginPage: React.FC<Props> = (props) => {
     };
 
     const selectChurch = async () => {
-        console.log("selectChurch");
-        await UserHelper.selectChurch(UserHelper.churches[0].id, props.context, props.defaultApi);
+        await UserHelper.selectChurch(UserHelper.churches[0].id, props.context);
         if (props.successCallback !== undefined) props.successCallback();
         else props.context.setUserName(UserHelper.currentChurch.id.toString());
     };

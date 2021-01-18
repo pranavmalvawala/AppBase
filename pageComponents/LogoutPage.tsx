@@ -9,8 +9,7 @@ export const LogoutPage: React.FC<Props> = (props) => {
     document.cookie = "jwt=";
     document.cookie = "email=";
     document.cookie = "name=";
-    console.log(document.cookie);
-    ApiHelper.jwt = '';
+    ApiHelper.clearJwts();
     props.context.setUserName('');
     setTimeout(() => { window.location.href = '/'; }, 300);
     return <></>;
