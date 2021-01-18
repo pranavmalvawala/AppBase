@@ -56,10 +56,7 @@ export const LoginPage: React.FC<Props> = (props) => {
 
             resp.churches.forEach((c) => {
                 var add = false;
-                console.log(c);
-                c.apis.forEach((api) => {
-                    if (api.keyName === ApiHelper.defaultApi) { add = true; }
-                });
+                c.apis.forEach((api) => { if (api.keyName === ApiHelper.defaultApi) { add = true; } });
                 if (add) UserHelper.churches.push(c);
             });
             if (UserHelper.churches.length > 0) {
@@ -67,13 +64,15 @@ export const LoginPage: React.FC<Props> = (props) => {
                 document.cookie = "email=" + resp.user.email;
                 UserHelper.user = resp.user;
                 selectChurch();
+            } else {
+                handleLoginErrors(["No permissions"]);
             }
         }
     }
 
     const handleLoginErrors = (errors: string[]) => {
         setWelcomeBackName("");
-        if (errors[0] === "No permissions") setErrors(["This login does not have access to AccessApi."]);
+        if (errors[0] === "No permissions") setErrors(["The provided login does not have access to this application."]);
         else setErrors(["Invalid login. Please check your email or password."]);
         setLoading(false);
     }
