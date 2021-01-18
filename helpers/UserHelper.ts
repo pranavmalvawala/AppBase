@@ -15,7 +15,10 @@ export class UserHelper {
         if (church === null) window.location.reload();
         else {
             UserHelper.currentChurch = church;
-            UserHelper.currentChurch.apis.forEach(api => { ApiHelper.setJwt(api.keyName, api.jwt); });
+            UserHelper.currentChurch.apis.forEach(api => {
+                ApiHelper.setJwt(api.keyName, api.jwt);
+                if (api.keyName === ApiHelper.defaultApi) UserHelper.currentPermissions = api.permissions;
+            });
             if (context.churchName !== "") UserHelper.churchChanged = true;
             context.setChurchName(UserHelper.currentChurch.name);
         }
