@@ -1,4 +1,4 @@
-import { ApiConfig } from "../interfaces";
+import { ApiConfig, RolePermissionInterface } from "../interfaces";
 
 export class ApiHelper {
 
@@ -8,19 +8,24 @@ export class ApiHelper {
 
     static getConfig(keyName: string) {
         if (keyName === undefined) keyName = this.defaultApi;
-        var result: ApiConfig = null;
+        var result: ApiConfig;
         this.apiConfigs.forEach(config => { if (config.keyName === keyName) result = config });
-        if (result === null) throw new Error("Unconfigured API: " + keyName);
+        //if (result === null) throw new Error("Unconfigured API: " + keyName);
         return result;
     }
 
-    static setJwt(keyName: string, jwt: string) {
-        this.apiConfigs.forEach(config => { if (config.keyName === keyName) config.jwt = jwt; });
+    static setPermissions(keyName: string, jwt: string, permissions: RolePermissionInterface[]) {
+        this.apiConfigs.forEach(config => {
+            if (config.keyName === keyName) {
+                config.jwt = jwt;
+                config.permisssions = permissions;
+            }
+        });
         this.isAuthenticated = true;
     }
 
-    static clearJwts() {
-        this.apiConfigs.forEach(config => { config.jwt = ""; });
+    static clearPermissions() {
+        this.apiConfigs.forEach(config => { config.jwt = ""; config.permisssions = []; });
         this.isAuthenticated = false;
     }
 

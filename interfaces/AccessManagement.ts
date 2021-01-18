@@ -15,3 +15,5 @@ export interface ResetPasswordResponseInterface { emailed: boolean }
 export interface SwitchAppRequestInterface { appName: string, churchId: number }
 export interface SwitchAppResponseInterface { appName: string, churchId: number }
 export interface UserInterface { id?: number, email?: string, authGuid?: string, displayName?: string, registrationDate?: Date, lastLogin?: Date, password?: string }
+
+export interface ApiConfig { keyName: string, url: string, jwt: string, permisssions: RolePermissionInterface[] }
