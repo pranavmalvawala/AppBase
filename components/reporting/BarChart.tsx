@@ -9,16 +9,10 @@ export const BarChart = (props: Props) => {
     var rows: any = [];
 
     const getChartData = () => {
-        console.log("REPORT");
-        console.log(props.report);
         rows = [];
         rows.push(getHeader());
-        console.log("HEADER");
-        console.log(rows[0]);
-
-        ReportHelper.getRows(props.report.data, props.report.headings).forEach(r => rows.push(r));
-
-        console.log("CHARTDATA");
+        ReportHelper.getRows(props.report.data, props.report.headings, props.report.groupings).forEach(r => rows.push(r));
+        console.log("ROWS");
         console.log(rows);
         return rows;
     }
@@ -31,8 +25,10 @@ export const BarChart = (props: Props) => {
     */
     const getHeader = () => {
         const headings = props.report.headings;
-        if (headings.length == 2) return [headings[0].name, headings[1].name];     //A simple Grouping/Value bar chart
+        const groupings = props.report.groupings;
+        if (groupings.length < 2) return [headings[0].name, headings[headings.length - 1].name];
         else {
+            //Untested code
             const result = [headings[0].name];
             const groupValues: string[] = [];
             const groupField = headings[1].field;
