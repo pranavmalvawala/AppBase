@@ -12,8 +12,6 @@ export const BarChart = (props: Props) => {
         rows = [];
         rows.push(getHeader());
         ReportHelper.getRows(props.report.data, props.report.headings, props.report.groupings).forEach(r => rows.push(r));
-        console.log("ROWS");
-        console.log(rows);
         return rows;
     }
 
@@ -45,17 +43,20 @@ export const BarChart = (props: Props) => {
         }
     }
 
-    var result = <></>
-
-    switch (props.report.reportType) {
-        case "Area Chart":
-            result = (<Chart chartType="AreaChart" data={getChartData()} width="100%" height="400px" options={{ height: 400, legend: { position: 'top', maxLines: 3 }, bar: { groupWidth: '75%' }, isStacked: true }} />);
-            break;
-        default:
-            result = (<Chart chartType="ColumnChart" data={getChartData()} width="100%" height="400px" options={{ height: 400, legend: { position: 'top', maxLines: 3 }, bar: { groupWidth: '75%' }, isStacked: true }} />);
-            break;
+    const chartData = getChartData();
+    if (chartData.length < 2) return (<>No results</>);
+    else {
+        var result = <></>
+        switch (props.report.reportType) {
+            case "Area Chart":
+                result = (<Chart chartType="AreaChart" data={getChartData()} width="100%" height="400px" options={{ height: 400, legend: { position: 'top', maxLines: 3 }, bar: { groupWidth: '75%' }, isStacked: true }} />);
+                break;
+            default:
+                result = (<Chart chartType="ColumnChart" data={getChartData()} width="100%" height="400px" options={{ height: 400, legend: { position: 'top', maxLines: 3 }, bar: { groupWidth: '75%' }, isStacked: true }} />);
+                break;
+        }
+        return result;
     }
-    return result;
 
 
 }

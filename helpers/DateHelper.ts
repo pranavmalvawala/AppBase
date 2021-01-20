@@ -1,6 +1,12 @@
 import { format as dateFormat } from 'date-fns'
 
 export class DateHelper {
+
+    static addDays(date: Date, days: number) {
+        date.setDate(date.getDate() + days);
+        return date;
+    }
+
     static formatDate(date: Date, format: string) {
         try {
             var cleanDate = new Date(new Date(date).toISOString().split('T')[0]); //truncate the time

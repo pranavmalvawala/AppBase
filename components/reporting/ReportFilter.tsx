@@ -4,19 +4,14 @@ import { InputBox } from '../InputBox';
 import { DateHelper } from "../../helpers";
 import { FormControl, FormGroup, FormLabel } from 'react-bootstrap';
 
-//updateFunction: (values: ReportValueInterface[]) => void
 
-interface Props { filter: ReportFilterInterface }
+
+interface Props { filter: ReportFilterInterface, updateFunction: (filter: ReportFilterInterface) => void }
 
 export const ReportFilter = (props: Props) => {
-
-
-    const handleUpdate = useCallback(() => {
-        //props.updateFunction(report?.values); 
-    }, [props])
-    /*
+    const [filter, setFilter] = React.useState<ReportFilterInterface>(null);
+    const handleUpdate = useCallback(() => { props.updateFunction(filter); }, [props])
     const handleKeyDown = (e: React.KeyboardEvent<any>) => { if (e.key === 'Enter') { e.preventDefault(); handleUpdate(); } }
-
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.preventDefault();
@@ -24,18 +19,17 @@ export const ReportFilter = (props: Props) => {
     }
 
     const setValue = (key: string, value: any) => {
-        const _report = { ...report };
-        _report.values.forEach(v => { if (v.key === key) v.value = value });
-        setReport(_report);
+        const _filter = { ...filter };
+        _filter.fields.forEach(f => { if (f.keyName === key) f.value = value });
+        setFilter(_filter);
     }
-*/
 
     const getControl = (field: ReportFilterFieldInterface) => {
-        // onChange={handleChange} onKeyDown={handleKeyDown} 
+        // 
         var result = null;
         switch (field.dataType) {
             case "date":
-                result = <FormControl type="date" data-cy="select-date" name={field.keyName} value={DateHelper.formatHtml5Date(field.value)} />;
+                result = <FormControl type="date" data-cy="select-date" name={field.keyName} value={DateHelper.formatHtml5Date(field.value)} onChange={handleChange} onKeyDown={handleKeyDown} />;
                 break;
         }
         return result;
@@ -52,8 +46,10 @@ export const ReportFilter = (props: Props) => {
         return result;
     }
 
+    React.useEffect(() => { setFilter(props.filter) }, [props.filter]);
 
-    return (
+    if (props.filter === null) return null;
+    else return (
         <InputBox headerIcon="far fa-chart-bar" data-cy="filter-box" headerText="Filter Report" saveFunction={handleUpdate} saveText="Update" id={"filterBox-" + props.filter.keyName}  >
             {getFields()}
         </InputBox>
