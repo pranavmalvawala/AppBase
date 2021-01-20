@@ -18,15 +18,13 @@ export const BarChart = (props: Props) => {
     }
 
     /*
-    There are two options:
-      #1 There are only two headings provided.  This is a simple Grouping/Value report.
-      #2 Three headings are provided.  In this case, the middle heading is a grouping and will be broken out into several columns on the report, replacing the third Value heading.
+    When multiple grouping fields are provided, the second heading is a grouping and will be broken out into several columns on the report, replacing the third Value heading.
          Example: Input headings of ["Week", "Fund", "Amount"] could result in ["Week", "General Fund", "Van Fund", "Roof Fund"].
     */
     const getHeader = () => {
         const headings = props.report.headings;
         const groupings = props.report.groupings;
-        if (groupings.length < 2) return [headings[0].name, headings[headings.length - 1].name];
+        if (groupings.length < 2) return [headings[0].name, headings[headings.length - 1].name];    //Single grouping
         else {
             //Untested code
             const result = [headings[0].name];
