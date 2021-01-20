@@ -8,9 +8,11 @@ export class UserHelper {
     static user: UserInterface;
     static churchChanged: boolean = false;
 
-    static selectChurch = async (churchId: number, context: UserContextInterface) => {
+    static selectChurch = async (context: UserContextInterface, churchId?: number,) => {
         var church = null;
-        UserHelper.churches.forEach(c => { if (c.id === churchId) church = c; });
+        const keyName = window.location.hostname.split('.')[0];
+        if (!churchId) UserHelper.churches.forEach(c => { if (c.subDomain === keyName) church = c; });
+        else UserHelper.churches.forEach(c => { if (c.id === churchId) church = c; });
         if (church === null) window.location.reload();
         else {
             UserHelper.currentChurch = church;

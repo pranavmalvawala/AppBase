@@ -90,7 +90,7 @@ export const LoginPage: React.FC<Props> = (props) => {
     };
 
     const selectChurch = async () => {
-        await UserHelper.selectChurch(UserHelper.churches[0].id, props.context);
+        await UserHelper.selectChurch(props.context);
         if (props.successCallback !== undefined) props.successCallback();
         else props.context.setUserName(UserHelper.currentChurch.id.toString());
     };
