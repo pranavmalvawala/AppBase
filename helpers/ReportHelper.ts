@@ -1,6 +1,5 @@
-import { ArrayHelper } from "../../helpers";
+import { ArrayHelper } from "./ArrayHelper";
 import { ReportHeadingInterface } from "../interfaces/ReportInterfaces";
-
 
 export class ReportHelper {
 
