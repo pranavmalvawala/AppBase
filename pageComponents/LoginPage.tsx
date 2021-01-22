@@ -4,16 +4,16 @@ import { ErrorMessages } from "../components";
 import { LoginResponseInterface, UserContextInterface } from "../interfaces";
 import { ApiHelper, UserHelper } from "../helpers";
 import { Button, FormControl, Alert } from "react-bootstrap";
-
+import { useParams } from "react-router-dom";
 interface Props { accessApi?: string, context: UserContextInterface, jwt: string, auth: string, successCallback?: () => void }
-
+interface pathParams { token: string }
 export const LoginPage: React.FC<Props> = (props) => {
     const [welcomeBackName, setWelcomeBackName] = React.useState("");
     const [email, setEmail] = React.useState("");
     const [password, setPassword] = React.useState("");
     const [errors, setErrors] = React.useState([]);
     const [loading, setLoading] = React.useState(false);
-
+    const { token } = useParams<pathParams>();
     const handleKeyDown = (e: React.KeyboardEvent<any>) => {
         if (e.key === "Enter") {
             e.preventDefault();
@@ -40,15 +40,14 @@ export const LoginPage: React.FC<Props> = (props) => {
     };
 
     const init = () => {
+        if (token !== undefined) { login({ jwt: token }); }
         if (props.auth !== "") login({ authGuid: props.auth });
-
         if (props.jwt !== "") {
             setEmail(getCookieValue("email"));
             setWelcomeBackName(getCookieValue("name"));
             login({ jwt: props.jwt });
         }
     };
-
 
     const handleLoginSuccess = (resp: LoginResponseInterface) => {
         if (Object.keys(resp).length !== 0) {
@@ -59,6 +58,7 @@ export const LoginPage: React.FC<Props> = (props) => {
                 c.apis.forEach((api) => { if (api.keyName === ApiHelper.defaultApi) { add = true; } });
                 if (add) UserHelper.churches.push(c);
             });
+
             if (UserHelper.churches.length > 0) {
                 document.cookie = "name=" + resp.user.displayName;
                 document.cookie = "email=" + resp.user.email;
@@ -77,7 +77,6 @@ export const LoginPage: React.FC<Props> = (props) => {
         setLoading(false);
     }
 
-
     const login = (data: any) => {
         setLoading(true);
         ApiHelper.postAnonymous("/users/login", data, "AccessApi")
@@ -90,7 +89,7 @@ export const LoginPage: React.FC<Props> = (props) => {
     };
 
     const selectChurch = async () => {
-        await UserHelper.selectChurch(UserHelper.churches[0].id, props.context);
+        await UserHelper.selectChurch(props.context);
         if (props.successCallback !== undefined) props.successCallback();
         else props.context.setUserName(UserHelper.currentChurch.id.toString());
     };
