@@ -1,9 +1,8 @@
 import React, { useCallback } from 'react';
-import { ReportFilterFieldInterface, ReportFilterInterface, ReportInterface } from '../../interfaces/ReportInterfaces';
+import { ReportFilterFieldInterface, ReportFilterInterface, ReportFilterOptionInterface, ReportInterface } from '../../interfaces/ReportInterfaces';
 import { InputBox } from '../InputBox';
 import { DateHelper } from "../../helpers";
 import { FormControl, FormGroup, FormLabel } from 'react-bootstrap';
-
 
 
 interface Props { filter: ReportFilterInterface, updateFunction: (filter: ReportFilterInterface) => void }
@@ -24,6 +23,13 @@ export const ReportFilter = (props: Props) => {
         setFilter(_filter);
     }
 
+
+    const getOptions = (data: ReportFilterOptionInterface[]) => {
+        var result: JSX.Element[] = [];
+        data?.forEach(d => { result.push(<option key={d.keyName} value={d.value}>{d.label}</option>) });
+        return result;
+    }
+
     const getControl = (field: ReportFilterFieldInterface) => {
         // 
         var result = null;
@@ -31,6 +37,10 @@ export const ReportFilter = (props: Props) => {
             case "date":
                 result = <FormControl type="date" data-cy="select-date" name={field.keyName} value={DateHelper.formatHtml5Date(field.value)} onChange={handleChange} onKeyDown={handleKeyDown} />;
                 break;
+            case "list":
+                result = (<FormControl as="select" data-cy="select-campus" name={field.keyName} onChange={handleChange} onKeyDown={handleKeyDown} >{getOptions(field.options())}</FormControl>);
+                break;
+
         }
         return result;
     }
