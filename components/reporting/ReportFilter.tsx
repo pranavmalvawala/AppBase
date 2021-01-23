@@ -9,7 +9,7 @@ interface Props { filter: ReportFilterInterface, updateFunction: (filter: Report
 
 export const ReportFilter = (props: Props) => {
     const [filter, setFilter] = React.useState<ReportFilterInterface>(null);
-    const handleUpdate = useCallback(() => { props.updateFunction(filter); }, [props])
+    const handleUpdate = () => { props.updateFunction(filter); }
     const handleKeyDown = (e: React.KeyboardEvent<any>) => { if (e.key === 'Enter') { e.preventDefault(); handleUpdate(); } }
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
