@@ -21,10 +21,21 @@ export class ArrayHelper {
 
     static getUniqueValues(array: any[], propertyName: string) {
         const result: any[] = [];
+
         for (const item of array) {
-            const val = item[propertyName]
+            const val = (propertyName.indexOf(".") === -1) ? item[propertyName] : this.getDeepValue(item, propertyName)
             if (result.indexOf(val) === -1) result.push(val);
         }
         return result;
     }
+
+    static getDeepValue(item: any, propertyName: string) {
+        const propertyNames = propertyName.split(".");
+        var result: any = item;
+        propertyNames.forEach(name => {
+            result = result[name];
+        });
+        return result;
+    }
+
 }
