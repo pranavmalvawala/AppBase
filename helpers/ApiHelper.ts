@@ -1,10 +1,11 @@
-import { ApiConfig, RolePermissionInterface } from "../interfaces";
+import { ApiConfig, RolePermissionInterface, ApiListType } from "../interfaces";
 
 export class ApiHelper {
 
     static apiConfigs: ApiConfig[] = [];
     static defaultApi = "";
     static isAuthenticated = false;
+
 
     static getConfig(keyName: string) {
         if (keyName === undefined) keyName = this.defaultApi;
@@ -29,7 +30,7 @@ export class ApiHelper {
         this.isAuthenticated = false;
     }
 
-    static async get(path: string, apiName?: string) {
+    static async get(path: string, apiName: ApiListType) {
         const config = this.getConfig(apiName);
         try {
             const requestOptions = { method: 'GET', headers: { 'Authorization': 'Bearer ' + config.jwt } };
@@ -39,7 +40,7 @@ export class ApiHelper {
         }
     }
 
-    static async post(path: string, data: any[] | {}, apiName?: string) {
+    static async post(path: string, data: any[] | {}, apiName: ApiListType) {
         const config = this.getConfig(apiName);
         const requestOptions = {
             method: 'POST',
@@ -49,7 +50,7 @@ export class ApiHelper {
         return fetch(config.url + path, requestOptions).then(response => response.json())
     }
 
-    static async delete(path: string, apiName?: string) {
+    static async delete(path: string, apiName: ApiListType) {
         const config = this.getConfig(apiName);
         const requestOptions = {
             method: 'DELETE',
@@ -58,7 +59,7 @@ export class ApiHelper {
         return fetch(config.url + path, requestOptions);
     }
 
-    static async postAnonymous(path: string, data: any[] | {}, apiName?: string) {
+    static async postAnonymous(path: string, data: any[] | {}, apiName: ApiListType) {
         const config = this.getConfig(apiName);
         const requestOptions = {
             method: 'POST',

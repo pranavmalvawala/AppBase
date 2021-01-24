@@ -34,7 +34,7 @@ export const ForgotPage: React.FC = () => {
             body: "Please click here to reset your password: <a href=\"" + resetUrl + "\">" + resetUrl + "</a>"
         };
 
-        ApiHelper.postAnonymous('/users/forgot', req).then((resp: ResetPasswordResponseInterface) => {
+        ApiHelper.postAnonymous('/users/forgot', req, "AccessApi").then((resp: ResetPasswordResponseInterface) => {
             if (resp.emailed) {
                 setErrors([]);
                 setSuccessMessage(<div className="alert alert-success" role="alert">Password reset email sent</div>);
