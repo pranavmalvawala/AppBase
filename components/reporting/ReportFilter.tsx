@@ -1,5 +1,5 @@
-import React, { useCallback } from 'react';
-import { ReportFilterFieldInterface, ReportFilterInterface, ReportFilterOptionInterface, ReportInterface } from '../../interfaces/ReportInterfaces';
+import React from 'react';
+import { ReportFilterFieldInterface, ReportFilterInterface, ReportFilterOptionInterface } from '../../interfaces/ReportInterfaces';
 import { InputBox } from '../InputBox';
 import { DateHelper } from "../../helpers";
 import { FormControl, FormGroup, FormLabel } from 'react-bootstrap';

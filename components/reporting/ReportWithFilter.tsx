@@ -16,7 +16,7 @@ export const ReportWithFilter = (props: Props) => {
 
     React.useEffect(() => {
         props.fetchReport(filter).then(r => { setReport(r) });
-    }, [filter]);
+    }, [props, filter]);
 
     React.useEffect(() => { setFilter(props.filter) }, [props.filter]);
 

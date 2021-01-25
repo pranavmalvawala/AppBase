@@ -27,7 +27,7 @@ export class ReportHelper {
         const result: any[] = [];
         const primaryHeading: ReportHeadingInterface = ArrayHelper.getOne(headings, "field", groupings[0]);
         const secondaryHeading: ReportHeadingInterface = ArrayHelper.getOne(headings, "field", groupings[1]);
-        var primaryGroupValues: string[] = ArrayHelper.getUniqueValues(data, primaryHeading.field);
+        //var primaryGroupValues: string[] = ArrayHelper.getUniqueValues(data, primaryHeading.field);
         var secondaryGroupValues: string[] = ArrayHelper.getUniqueValues(data, secondaryHeading.field);
         const valHeading = headings[headings.length - 1];
 

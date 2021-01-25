@@ -61,5 +61,4 @@ export const GroupedReport = (props: Props) => {
             </tbody>
         </table>
     );
-    return <></>
 }
