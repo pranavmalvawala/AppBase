@@ -1,7 +1,7 @@
-import React from 'react';
+import React from "react";
 import { BarChart } from "./BarChart";
 import { GroupedReport } from "./GroupedReport";
-import { DisplayBox, ExportLink } from '../';
+import { DisplayBox, ExportLink } from "../";
 import { ReportInterface } from "../../interfaces/ReportInterfaces";
 
 interface Props { report?: ReportInterface }
@@ -10,7 +10,7 @@ export const ReportView = (props: Props) => {
 
     const handlePrint = (e: React.MouseEvent) => {
         e.preventDefault();
-        var content = document.getElementById("chartBox").getElementsByClassName('content')[0].innerHTML;
+        var content = document.getElementById("chartBox").getElementsByClassName("content")[0].innerHTML;
         var printFrame: any = document.getElementById("printFrame");
         var cw = printFrame.contentWindow;
         //cw.document.open;

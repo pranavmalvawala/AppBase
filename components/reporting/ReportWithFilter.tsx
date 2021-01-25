@@ -1,5 +1,5 @@
-import React from 'react';
-import { ReportFilterInterface, ReportInterface } from '../../interfaces/ReportInterfaces';
+import React from "react";
+import { ReportFilterInterface, ReportInterface } from "../../interfaces/ReportInterfaces";
 import { Row, Col } from "react-bootstrap";
 import { ReportView } from "./ReportView";
 import { ReportFilter } from "./ReportFilter";

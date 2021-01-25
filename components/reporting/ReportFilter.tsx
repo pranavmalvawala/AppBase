@@ -1,8 +1,8 @@
-import React from 'react';
-import { ReportFilterFieldInterface, ReportFilterInterface, ReportFilterOptionInterface } from '../../interfaces/ReportInterfaces';
-import { InputBox } from '../InputBox';
+import React from "react";
+import { ReportFilterFieldInterface, ReportFilterInterface, ReportFilterOptionInterface } from "../../interfaces/ReportInterfaces";
+import { InputBox } from "../InputBox";
 import { DateHelper } from "../../helpers";
-import { FormControl, FormGroup, FormLabel } from 'react-bootstrap';
+import { FormControl, FormGroup, FormLabel } from "react-bootstrap";
 
 
 interface Props { filter: ReportFilterInterface, updateFunction: (filter: ReportFilterInterface) => void }
@@ -10,7 +10,7 @@ interface Props { filter: ReportFilterInterface, updateFunction: (filter: Report
 export const ReportFilter = (props: Props) => {
     const [filter, setFilter] = React.useState<ReportFilterInterface>(null);
     const handleUpdate = () => { props.updateFunction(filter); }
-    const handleKeyDown = (e: React.KeyboardEvent<any>) => { if (e.key === 'Enter') { e.preventDefault(); handleUpdate(); } }
+    const handleKeyDown = (e: React.KeyboardEvent<any>) => { if (e.key === "Enter") { e.preventDefault(); handleUpdate(); } }
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.preventDefault();

@@ -1,5 +1,5 @@
-import React from 'react';
-import { CSVLink } from 'react-csv';
+import React from "react";
+import { CSVLink } from "react-csv";
 
 interface Props {
     data: any[],
@@ -22,7 +22,7 @@ export const ExportLink: React.FC<Props> = (props) => {
     const getAllPropertyNames = () => {
         var result = [];
         for (let i = 0; i < props.data.length; i++) {
-            var propertyNames = getPropertyNames('', props.data[i]);
+            var propertyNames = getPropertyNames("", props.data[i]);
             for (let j = 0; j < propertyNames.length; j++) if (result.indexOf(propertyNames[j]) === -1) result.push(propertyNames[j]);
         }
         return result.sort();
@@ -34,14 +34,14 @@ export const ExportLink: React.FC<Props> = (props) => {
         for (let i = 0; i < names.length; i++) {
             var t = typeof obj[names[i]];
             switch (t) {
-                case 'number':
-                case 'string':
-                case 'boolean':
+                case "number":
+                case "string":
+                case "boolean":
                     result.push(prefix + names[i]);
                     break;
-                case 'object':
+                case "object":
                     if ((obj[names[i]] !== null)) {
-                        var children: string[] = getPropertyNames(prefix + names[i] + '.', obj[names[i]]);
+                        var children: string[] = getPropertyNames(prefix + names[i] + ".", obj[names[i]]);
                         for (let j = 0; j < children.length; j++) result.push(children[j]);
                     }
             }
@@ -52,9 +52,9 @@ export const ExportLink: React.FC<Props> = (props) => {
     if (props.data?.length === 0) return null;
     else {
         var items = [];
-        if (props.spaceBefore) items.push(' ');
-        items.push(<CSVLink key={props.filename} data={props.data} headers={getHeaders()} filename={props.filename || 'export.csv'} > <i className="fas fa-download" > </i></CSVLink >);
-        if (props.spaceAfter) items.push(' ');
+        if (props.spaceBefore) items.push(" ");
+        items.push(<CSVLink key={props.filename} data={props.data} headers={getHeaders()} filename={props.filename || "export.csv"} > <i className="fas fa-download" > </i></CSVLink >);
+        if (props.spaceAfter) items.push(" ");
         return (<>{items}</>);
     }
 }

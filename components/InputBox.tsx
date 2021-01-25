@@ -1,5 +1,5 @@
-import React from 'react';
-import { Row, Col, Button } from 'react-bootstrap';
+import React from "react";
+import { Row, Col, Button } from "react-bootstrap";
 
 interface Props {
     id?: string,
@@ -11,10 +11,10 @@ interface Props {
     cancelFunction?: () => void;
     deleteFunction?: () => void;
     saveFunction: () => void;
-    'data-cy'?: string;
+    "data-cy"?: string;
 }
 export const InputBox: React.FC<Props> = (props) => {
-    var saveText = 'Save';
+    var saveText = "Save";
     if (props.saveText !== undefined) saveText = props.saveText;
 
     const handleCancel = (e: React.MouseEvent) => { e.preventDefault(); props.cancelFunction(); }
@@ -27,11 +27,11 @@ export const InputBox: React.FC<Props> = (props) => {
     if (props.saveFunction !== undefined) buttons.push(<Col key="save"><Button variant="success" data-cy="save-button" block onClick={handleSave}>{saveText}</Button></Col>);
 
     return (
-        <div id={props.id} className="inputBox" data-cy={props['data-cy']}>
+        <div id={props.id} className="inputBox" data-cy={props["data-cy"]}>
             <div className="header" data-cy="header">
                 <Row>
                     <Col xs={8}><i className={props.headerIcon}></i> {props.headerText}</Col>
-                    <Col xs={4} style={{ textAlign: 'right' }} >{props.headerActionContent}</Col>
+                    <Col xs={4} style={{ textAlign: "right" }} >{props.headerActionContent}</Col>
                 </Row>
             </div>
             <div className="content">{props.children}</div>

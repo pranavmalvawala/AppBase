@@ -1,20 +1,20 @@
-import React from 'react';
-import './Login.css';
+import React from "react";
+import "./Login.css";
 import { ApiHelper } from "../helpers";
 import { ErrorMessages, } from "../components";
-import { ResetPasswordRequestInterface, ResetPasswordResponseInterface } from '../interfaces';
-import { Button } from 'react-bootstrap';
+import { ResetPasswordRequestInterface, ResetPasswordResponseInterface } from "../interfaces";
+import { Button } from "react-bootstrap";
 
 
 export const ForgotPage: React.FC = () => {
-    const [email, setEmail] = React.useState('');
+    const [email, setEmail] = React.useState("");
     const [errors, setErrors] = React.useState([]);
     const [successMessage, setSuccessMessage] = React.useState<React.ReactElement>(null);
 
-    const handleKeyDown = (e: React.KeyboardEvent<any>) => { if (e.key === 'Enter') { e.preventDefault(); handleSubmit(null); } }
+    const handleKeyDown = (e: React.KeyboardEvent<any>) => { if (e.key === "Enter") { e.preventDefault(); handleSubmit(null); } }
     const validate = () => {
         var errors = [];
-        if (email === '') errors.push('Please enter your email address.');
+        if (email === "") errors.push("Please enter your email address.");
         setErrors(errors);
         return errors.length === 0;
     }
@@ -25,7 +25,7 @@ export const ForgotPage: React.FC = () => {
     }
 
     const reset = (email: string) => {
-        const resetUrl = window.location.href.replace(window.location.pathname, '') + '/login?auth={auth}';
+        const resetUrl = window.location.href.replace(window.location.pathname, "") + "/login?auth={auth}";
 
         var req: ResetPasswordRequestInterface = {
             userEmail: email,
@@ -34,12 +34,12 @@ export const ForgotPage: React.FC = () => {
             body: "Please click here to reset your password: <a href=\"" + resetUrl + "\">" + resetUrl + "</a>"
         };
 
-        ApiHelper.postAnonymous('/users/forgot', req, "AccessApi").then((resp: ResetPasswordResponseInterface) => {
+        ApiHelper.postAnonymous("/users/forgot", req, "AccessApi").then((resp: ResetPasswordResponseInterface) => {
             if (resp.emailed) {
                 setErrors([]);
                 setSuccessMessage(<div className="alert alert-success" role="alert">Password reset email sent</div>);
             } else {
-                setErrors(['We could not find an account with this email address']);
+                setErrors(["We could not find an account with this email address"]);
                 setSuccessMessage(<></>);
             }
         });

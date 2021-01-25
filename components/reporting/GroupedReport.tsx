@@ -1,5 +1,5 @@
-import React from 'react';
-import { ReportInterface, ReportHeadingInterface } from '../../interfaces/ReportInterfaces';
+import React from "react";
+import { ReportInterface, ReportHeadingInterface } from "../../interfaces/ReportInterfaces";
 
 interface Props { report?: ReportInterface }
 

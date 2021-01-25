@@ -1,7 +1,7 @@
-import React from 'react';
-import { ReportInterface } from '../../interfaces/ReportInterfaces';
-import { Chart } from 'react-google-charts';
-import { ReportHelper } from '../../helpers/ReportHelper';
+import React from "react";
+import { ReportInterface } from "../../interfaces/ReportInterfaces";
+import { Chart } from "react-google-charts";
+import { ReportHelper } from "../../helpers/ReportHelper";
 
 interface Props { report?: ReportInterface }
 
@@ -49,10 +49,10 @@ export const BarChart = (props: Props) => {
         var result = <></>
         switch (props.report.reportType) {
             case "Area Chart":
-                result = (<Chart chartType="AreaChart" data={getChartData()} width="100%" height="400px" options={{ height: 400, legend: { position: 'top', maxLines: 3 }, bar: { groupWidth: '75%' }, isStacked: true }} />);
+                result = (<Chart chartType="AreaChart" data={getChartData()} width="100%" height="400px" options={{ height: 400, legend: { position: "top", maxLines: 3 }, bar: { groupWidth: "75%" }, isStacked: true }} />);
                 break;
             default:
-                result = (<Chart chartType="ColumnChart" data={getChartData()} width="100%" height="400px" options={{ height: 400, legend: { position: 'top', maxLines: 3 }, bar: { groupWidth: '75%' }, isStacked: true }} />);
+                result = (<Chart chartType="ColumnChart" data={getChartData()} width="100%" height="400px" options={{ height: 400, legend: { position: "top", maxLines: 3 }, bar: { groupWidth: "75%" }, isStacked: true }} />);
                 break;
         }
         return result;
