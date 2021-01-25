@@ -17,4 +17,4 @@ export interface SwitchAppResponseInterface { appName: string, churchId: number 
 export interface UserInterface { id?: number, email?: string, authGuid?: string, displayName?: string, registrationDate?: Date, lastLogin?: Date, password?: string }
 
 export interface ApiConfig { keyName: string, url: string, jwt: string, permisssions: RolePermissionInterface[] }
-export type ApiListType = "AccessApi" | "ChumsApi" | "MembershipApi" | "AttendanceApi" | "GivingApi" | "StreamingLiveApi";
+export type ApiListType = "AccessApi" | "MembershipApi" | "AttendanceApi" | "GivingApi" | "StreamingLiveApi";
