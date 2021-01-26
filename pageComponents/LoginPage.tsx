@@ -5,7 +5,7 @@ import { LoginResponseInterface, UserContextInterface } from "../interfaces";
 import { ApiHelper, UserHelper } from "../helpers";
 import { Button, FormControl, Alert } from "react-bootstrap";
 import { useParams } from "react-router-dom";
-interface Props { accessApi?: string, context: UserContextInterface, jwt: string, auth: string, successCallback?: () => void, keyName?: string }
+interface Props { accessApi?: string, context: UserContextInterface, jwt: string, auth: string, successCallback?: () => void, requiredKeyName: boolean }
 interface pathParams { token: string }
 export const LoginPage: React.FC<Props> = (props) => {
     const [welcomeBackName, setWelcomeBackName] = React.useState("");
@@ -89,7 +89,7 @@ export const LoginPage: React.FC<Props> = (props) => {
     };
 
     const selectChurch = async () => {
-        if (props.keyName === 'StreamingLive') {
+        if (props.requiredKeyName) {
             const keyName = window.location.hostname.split('.')[0];
             await UserHelper.selectChurch(props.context, undefined, keyName);
         }
@@ -109,12 +109,7 @@ export const LoginPage: React.FC<Props> = (props) => {
 
     return (
         <div className="smallCenterBlock">
-            <img
-                src="/images/logo-login.png"
-                alt="logo"
-                className="img-fluid"
-                style={{ marginBottom: 50 }}
-            />
+            <img src="/images/logo-login.png" alt="logo" className="img-fluid" style={{ marginBottom: 50 }} />
             {token ? <Alert variant="info"> Please wait while we load your data.</Alert> :
                 <>
                     <ErrorMessages errors={errors} />
@@ -127,9 +122,7 @@ export const LoginPage: React.FC<Props> = (props) => {
                             {loading ? "Please wait..." : "Sign in"}
                         </Button>
                         <br />
-                        <div className="text-right">
-                            <a href="/forgot">Forgot Password</a>&nbsp;
-          </div>
+                        <div className="text-right"><a href="/forgot">Forgot Password</a>&nbsp;</div>
                     </div>
                 </>
             }
