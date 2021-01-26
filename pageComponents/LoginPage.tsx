@@ -5,7 +5,7 @@ import { LoginResponseInterface, UserContextInterface } from "../interfaces";
 import { ApiHelper, UserHelper } from "../helpers";
 import { Button, FormControl, Alert } from "react-bootstrap";
 import { useParams } from "react-router-dom";
-interface Props { accessApi?: string, context: UserContextInterface, jwt: string, auth: string, successCallback?: () => void }
+interface Props { accessApi?: string, context: UserContextInterface, jwt: string, auth: string, successCallback?: () => void, keyName?: string }
 interface pathParams { token: string }
 export const LoginPage: React.FC<Props> = (props) => {
     const [welcomeBackName, setWelcomeBackName] = React.useState("");
@@ -89,7 +89,11 @@ export const LoginPage: React.FC<Props> = (props) => {
     };
 
     const selectChurch = async () => {
-        await UserHelper.selectChurch(props.context);
+        if (props.keyName === 'StreamingLive') {
+            const keyName = window.location.hostname.split('.')[0];
+            await UserHelper.selectChurch(props.context, undefined, keyName);
+        }
+        else await UserHelper.selectChurch(props.context);
         if (props.successCallback !== undefined) props.successCallback();
         else props.context.setUserName(UserHelper.currentChurch.id.toString());
     };
@@ -111,20 +115,24 @@ export const LoginPage: React.FC<Props> = (props) => {
                 className="img-fluid"
                 style={{ marginBottom: 50 }}
             />
-            <ErrorMessages errors={errors} />
-            {getWelcomeBack()}
-            <div id="loginBox">
-                <h2>Please sign in</h2>
-                <FormControl id="email" name="email" value={email} onChange={(e) => { e.preventDefault(); setEmail(e.currentTarget.value); }} placeholder="Email address" onKeyDown={handleKeyDown} />
-                <FormControl id="password" name="password" type="password" placeholder="Password" value={password} onChange={(e) => { e.preventDefault(); setPassword(e.currentTarget.value); }} onKeyDown={handleKeyDown} />
-                <Button id="signInButton" size="lg" variant="primary" block onClick={!loading ? handleSubmit : null} disabled={loading} >
-                    {loading ? "Please wait..." : "Sign in"}
-                </Button>
-                <br />
-                <div className="text-right">
-                    <a href="/forgot">Forgot Password</a>&nbsp;
+            {token ? <Alert variant="info"> Please wait while we load your data.</Alert> :
+                <>
+                    <ErrorMessages errors={errors} />
+                    {getWelcomeBack()}
+                    <div id="loginBox">
+                        <h2>Please sign in</h2>
+                        <FormControl id="email" name="email" value={email} onChange={(e) => { e.preventDefault(); setEmail(e.currentTarget.value); }} placeholder="Email address" onKeyDown={handleKeyDown} />
+                        <FormControl id="password" name="password" type="password" placeholder="Password" value={password} onChange={(e) => { e.preventDefault(); setPassword(e.currentTarget.value); }} onKeyDown={handleKeyDown} />
+                        <Button id="signInButton" size="lg" variant="primary" block onClick={!loading ? handleSubmit : null} disabled={loading} >
+                            {loading ? "Please wait..." : "Sign in"}
+                        </Button>
+                        <br />
+                        <div className="text-right">
+                            <a href="/forgot">Forgot Password</a>&nbsp;
           </div>
-            </div>
+                    </div>
+                </>
+            }
         </div>
     );
 
