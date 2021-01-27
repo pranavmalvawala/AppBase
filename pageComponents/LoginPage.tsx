@@ -60,10 +60,12 @@ export const LoginPage: React.FC<Props> = (props) => {
                     if (api.keyName === ApiHelper.defaultApi) { 
                         add = true; 
                     }
-                    if (api.keyName === ApiName.ACCESS_API) {
+                 });
+                c.apis.forEach(api => {
+                    if (add && (api.keyName === ApiName.ACCESS_API)) {
                         document.cookie = "jwt=" + api.jwt;
                     }
-                 });
+                })
                 if (add) UserHelper.churches.push(c);
             });
 
