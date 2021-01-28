@@ -2,14 +2,14 @@ export class Permissions {
   static attendanceApi = {
     attendance: {
       view: { api: "AttendanceApi", contentType: "Attendance", action: "View" },
-      view_summary: { api: "AttendanceApi", contentType: "Attendance", action: "View Summary" },
+      viewSummary: { api: "AttendanceApi", contentType: "Attendance", action: "View Summary" },
       edit: { api: "AttendanceApi", contentType: "Attendance", action: "Edit" }
     },
     services: {
       edit: { api: "AttendanceApi", contentType: "Services", action: "Edit" }
     },
     admin: {
-      edit_settings: { api: "AttendanceApi", contentType: "Admin", action: "Edit Settings" }
+      editSettings: { api: "AttendanceApi", contentType: "Admin", action: "Edit Settings" }
     }
   };
 
@@ -23,11 +23,11 @@ export class Permissions {
       edit: { api: "MembershipApi", contentType: "Groups", action: "Edit" }
     },
     people: {
-      edit_notes: { api: "MembershipApi", contentType: "People", action: "Edit Notes" },
-      view_notes: { api: "MembershipApi", contentType: "People", action: "View Notes" },
+      editNotes: { api: "MembershipApi", contentType: "People", action: "Edit Notes" },
+      viewNotes: { api: "MembershipApi", contentType: "People", action: "View Notes" },
       edit: { api: "MembershipApi", contentType: "People", action: "Edit" }
     },
-    group_members: {
+    groupMembers: {
       edit: { api: "MembershipApi", contentType: "Group Members", action: "Edit" },
       view: { api: "MembershipApi", contentType: "Group Members", action: "View" }
     },
@@ -38,7 +38,7 @@ export class Permissions {
 
   static givingApi = {
     donations: {
-      view_summary: { api: "GivingApi", contentType: "Donations", action: "View Summary" },
+      viewSummary: { api: "GivingApi", contentType: "Donations", action: "View Summary" },
       view: { api: "GivingApi", contentType: "Donations", action: "View" },
       edit: { api: "GivingApi", contentType: "Donations", action: "Edit" }
     }
@@ -49,11 +49,11 @@ export class Permissions {
       view: { api: "AccessApi", contentType: "Roles", action: "View" },
       edit: { api: "AccessApi", contentType: "Roles", action: "Edit" }
     },
-    role_members: {
+    roleMembers: {
       view: { api: "AccessApi", contentType: "RoleMembers", action: "View" },
       edit: { api: "AccessApi", contentType: "RoleMembers", action: "Edit" }
     },
-    role_permissions: {
+    rolePermissions: {
       view: { api: "AccessApi", contentType: "RolePermissions", action: "View" },
       edit: { api: "AccessApi", contentType: "RolePermissions", action: "Edit" }
     },
