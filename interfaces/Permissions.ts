@@ -1,74 +1,5 @@
-import { IPermission } from "./";
-
-interface AttendancePermissions {
-  attendance: {
-    view: IPermission;
-    view_summary: IPermission;
-    edit: IPermission
-  };
-  services: {
-    edit: IPermission
-  };
-  admin: {
-    edit_settings: IPermission
-  }
-}
-
-interface MembershipPermissions {
-  forms: {
-    view: IPermission;
-    edit: IPermission;
-  };
-  groups: {
-    view: IPermission;
-    edit: IPermission;
-  },
-  people: {
-    edit_notes: IPermission;
-    view_notes: IPermission;
-    edit: IPermission;
-  }
-  group_members: {
-    edit: IPermission;
-    view: IPermission;
-  },
-  households: {
-    edit: IPermission
-  }
-}
-
-interface GivingPermissions {
-  donations: {
-    view_summary: IPermission;
-    view: IPermission;
-    edit: IPermission;
-  }
-}
-
-interface AccessPermissions {
-  roles: {
-    edit: IPermission;
-    view: IPermission;
-  },
-  role_members: {
-    edit: IPermission;
-    view: IPermission;
-  },
-  role_permissions: {
-    edit: IPermission;
-    view: IPermission;
-  },
-  users: {
-    edit: IPermission;
-    view: IPermission;
-  },
-  settings: {
-    edit: IPermission;
-  }
-}
-
 export class Permissions {
-  static attendanceApi: AttendancePermissions = {
+  static attendanceApi = {
     attendance: {
       view: { api: "AttendanceApi", contentType: "Attendance", action: "View" },
       view_summary: { api: "AttendanceApi", contentType: "Attendance", action: "View Summary" },
@@ -82,7 +13,7 @@ export class Permissions {
     }
   };
 
-  static membershipApi: MembershipPermissions = {
+  static membershipApi = {
     forms: {
       view: { api: "MembershipApi", contentType: "Forms", action: "View" },
       edit: { api: "MembershipApi", contentType: "Forms", action: "Edit" }
@@ -105,7 +36,7 @@ export class Permissions {
     }
   };
 
-  static givingApi: GivingPermissions = {
+  static givingApi = {
     donations: {
       view_summary: { api: "GivingApi", contentType: "Donations", action: "View Summary" },
       view: { api: "GivingApi", contentType: "Donations", action: "View" },
@@ -113,7 +44,7 @@ export class Permissions {
     }
   }
 
-  static accessApi: AccessPermissions = {
+  static accessApi = {
     roles: {
       view: { api: "AccessApi", contentType: "Roles", action: "View" },
       edit: { api: "AccessApi", contentType: "Roles", action: "Edit" }
