@@ -1,5 +1,6 @@
 export * from "./AccessManagement";
 export * from "./UserContextInterface";
+export * from "./Permissions";
 
 export enum ApiName {
     ACCESS_API = "AccessApi",

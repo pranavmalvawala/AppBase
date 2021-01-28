@@ -1,6 +1,6 @@
 import { ApiHelper } from './ApiHelper'
 import { UserInterface, ChurchInterface } from "../interfaces/AccessManagement";
-import { UserContextInterface, ApiListType } from '../interfaces';
+import { UserContextInterface, IPermission } from '../interfaces';
 
 export class UserHelper {
     static currentChurch: ChurchInterface;
@@ -23,8 +23,8 @@ export class UserHelper {
         }
     }
 
-    static checkAccess(contentType: string, action: string, apiName: ApiListType): boolean {
-        const permissions = ApiHelper.getConfig(apiName).permisssions;
+    static checkAccess({ api, contentType, action }: IPermission): boolean {
+        const permissions = ApiHelper.getConfig(api).permisssions;
 
         var result = false;
         if (permissions !== undefined) {

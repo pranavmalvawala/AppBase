@@ -26,7 +26,7 @@ export const ReportFilter = (props: Props) => {
 
     const getOptions = (data: ReportFilterOptionInterface[]) => {
         var result: JSX.Element[] = [];
-        data?.forEach(d => { result.push(<option key={d.keyName} value={d.value}>{d.label}</option>) });
+        data?.forEach((d, index) => { result.push(<option key={index} value={d.value}>{d.label}</option>) });
         return result;
     }
 

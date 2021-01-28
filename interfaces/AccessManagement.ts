@@ -18,3 +18,8 @@ export interface UserInterface { id?: number, email?: string, authGuid?: string,
 
 export interface ApiConfig { keyName: string, url: string, jwt: string, permisssions: RolePermissionInterface[] }
 export type ApiListType = "AccessApi" | "MembershipApi" | "AttendanceApi" | "GivingApi" | "StreamingLiveApi";
+export interface IPermission {
+    api: string;
+    contentType: string;
+    action: string;
+}
