@@ -5,7 +5,7 @@ import { LoginResponseInterface, UserContextInterface, ApiName } from "../interf
 import { ApiHelper, UserHelper } from "../helpers";
 import { Button, FormControl, Alert } from "react-bootstrap";
 import { useParams } from "react-router-dom";
-interface Props { accessApi?: string, context: UserContextInterface, jwt: string, auth: string, successCallback?: () => void, requiredKeyName: boolean }
+interface Props { accessApi?: string, context: UserContextInterface, jwt: string, auth: string, successCallback?: () => void, requiredKeyName?: boolean }
 interface pathParams { token: string }
 
 export const LoginPage: React.FC<Props> = (props) => {
