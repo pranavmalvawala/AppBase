@@ -1,12 +1,13 @@
 import React from "react";
 import "./Login.css";
 import { ErrorMessages } from "../components";
-import { LoginResponseInterface, UserContextInterface } from "../interfaces";
+import { LoginResponseInterface, UserContextInterface, ApiName } from "../interfaces";
 import { ApiHelper, UserHelper } from "../helpers";
 import { Button, FormControl, Alert } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 interface Props { accessApi?: string, context: UserContextInterface, jwt: string, auth: string, successCallback?: () => void, requiredKeyName: boolean }
 interface pathParams { token: string }
+
 export const LoginPage: React.FC<Props> = (props) => {
     const [welcomeBackName, setWelcomeBackName] = React.useState("");
     const [email, setEmail] = React.useState("");
@@ -55,7 +56,16 @@ export const LoginPage: React.FC<Props> = (props) => {
 
             resp.churches.forEach((c) => {
                 var add = false;
-                c.apis.forEach((api) => { if (api.keyName === ApiHelper.defaultApi) { add = true; } });
+                c.apis.forEach((api) => { 
+                    if (api.keyName === ApiHelper.defaultApi) { 
+                        add = true; 
+                    }
+                 });
+                c.apis.forEach(api => {
+                    if (add && (api.keyName === ApiName.ACCESS_API)) {
+                        document.cookie = "jwt=" + api.jwt;
+                    }
+                })
                 if (add) UserHelper.churches.push(c);
             });
 
