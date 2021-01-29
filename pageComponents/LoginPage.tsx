@@ -56,11 +56,11 @@ export const LoginPage: React.FC<Props> = (props) => {
 
             resp.churches.forEach((c) => {
                 var add = false;
-                c.apis.forEach((api) => { 
-                    if (api.keyName === ApiHelper.defaultApi) { 
-                        add = true; 
+                c.apis.forEach((api) => {
+                    if (api.keyName === ApiHelper.defaultApi) {
+                        add = true;
                     }
-                 });
+                });
                 c.apis.forEach(api => {
                     if (add && (api.keyName === ApiName.ACCESS_API)) {
                         document.cookie = "jwt=" + api.jwt;
@@ -100,7 +100,7 @@ export const LoginPage: React.FC<Props> = (props) => {
 
     const selectChurch = async () => {
         if (props.requiredKeyName) {
-            const keyName = window.location.hostname.split('.')[0];
+            const keyName = window.location.hostname.split(".")[0];
             await UserHelper.selectChurch(props.context, undefined, keyName);
         }
         else await UserHelper.selectChurch(props.context);
