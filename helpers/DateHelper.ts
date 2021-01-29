@@ -14,9 +14,22 @@ export class DateHelper {
         } catch { return ''; }
     }
 
+
+    static formatDateTime(date: Date, format: string) {
+        try {
+            return dateFormat(date, format);
+        } catch { return ''; }
+    }
+
     static prettyDate(date: Date) {
         if (date === undefined || date === null) return '';
         return this.formatDate(date, 'MMM d, yyyy');
+    }
+
+
+    static prettyDateTime(date: Date) {
+        if (date === undefined || date === null) return '';
+        return this.formatDateTime(date, 'MMM d, yyyy h:mm a');
     }
 
     static formatCurrency(amount: number) {
@@ -49,6 +62,13 @@ export class DateHelper {
             } catch { }
         }
         return result;
+    }
+
+    static formatHtml5DateTime(date: Date): string {
+        if (date === undefined || date === null) return '';
+        else {
+            return this.formatDateTime(date, 'yyyy-MM-dd') + "T" + this.formatDateTime(date, 'HH:mm');
+        }
     }
 
     static getDisplayDuration(d: Date): string {
