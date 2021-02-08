@@ -50,7 +50,7 @@ export const GroupedReport = (props: Props) => {
     }
 
 
-
+    if (props.report?.data.length === 0) return <>Group report will appear once attendance has been added.</>;
     return (
         <table className="table report table-sm">
             <thead className="thead-dark">

@@ -42,9 +42,15 @@ export const BarChart = (props: Props) => {
             return result;
         }
     }
+    const { keyName } = props.report;
+    let noDataMessage: string = 'Attendance chart will appear once attendance has been added.';
+
+    if (keyName === "donationSummary") {
+        noDataMessage = 'Donations chart will appear once donation has been made.'
+    }
 
     const chartData = getChartData();
-    if (chartData.length < 2) return (<>No results</>);
+    if (chartData.length < 2) return (<>{noDataMessage}</>);
     else {
         var result = <></>
         switch (props.report.reportType) {
