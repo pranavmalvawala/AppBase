@@ -95,7 +95,7 @@ export const LoginPage: React.FC<Props> = (props) => {
 
                 else handleLoginSuccess(resp);
             })
-            .catch((e) => { setErrors([e.toString()]); throw e; });
+            .catch((e) => { setErrors([e.toString()]); setLoading(false); throw e; });
     };
 
     const selectChurch = async () => {
