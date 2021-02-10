@@ -8,8 +8,8 @@ export class Permissions {
     services: {
       edit: { api: "AttendanceApi", contentType: "Services", action: "Edit" }
     },
-    admin: {
-      editSettings: { api: "AttendanceApi", contentType: "Admin", action: "Edit Settings" }
+    settings: {
+      edit: { api: "AttendanceApi", contentType: "Settings", action: "Edit" }
     }
   };
 
