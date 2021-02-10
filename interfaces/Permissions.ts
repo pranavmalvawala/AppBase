@@ -23,8 +23,6 @@ export class Permissions {
       edit: { api: "MembershipApi", contentType: "Groups", action: "Edit" }
     },
     people: {
-      editNotes: { api: "MembershipApi", contentType: "People", action: "Edit Notes" },
-      viewNotes: { api: "MembershipApi", contentType: "People", action: "View Notes" },
       edit: { api: "MembershipApi", contentType: "People", action: "Edit" }
     },
     groupMembers: {
@@ -33,6 +31,10 @@ export class Permissions {
     },
     households: {
       edit: { api: "MembershipApi", contentType: "Households", action: "Edit" }
+    },
+    notes: {
+      edit: { api: "MembershipApi", contentType: "Notes", action: "Edit" },
+      view: { api: "MembershipApi", contentType: "Notes", action: "View" }
     }
   };
 
