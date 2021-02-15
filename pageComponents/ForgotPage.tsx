@@ -4,9 +4,12 @@ import { ApiHelper } from "../helpers";
 import { ErrorMessages, } from "../components";
 import { ResetPasswordRequestInterface, ResetPasswordResponseInterface } from "../interfaces";
 import { Button } from "react-bootstrap";
-import { EnvironmentHelper } from '../../helpers'
 
-export const ForgotPage: React.FC = () => {
+interface Props {
+    supportEmail?: string;
+}
+
+export const ForgotPage: React.FC<Props> = (props) => {
     const [email, setEmail] = React.useState("");
     const [errors, setErrors] = React.useState([]);
     const [successMessage, setSuccessMessage] = React.useState<React.ReactElement>(null);
@@ -29,7 +32,7 @@ export const ForgotPage: React.FC = () => {
 
         var req: ResetPasswordRequestInterface = {
             userEmail: email,
-            fromEmail: EnvironmentHelper.supportEmail,
+            fromEmail: props.supportEmail,
             subject: "Live Church Solutions Password Reset",
             body: "Please click here to reset your password: <a href=\"" + resetUrl + "\">" + resetUrl + "</a>"
         };
