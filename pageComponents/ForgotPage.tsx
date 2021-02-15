@@ -4,7 +4,7 @@ import { ApiHelper } from "../helpers";
 import { ErrorMessages, } from "../components";
 import { ResetPasswordRequestInterface, ResetPasswordResponseInterface } from "../interfaces";
 import { Button } from "react-bootstrap";
-
+import { EnvironmentHelper } from '../../helpers'
 
 export const ForgotPage: React.FC = () => {
     const [email, setEmail] = React.useState("");
@@ -29,7 +29,7 @@ export const ForgotPage: React.FC = () => {
 
         var req: ResetPasswordRequestInterface = {
             userEmail: email,
-            fromEmail: "support@livecs.org",
+            fromEmail: EnvironmentHelper.supportEmail,
             subject: "Live Church Solutions Password Reset",
             body: "Please click here to reset your password: <a href=\"" + resetUrl + "\">" + resetUrl + "</a>"
         };
