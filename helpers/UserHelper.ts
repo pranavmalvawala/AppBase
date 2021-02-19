@@ -8,7 +8,7 @@ export class UserHelper {
     static user: UserInterface;
     static churchChanged: boolean = false;
 
-    static selectChurch = async (context: UserContextInterface, churchId?: number, keyName?: string) => {
+    static selectChurch = async (context: UserContextInterface, churchId?: string, keyName?: string) => {
         var church = null;
         //const keyName = window.location.hostname.split('.')[0];
         if (churchId !== undefined) UserHelper.churches.forEach(c => { if (c.id === churchId) church = c; });
