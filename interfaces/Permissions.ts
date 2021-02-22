@@ -43,7 +43,12 @@ export class Permissions {
       viewSummary: { api: "GivingApi", contentType: "Donations", action: "View Summary" },
       view: { api: "GivingApi", contentType: "Donations", action: "View" },
       edit: { api: "GivingApi", contentType: "Donations", action: "Edit" }
+    },
+    settings: {
+      view: { api: "GivingApi", contentType: "Settings", action: "View" },
+      edit: { api: "GivingApi", contentType: "Settings", action: "Edit" }
     }
+
   }
 
   static accessApi = {
