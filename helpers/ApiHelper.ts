@@ -40,6 +40,16 @@ export class ApiHelper {
         }
     }
 
+    static async getAnonymous(path: string, apiName: ApiListType) {
+        const config = this.getConfig(apiName);
+        try {
+            const requestOptions = { method: 'GET', };
+            return fetch(config.url + path, requestOptions).then(response => response.json())
+        } catch (e) {
+            throw (e);
+        }
+    }
+
     static async post(path: string, data: any[] | {}, apiName: ApiListType) {
         const config = this.getConfig(apiName);
         const requestOptions = {
