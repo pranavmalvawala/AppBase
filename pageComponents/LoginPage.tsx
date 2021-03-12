@@ -6,7 +6,7 @@ import { ApiHelper, UserHelper } from "../helpers";
 import { Button, FormControl, Alert } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 
-interface Props { accessApi?: string, context: UserContextInterface, jwt: string, auth: string, successCallback?: () => void, requiredKeyName?: boolean, logoSquare?:string }
+interface Props { accessApi?: string, context: UserContextInterface, jwt: string, auth: string, successCallback?: () => void, requiredKeyName?: boolean, logoSquare?: string }
 interface pathParams { token: string }
 
 export const LoginPage: React.FC<Props> = (props) => {
@@ -120,7 +120,7 @@ export const LoginPage: React.FC<Props> = (props) => {
 
     return (
         <div className="smallCenterBlock">
-            <img src={props.logoSquare || '/images/logo-login.png'} alt="logo" className="img-fluid" style={{ marginBottom: 50 }} />
+            <img src={props.logoSquare || '/images/logo-login.png'} alt="logo" className="img-fluid" />
             {token ? <Alert variant="info"> Please wait while we load your data.</Alert> :
                 <>
                     <ErrorMessages errors={errors} />
