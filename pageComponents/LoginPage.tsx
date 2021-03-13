@@ -53,21 +53,12 @@ export const LoginPage: React.FC<Props> = (props) => {
 
     const handleLoginSuccess = (resp: LoginResponseInterface) => {
         if (Object.keys(resp).length !== 0) {
-            UserHelper.churches = [];
+            UserHelper.churches = resp.churches;
 
             resp.churches.forEach((c) => {
-                var add = false;
-                c.apis.forEach((api) => {
-                    if (api.keyName === ApiHelper.defaultApi) {
-                        add = true;
-                    }
-                });
                 c.apis.forEach(api => {
-                    if (add && (api.keyName === ApiName.ACCESS_API)) {
-                        document.cookie = "jwt=" + api.jwt;
-                    }
+                    if (api.keyName === ApiName.ACCESS_API) document.cookie = "jwt=" + api.jwt;
                 })
-                if (add) UserHelper.churches.push(c);
             });
 
             if (UserHelper.churches.length > 0) {
@@ -75,9 +66,7 @@ export const LoginPage: React.FC<Props> = (props) => {
                 document.cookie = "email=" + resp.user.email;
                 UserHelper.user = resp.user;
                 selectChurch();
-            } else {
-                handleLoginErrors(["No permissions"]);
-            }
+            } else handleLoginErrors(["No permissions"]);
         }
     }
 

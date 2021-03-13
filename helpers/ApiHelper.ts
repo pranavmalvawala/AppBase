@@ -15,6 +15,14 @@ export class ApiHelper {
         return result;
     }
 
+    static setDefaultPermissions(jwt: string) {
+        this.apiConfigs.forEach(config => {
+            config.jwt = jwt;
+            config.permisssions = [];
+        });
+        this.isAuthenticated = true;
+    }
+
     static setPermissions(keyName: string, jwt: string, permissions: RolePermissionInterface[]) {
         this.apiConfigs.forEach(config => {
             if (config.keyName === keyName) {

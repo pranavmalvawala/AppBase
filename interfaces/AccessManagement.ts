@@ -1,7 +1,7 @@
 export interface ApiInterface { name: string, keyName?: string, permissions: RolePermissionInterface[], jwt: string }
 export interface ApplicationInterface { name: string, keyName?: string, permissions: RolePermissionInterface[] }
 export interface ChurchAppInterface { id?: string, churchId?: string, appName?: string }
-export interface ChurchInterface { id?: string, name: string, registrationDate?: Date, apis?: ApiInterface[], apps?: ApplicationInterface[], address1?: string, address2?: string, city?: string, state?: string, zip?: string, country?: string, subDomain?: string }
+export interface ChurchInterface { id?: string, name: string, registrationDate?: Date, apis?: ApiInterface[], apps?: ApplicationInterface[], address1?: string, address2?: string, city?: string, state?: string, zip?: string, country?: string, subDomain?: string, jwt: string }
 export interface ForgotResponse { emailed: boolean }
 export interface LoadCreateUserRequestInterface { userEmail: string, fromEmail?: string, subject?: string, body?: string, userName: string }
 export interface LoginResponseInterface { user: UserInterface, churches: ChurchInterface[], errors: string[] }

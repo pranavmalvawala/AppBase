@@ -17,6 +17,7 @@ export class UserHelper {
         if (church === null) window.location.reload();
         else {
             UserHelper.currentChurch = church;
+            ApiHelper.setDefaultPermissions(UserHelper.currentChurch.jwt);
             UserHelper.currentChurch.apis.forEach(api => { ApiHelper.setPermissions(api.keyName, api.jwt, api.permissions); });
             if (context.churchName !== "") UserHelper.churchChanged = true;
             context.setChurchName(UserHelper.currentChurch.name);
