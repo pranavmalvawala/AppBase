@@ -4,7 +4,7 @@ export class ArrayHelper {
     static getIds(array: any[], propertyName: string) {
         const result: number[] = [];
         for (const item of array) {
-            const id = item[propertyName].toString();
+            const id = item[propertyName]?.toString();
             if (!UniqueIdHelper.isMissing(id) && result.indexOf(id) === -1) result.push(id);
         }
         return result;
