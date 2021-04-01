@@ -4,17 +4,18 @@ import { ErrorMessages } from "../components";
 import { LoginResponseInterface, UserContextInterface, ApiName } from "../interfaces";
 import { ApiHelper, UserHelper } from "../helpers";
 import { Button, FormControl, Alert } from "react-bootstrap";
-import { useParams } from "react-router-dom";
+import { useParams, withRouter, RouteComponentProps, Redirect } from "react-router-dom";
 
-interface Props { accessApi?: string, context: UserContextInterface, jwt: string, auth: string, successCallback?: () => void, requiredKeyName?: boolean, logoSquare?: string }
+interface Props extends RouteComponentProps { accessApi?: string, context: UserContextInterface, jwt: string, auth: string, successCallback?: () => void, requiredKeyName?: boolean, logoSquare?: string }
 interface pathParams { token: string }
 
-export const LoginPage: React.FC<Props> = (props) => {
+const Login: React.FC<Props> = (props) => {
     const [welcomeBackName, setWelcomeBackName] = React.useState("");
     const [email, setEmail] = React.useState("");
     const [password, setPassword] = React.useState("");
     const [errors, setErrors] = React.useState([]);
     const [loading, setLoading] = React.useState(false);
+    const [redirectTo, setRedirectTo] = React.useState<string>("");
     const { token } = useParams<pathParams>();
     const handleKeyDown = (e: React.KeyboardEvent<any>) => {
         if (e.key === "Enter") {
@@ -67,6 +68,12 @@ export const LoginPage: React.FC<Props> = (props) => {
                 UserHelper.user = resp.user;
                 selectChurch();
             } else handleLoginErrors(["No permissions"]);
+
+            const search = new URLSearchParams(props.location.search);
+            const returnUrl = search.get("returnUrl");
+            if (returnUrl) {
+                setRedirectTo(returnUrl);
+            }
         }
     }
 
@@ -107,6 +114,9 @@ export const LoginPage: React.FC<Props> = (props) => {
 
     React.useEffect(init, []);
 
+    if (redirectTo) {
+        return <Redirect to={redirectTo} />;
+    }
     return (
         <div className="smallCenterBlock">
             <img src={props.logoSquare || '/images/logo-login.png'} alt="logo" className="img-fluid" />
@@ -130,3 +140,5 @@ export const LoginPage: React.FC<Props> = (props) => {
     );
 
 };
+
+export const LoginPage = withRouter(Login);
