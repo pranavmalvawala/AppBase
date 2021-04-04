@@ -58,13 +58,13 @@ const Login: React.FC<Props> = (props) => {
 
             resp.churches.forEach((c) => {
                 c.apis.forEach(api => {
-                    if (api.keyName === ApiName.ACCESS_API) document.cookie = "jwt=" + api.jwt;
+                    if (api.keyName === ApiName.ACCESS_API) document.cookie = "jwt=" + api.jwt + "; path=/;";
                 })
             });
 
             if (UserHelper.churches.length > 0) {
-                document.cookie = "name=" + resp.user.displayName;
-                document.cookie = "email=" + resp.user.email;
+                document.cookie = "name=" + resp.user.displayName + "; path=/;";
+                document.cookie = "email=" + resp.user.email + "; path=/;";
                 UserHelper.user = resp.user;
                 selectChurch();
             } else handleLoginErrors(["No permissions"]);
