@@ -1,4 +1,4 @@
-import { PersonInterface, ContactInfoInterface } from '../Interfaces';
+import { PersonInterface, ContactInfoInterface } from '../interfaces';
 
 export class PersonHelper {
     static getAge(birthdate: Date): string {
