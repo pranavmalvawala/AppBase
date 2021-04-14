@@ -2,8 +2,14 @@ import React from "react";
 import { ApiHelper } from "../helpers";
 import { PersonInterface } from '../interfaces'
 import { Table, Button, FormControl, InputGroup } from "react-bootstrap";
+import { PersonAddEvents } from '.'
 
-interface Props { addFunction: (person: PersonInterface) => void, person?: PersonInterface, getPhotoUrl: (person: PersonInterface) => string }
+interface Props { 
+    addFunction: (person: PersonInterface) => void,
+    person?: PersonInterface,
+    getPhotoUrl: (person: PersonInterface) => string,
+    passEvents?: (eventName: PersonAddEvents) => void,
+}
 
 export const PersonAdd: React.FC<Props> = (props) => {
     const [searchResults, setSearchResults] = React.useState<PersonInterface[]>(null);
@@ -14,7 +20,11 @@ export const PersonAdd: React.FC<Props> = (props) => {
     const handleSearch = (e: React.MouseEvent) => {
         if (e !== null) e.preventDefault();
         let term = escape(searchText.trim());
-        ApiHelper.get("/people/search?term=" + term, "MembershipApi").then(data => setSearchResults(data));
+        ApiHelper.get("/people/search?term=" + term, "MembershipApi")
+            .then(data => {
+                setSearchResults(data);
+                props.passEvents("searchClicked");
+            });
     }
     const handleAdd = (e: React.MouseEvent) => {
         e.preventDefault();
