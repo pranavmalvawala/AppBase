@@ -2,13 +2,12 @@ import React from "react";
 import { ApiHelper } from "../helpers";
 import { PersonInterface } from '../interfaces'
 import { Table, Button, FormControl, InputGroup } from "react-bootstrap";
-import { PersonAddEvents } from '.'
 
 interface Props { 
     addFunction: (person: PersonInterface) => void,
     person?: PersonInterface,
     getPhotoUrl: (person: PersonInterface) => string,
-    passEvents?: (eventName: PersonAddEvents) => void,
+    searchClicked?: () => void,
 }
 
 export const PersonAdd: React.FC<Props> = (props) => {
@@ -23,7 +22,7 @@ export const PersonAdd: React.FC<Props> = (props) => {
         ApiHelper.get("/people/search?term=" + term, "MembershipApi")
             .then(data => {
                 setSearchResults(data);
-                props.passEvents("searchClicked");
+                props.searchClicked();
             });
     }
     const handleAdd = (e: React.MouseEvent) => {
