@@ -22,7 +22,9 @@ export const PersonAdd: React.FC<Props> = (props) => {
         ApiHelper.get("/people/search?term=" + term, "MembershipApi")
             .then(data => {
                 setSearchResults(data);
-                props.searchClicked();
+                if (props.searchClicked) {
+                    props.searchClicked();
+                }
             });
     }
     const handleAdd = (e: React.MouseEvent) => {
