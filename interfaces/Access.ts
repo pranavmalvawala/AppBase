@@ -10,7 +10,7 @@ export interface RegisterInterface { churchName?: string, displayName?: string, 
 export interface RoleInterface { id?: string, churchId?: string, appName?: string, name?: string }
 export interface RolePermissionInterface { id?: string, churchId?: string, roleId?: string, apiName?: string, contentType?: string, contentId?: string, action?: string }
 export interface RoleMemberInterface { id?: string, churchId?: string, roleId?: string, userId?: string, user?: UserInterface }
-export interface ResetPasswordRequestInterface { userEmail: string, fromEmail: string, subject: string, body: string }
+export interface ResetPasswordRequestInterface { userEmail: string }
 export interface ResetPasswordResponseInterface { emailed: boolean }
 export interface SwitchAppRequestInterface { appName: string, churchId: string }
 export interface SwitchAppResponseInterface { appName: string, churchId: string }

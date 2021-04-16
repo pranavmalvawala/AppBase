@@ -5,11 +5,7 @@ import { ErrorMessages, } from "../components";
 import { ResetPasswordRequestInterface, ResetPasswordResponseInterface } from "../interfaces";
 import { Button } from "react-bootstrap";
 
-interface Props {
-    supportEmail?: string;
-}
-
-export const ForgotPage: React.FC<Props> = (props) => {
+export const ForgotPage: React.FC = () => {
     const [email, setEmail] = React.useState("");
     const [errors, setErrors] = React.useState([]);
     const [successMessage, setSuccessMessage] = React.useState<React.ReactElement>(null);
@@ -28,14 +24,7 @@ export const ForgotPage: React.FC<Props> = (props) => {
     }
 
     const reset = (email: string) => {
-        const resetUrl = window.location.href.replace(window.location.pathname, "") + "/login?auth={auth}";
-
-        var req: ResetPasswordRequestInterface = {
-            userEmail: email,
-            fromEmail: props.supportEmail,
-            subject: "Live Church Solutions Password Reset",
-            body: "Please click here to reset your password: <a href=\"" + resetUrl + "\">" + resetUrl + "</a>"
-        };
+        var req: ResetPasswordRequestInterface = { userEmail: email };
 
         ApiHelper.postAnonymous("/users/forgot", req, "AccessApi").then((resp: ResetPasswordResponseInterface) => {
             if (resp.emailed) {
