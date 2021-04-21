@@ -7,7 +7,7 @@ export interface LoadCreateUserRequestInterface { userEmail: string, fromEmail?:
 export interface LoginResponseInterface { user: UserInterface, churches: ChurchInterface[], errors: string[] }
 export interface PermissionInterface { apiName?: string, section?: string, action?: string, displaySection?: string, displayAction?: string }
 export interface RegisterInterface { churchName?: string, displayName?: string, email?: string, password?: string, subDomain?: string }
-export interface RoleInterface { id?: string, churchId?: string, appName?: string, name?: string }
+export interface RoleInterface { id?: string, churchId?: string, name?: string }
 export interface RolePermissionInterface { id?: string, churchId?: string, roleId?: string, apiName?: string, contentType?: string, contentId?: string, action?: string }
 export interface RoleMemberInterface { id?: string, churchId?: string, roleId?: string, userId?: string, user?: UserInterface }
 export interface ResetPasswordRequestInterface { userEmail: string }
