@@ -59,11 +59,15 @@ const Login: React.FC<Props> = (props) => {
 
         if (!hasAccess) {
             handleLoginErrors(["No permissions"]);
+            return;
         }
         // App has access so lets save selected church's access API JWT.
         UserHelper.currentChurch.apis.forEach(api => {
             if (api.keyName === ApiName.ACCESS_API) setCookie("jwt", api.jwt, { path: "/" });
         })
+
+        if (props.successCallback !== undefined) props.successCallback();
+        else props.context.setUserName(UserHelper.currentChurch.id.toString());
 
         const search = new URLSearchParams(props.location.search);
         const returnUrl = search.get("returnUrl");
@@ -90,13 +94,11 @@ const Login: React.FC<Props> = (props) => {
     };
 
     const selectChurch = () => {
+        let keyName: string;
         if (props.requiredKeyName) {
-            const keyName = window.location.hostname.split(".")[0];
-            UserHelper.selectChurch(props.context, undefined, keyName);
+            keyName = window.location.hostname.split(".")[0];
         }
-        else UserHelper.selectChurch(props.context);
-        if (props.successCallback !== undefined) props.successCallback();
-        else props.context.setUserName(UserHelper.currentChurch.id.toString());
+        UserHelper.selectChurch(props.context, undefined, keyName);
     };
 
     const getWelcomeBack = () => {
