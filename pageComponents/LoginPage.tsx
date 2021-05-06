@@ -1,22 +1,32 @@
 import React from "react";
 import "./Login.css";
 import { ErrorMessages } from "../components";
-import { LoginResponseInterface, UserContextInterface, ApiName } from "../interfaces";
+import { LoginResponseInterface, UserContextInterface } from "../interfaces";
 import { ApiHelper, UserHelper } from "../helpers";
 import { Button, FormControl, Alert } from "react-bootstrap";
-import { useParams, withRouter, RouteComponentProps, Redirect } from "react-router-dom";
+import { Redirect, useLocation } from "react-router-dom";
+import { useCookies } from "react-cookie"
 
-interface Props extends RouteComponentProps { accessApi?: string, context: UserContextInterface, jwt: string, auth: string, successCallback?: () => void, requiredKeyName?: boolean, logoSquare?: string }
-interface pathParams { token: string }
+interface Props { 
+    accessApi?: string,
+    context: UserContextInterface,
+    jwt: string, auth: string,
+    successCallback?: () => void,
+    requiredKeyName?: boolean,
+    logoSquare?: string,
+    appName?: string
+}
 
-const Login: React.FC<Props> = (props) => {
+export const LoginPage: React.FC<Props> = (props) => {
     const [welcomeBackName, setWelcomeBackName] = React.useState("");
     const [email, setEmail] = React.useState("");
     const [password, setPassword] = React.useState("");
     const [errors, setErrors] = React.useState([]);
     const [loading, setLoading] = React.useState(false);
     const [redirectTo, setRedirectTo] = React.useState<string>("");
-    const { token } = useParams<pathParams>();
+    const [cookies, setCookie] = useCookies(["jwt", "name", "email"]);
+    const location = useLocation();
+
     const handleKeyDown = (e: React.KeyboardEvent<any>) => {
         if (e.key === "Enter") {
             e.preventDefault();
@@ -37,43 +47,41 @@ const Login: React.FC<Props> = (props) => {
         if (validate()) login({ email: email, password: password });
     };
 
-    const getCookieValue = (a: string) => {
-        var b = document.cookie.match("(^|;)\\s*" + a + "\\s*=\\s*([^;]+)");
-        return b ? b.pop() : "";
-    };
-
     const init = () => {
-        if (token !== undefined) { login({ jwt: token }); }
-        if (props.auth !== "") login({ authGuid: props.auth });
-        if (props.jwt !== "") {
-            setEmail(getCookieValue("email"));
-            setWelcomeBackName(getCookieValue("name"));
+        if (props.auth) login({ authGuid: props.auth });
+        if (props.jwt) {
+            setEmail(cookies.email);
+            setWelcomeBackName(cookies.name);
             login({ jwt: props.jwt });
         }
     };
 
     const handleLoginSuccess = (resp: LoginResponseInterface) => {
-        if (Object.keys(resp).length !== 0) {
-            UserHelper.churches = resp.churches;
+        UserHelper.churches = resp.churches;
 
-            resp.churches.forEach((c) => {
-                c.apis.forEach(api => {
-                    if (api.keyName === ApiName.ACCESS_API) document.cookie = "jwt=" + api.jwt + "; path=/;";
-                })
-            });
+        setCookie("name", resp.user.displayName, { path: "/" });
+        setCookie("email", resp.user.email, { path: "/" });
+        UserHelper.user = resp.user;
+        selectChurch();
 
-            if (UserHelper.churches.length > 0) {
-                document.cookie = "name=" + resp.user.displayName + "; path=/;";
-                document.cookie = "email=" + resp.user.email + "; path=/;";
-                UserHelper.user = resp.user;
-                selectChurch();
-            } else handleLoginErrors(["No permissions"]);
+        const hasAccess = UserHelper.currentChurch.apps.some((app => app.appName === props.appName));
 
-            const search = new URLSearchParams(props.location.search);
-            const returnUrl = search.get("returnUrl");
-            if (returnUrl) {
-                setRedirectTo(returnUrl);
-            }
+        if (!hasAccess) {
+            handleLoginErrors(["No permissions"]);
+            return;
+        }
+        // App has access so lets cookie selected church's access API JWT.
+        UserHelper.currentChurch.apis.forEach(api => {
+            if (api.keyName === "AccessApi") setCookie("jwt", api.jwt, { path: "/" });
+        })
+
+        if (props.successCallback !== undefined) props.successCallback();
+        else props.context.setUserName(UserHelper.currentChurch.id.toString());
+
+        const search = new URLSearchParams(location.search);
+        const returnUrl = search.get("returnUrl");
+        if (returnUrl) {
+            setRedirectTo(returnUrl);
         }
     }
 
@@ -88,21 +96,18 @@ const Login: React.FC<Props> = (props) => {
         setLoading(true);
         ApiHelper.postAnonymous("/users/login", data, "AccessApi")
             .then((resp: LoginResponseInterface) => {
-                if (resp.errors !== undefined) handleLoginErrors(resp.errors);
-
+                if (resp.errors) handleLoginErrors(resp.errors);
                 else handleLoginSuccess(resp);
             })
             .catch((e) => { setErrors([e.toString()]); setLoading(false); throw e; });
     };
 
-    const selectChurch = async () => {
+    const selectChurch = () => {
+        let keyName: string;
         if (props.requiredKeyName) {
-            const keyName = window.location.hostname.split(".")[0];
-            await UserHelper.selectChurch(props.context, undefined, keyName);
+            keyName = window.location.hostname.split(".")[0];
         }
-        else await UserHelper.selectChurch(props.context);
-        if (props.successCallback !== undefined) props.successCallback();
-        else props.context.setUserName(UserHelper.currentChurch.id.toString());
+        UserHelper.selectChurch(props.context, undefined, keyName);
     };
 
     const getWelcomeBack = () => {
@@ -120,25 +125,19 @@ const Login: React.FC<Props> = (props) => {
     return (
         <div className="smallCenterBlock">
             <img src={props.logoSquare || '/images/logo-login.png'} alt="logo" className="img-fluid" />
-            {token ? <Alert variant="info"> Please wait while we load your data.</Alert> :
-                <>
-                    <ErrorMessages errors={errors} />
-                    {getWelcomeBack()}
-                    <div id="loginBox">
-                        <h2 data-cy="sign-in-call-to-action">Please sign in</h2>
-                        <FormControl id="email" name="email" data-cy="email" value={email} onChange={(e) => { e.preventDefault(); setEmail(e.currentTarget.value); }} placeholder="Email address" onKeyDown={handleKeyDown} />
-                        <FormControl id="password" name="password" data-cy="password" type="password" placeholder="Password" value={password} onChange={(e) => { e.preventDefault(); setPassword(e.currentTarget.value); }} onKeyDown={handleKeyDown} />
-                        <Button id="signInButton" data-cy="sign-in-button" size="lg" variant="primary" block onClick={!loading ? handleSubmit : null} disabled={loading} >
-                            {loading ? "Please wait..." : "Sign in"}
-                        </Button>
-                        <br />
-                        <div className="text-right"><a href="/forgot">Forgot Password</a>&nbsp;</div>
-                    </div>
-                </>
-            }
+            <ErrorMessages errors={errors} />
+            {getWelcomeBack()}
+            <div id="loginBox">
+                <h2 data-cy="sign-in-call-to-action">Please sign in</h2>
+                <FormControl id="email" name="email" data-cy="email" value={email} onChange={(e) => { e.preventDefault(); setEmail(e.currentTarget.value); }} placeholder="Email address" onKeyDown={handleKeyDown} />
+                <FormControl id="password" name="password" data-cy="password" type="password" placeholder="Password" value={password} onChange={(e) => { e.preventDefault(); setPassword(e.currentTarget.value); }} onKeyDown={handleKeyDown} />
+                <Button id="signInButton" data-cy="sign-in-button" size="lg" variant="primary" block onClick={!loading ? handleSubmit : null} disabled={loading} >
+                    {loading ? "Please wait..." : "Sign in"}
+                </Button>
+                <br />
+                <div className="text-right"><a href="/forgot">Forgot Password</a>&nbsp;</div>
+            </div>
         </div>
     );
 
 };
-
-export const LoginPage = withRouter(Login);
