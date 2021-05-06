@@ -1,15 +1,23 @@
 import React from "react";
 import "./Login.css";
 import { ErrorMessages } from "../components";
-import { LoginResponseInterface, UserContextInterface, ApiName } from "../interfaces";
+import { LoginResponseInterface, UserContextInterface } from "../interfaces";
 import { ApiHelper, UserHelper } from "../helpers";
 import { Button, FormControl, Alert } from "react-bootstrap";
-import { withRouter, RouteComponentProps, Redirect } from "react-router-dom";
+import { Redirect, useLocation } from "react-router-dom";
 import { useCookies } from "react-cookie"
 
-interface Props extends RouteComponentProps { accessApi?: string, context: UserContextInterface, jwt: string, auth: string, successCallback?: () => void, requiredKeyName?: boolean, logoSquare?: string }
+interface Props { 
+    accessApi?: string,
+    context: UserContextInterface,
+    jwt: string, auth: string,
+    successCallback?: () => void,
+    requiredKeyName?: boolean,
+    logoSquare?: string,
+    appName?: string
+}
 
-const Login: React.FC<Props> = (props) => {
+export const LoginPage: React.FC<Props> = (props) => {
     const [welcomeBackName, setWelcomeBackName] = React.useState("");
     const [email, setEmail] = React.useState("");
     const [password, setPassword] = React.useState("");
@@ -17,6 +25,7 @@ const Login: React.FC<Props> = (props) => {
     const [loading, setLoading] = React.useState(false);
     const [redirectTo, setRedirectTo] = React.useState<string>("");
     const [cookies, setCookie] = useCookies(["jwt", "name", "email"]);
+    const location = useLocation();
 
     const handleKeyDown = (e: React.KeyboardEvent<any>) => {
         if (e.key === "Enter") {
@@ -55,21 +64,21 @@ const Login: React.FC<Props> = (props) => {
         UserHelper.user = resp.user;
         selectChurch();
 
-        const hasAccess = UserHelper.currentChurch.apps.some((app => app.appName === "AccessManagement"));
+        const hasAccess = UserHelper.currentChurch.apps.some((app => app.appName === props.appName));
 
         if (!hasAccess) {
             handleLoginErrors(["No permissions"]);
             return;
         }
-        // App has access so lets save selected church's access API JWT.
+        // App has access so lets cookie selected church's access API JWT.
         UserHelper.currentChurch.apis.forEach(api => {
-            if (api.keyName === ApiName.ACCESS_API) setCookie("jwt", api.jwt, { path: "/" });
+            if (api.keyName === "AccessApi") setCookie("jwt", api.jwt, { path: "/" });
         })
 
         if (props.successCallback !== undefined) props.successCallback();
         else props.context.setUserName(UserHelper.currentChurch.id.toString());
 
-        const search = new URLSearchParams(props.location.search);
+        const search = new URLSearchParams(location.search);
         const returnUrl = search.get("returnUrl");
         if (returnUrl) {
             setRedirectTo(returnUrl);
@@ -132,5 +141,3 @@ const Login: React.FC<Props> = (props) => {
     );
 
 };
-
-export const LoginPage = withRouter(Login);
