@@ -6,7 +6,7 @@ import { ResetPasswordRequestInterface, ResetPasswordResponseInterface } from ".
 import { Button } from "react-bootstrap";
 
 interface Props {
-    registerUrl: string;
+    registerUrl?: string;
 }
 
 export const ForgotPage: React.FC<Props> = ({registerUrl}) => {

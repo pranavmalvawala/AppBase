@@ -3,12 +3,10 @@ import { ApiConfig, RolePermissionInterface, ApiListType } from "../interfaces";
 export class ApiHelper {
 
     static apiConfigs: ApiConfig[] = [];
-    static defaultApi = "";
     static isAuthenticated = false;
 
 
     static getConfig(keyName: string) {
-        if (keyName === undefined) keyName = this.defaultApi;
         var result: ApiConfig;
         this.apiConfigs.forEach(config => { if (config.keyName === keyName) result = config });
         //if (result === null) throw new Error("Unconfigured API: " + keyName);
