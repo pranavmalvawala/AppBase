@@ -1,7 +1,7 @@
 import React from "react";
 import "./Login.css";
 import { ErrorMessages } from "../components";
-import { LoginResponseInterface, UserContextInterface } from "../interfaces";
+import { LoginResponseInterface, UserContextInterface, ChurchInterface } from "../interfaces";
 import { ApiHelper, UserHelper } from "../helpers";
 import { Button, FormControl, Alert } from "react-bootstrap";
 import { Redirect, useLocation } from "react-router-dom";
@@ -57,7 +57,13 @@ export const LoginPage: React.FC<Props> = (props) => {
     };
 
     const handleLoginSuccess = (resp: LoginResponseInterface) => {
-        UserHelper.churches = resp.churches;
+        let churches: ChurchInterface[] = [];
+        resp.churches.forEach(church => {
+            if (church.apps.some(c => c.appName === props.appName)) {
+                churches.push(church)
+            }
+        })
+        UserHelper.churches = churches;
 
         setCookie("name", resp.user.displayName, { path: "/" });
         setCookie("email", resp.user.email, { path: "/" });
