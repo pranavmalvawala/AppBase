@@ -81,14 +81,14 @@ export const LoginPage: React.FC<Props> = (props) => {
             if (api.keyName === "AccessApi") setCookie("jwt", api.jwt, { path: "/" });
         })
 
-        if (props.successCallback !== undefined) props.successCallback();
-        else props.context.setUserName(UserHelper.currentChurch.id.toString());
-
         const search = new URLSearchParams(location.search);
         const returnUrl = search.get("returnUrl");
         if (returnUrl) {
             setRedirectTo(returnUrl);
         }
+
+        if (props.successCallback !== undefined) props.successCallback();
+        else props.context.setUserName(UserHelper.currentChurch.id.toString());
     }
 
     const handleLoginErrors = (errors: string[]) => {
