@@ -34,7 +34,7 @@ export class StripePaymentMethod {
       this.exp_month = obj?.exp_month || obj?.card?.exp_month || null;
       this.exp_year = obj?.exp_year || obj?.card?.exp_year || null;
       this.status = obj?.status || null;
-      this.account_holder_name = obj?.account_holder_name || null;
-      this.account_holder_type = obj?.account_holder_type || null;
+      this.account_holder_name = obj?.account_holder_name || '';
+      this.account_holder_type = obj?.account_holder_type || 'individual';
     }
 }
