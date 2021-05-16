@@ -9,18 +9,22 @@ export class UserHelper {
 
     static selectChurch = (context: UserContextInterface, churchId?: string, keyName?: string) => {
         var church = null;
-        //const keyName = window.location.hostname.split('.')[0];
+
         if (churchId) UserHelper.churches.forEach(c => { if (c.id === churchId) church = c; });
         else if (keyName) UserHelper.churches.forEach(c => { if (c.subDomain === keyName) church = c; });
         else church = UserHelper.churches[0];
-        if (church === null) window.location.reload();
+        if (church === null) return;
         else {
             UserHelper.currentChurch = church;
-            ApiHelper.setDefaultPermissions(UserHelper.currentChurch.jwt);
-            UserHelper.currentChurch.apis.forEach(api => { ApiHelper.setPermissions(api.keyName, api.jwt, api.permissions); });
+            UserHelper.setupApiHelper(UserHelper.currentChurch);
             if (context.churchName !== "") UserHelper.churchChanged = true;
             context.setChurchName(UserHelper.currentChurch.name);
         }
+    }
+
+    static setupApiHelper(church: ChurchInterface) {
+        ApiHelper.setDefaultPermissions(church.jwt);
+        church.apis.forEach(api => { ApiHelper.setPermissions(api.keyName, api.jwt, api.permissions); });
     }
 
     static checkAccess({ api, contentType, action }: IPermission): boolean {

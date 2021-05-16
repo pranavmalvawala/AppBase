@@ -14,7 +14,8 @@ interface Props {
     successCallback?: () => void,
     requiredKeyName?: boolean,
     logoSquare?: string,
-    appName?: string
+    appName?: string,
+    performGuestLogin?: (churches: ChurchInterface[]) => void;
 }
 
 export const LoginPage: React.FC<Props> = (props) => {
@@ -69,6 +70,16 @@ export const LoginPage: React.FC<Props> = (props) => {
         setCookie("email", resp.user.email, { path: "/" });
         UserHelper.user = resp.user;
         selectChurch();
+
+        /**
+         * if user doesn't belong to the church but still wants to log in to that church. 
+         * We allow them to log in as "Guest", this feature is only supported
+         * for "streamingLive" app. 
+         */ 
+        if (props.appName === "StreamingLive" && !UserHelper.currentChurch) {
+            props.performGuestLogin(resp.churches);
+            return;
+        }
 
         const hasAccess = UserHelper.currentChurch.apps.some((app => app.appName === props.appName));
 
