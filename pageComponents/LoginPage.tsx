@@ -81,7 +81,7 @@ export const LoginPage: React.FC<Props> = (props) => {
             return;
         }
 
-        const hasAccess = UserHelper.currentChurch.apps.some((app => app.appName === props.appName));
+        const hasAccess = UserHelper.currentChurch?.apps.some((app => app.appName === props.appName));
 
         if (!hasAccess) {
             handleLoginErrors(["No permissions"]);
