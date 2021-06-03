@@ -15,5 +15,5 @@ export interface ReportColumnInterface { field?: string, heading?: string, group
 export interface ReportValueInterface { key?: string, value?: any }
 export interface PersonInterface { id?: string, name: NameInterface, contactInfo: ContactInfoInterface, membershipStatus?: string, gender?: string, birthDate?: Date, maritalStatus?: string, anniversary?: Date, photo?: string, photoUpdated?: Date, householdId?: string, householdRole?: string, userId?: string, formSubmissions?: [FormSubmissionInterface] }
 export interface QuestionInterface { id?: string, formId?: string, title?: string, fieldType?: string, placeholder?: string, description?: string, choices?: [{ value?: string, text?: string }] }
-export interface ServiceInterface { id?: string, campusId?: string, name?: string }
-export interface ServiceTimeInterface { id?: string, name?: string, longName?: string, serviceId?: string }
+export interface ServiceInterface { id?: string, campusId?: string, name?: string, campus?: CampusInterface }
+export interface ServiceTimeInterface { id?: string, name?: string, longName?: string, serviceId?: string, groups?: GroupInterface[] }
