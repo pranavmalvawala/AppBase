@@ -11,14 +11,28 @@ export class ArrayHelper {
     }
 
     static getOne(array: any[], propertyName: string, value: any) {
-        for (const item of array) if (item[propertyName] === value) return item;
+        for (const item of array) if (ArrayHelper.compare(item, propertyName, value)) return item;
         return null
     }
 
     static getAll(array: any[], propertyName: string, value: any) {
         const result: any[] = []
-        for (const item of array) if (item[propertyName] === value) result.push(item);
+        for (const item of array) {
+            if (ArrayHelper.compare(item, propertyName, value)) result.push(item);
+        }
         return result;
+    }
+
+    private static compare(item: any, propertyName: string, value: any) {
+        const propChain = propertyName.split(".");
+        if (propChain.length === 1) return item[propertyName] === value;
+        else {
+            var obj = item;
+            for (let i = 0; i < propChain.length - 1; i++) {
+                if (obj) obj = item[propChain[i]];
+            }
+            return obj[propChain[propChain.length - 1]] === value;
+        }
     }
 
     static getUniqueValues(array: any[], propertyName: string) {
