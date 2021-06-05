@@ -19,10 +19,11 @@ export class Permissions {
       edit: { api: "MembershipApi", contentType: "Forms", action: "Edit" }
     },
     groups: {
-      view: { api: "MembershipApi", contentType: "Groups", action: "View" },
       edit: { api: "MembershipApi", contentType: "Groups", action: "Edit" }
     },
     people: {
+      view: { api: "MembershipApi", contentType: "People", action: "View" },
+      viewMembers: { api: "MembershipApi", contentType: "People", action: "View Members" },
       edit: { api: "MembershipApi", contentType: "People", action: "Edit" }
     },
     groupMembers: {
