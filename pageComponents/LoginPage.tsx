@@ -7,7 +7,7 @@ import { Button, FormControl, Alert } from "react-bootstrap";
 import { Redirect, useLocation } from "react-router-dom";
 import { useCookies } from "react-cookie"
 
-interface Props { 
+interface Props {
     accessApi?: string,
     context: UserContextInterface,
     jwt: string, auth: string,
@@ -75,7 +75,7 @@ export const LoginPage: React.FC<Props> = (props) => {
          * if user doesn't belong to the church but still wants to log in to that church. 
          * We allow them to log in as "Guest", this feature is only supported
          * for "streamingLive" app. 
-         */ 
+         */
         if (props.appName === "StreamingLive" && !UserHelper.currentChurch) {
             props.performGuestLogin(resp.churches);
             return;
@@ -141,7 +141,7 @@ export const LoginPage: React.FC<Props> = (props) => {
     }
     return (
         <div className="smallCenterBlock">
-            <img src={props.logoSquare || '/images/logo-login.png'} alt="logo" className="img-fluid" />
+            <img src={props.logoSquare || '/images/logo-login.png'} alt="logo" className="img-fluid" style={{ width: "100%" }} />
             <ErrorMessages errors={errors} />
             {getWelcomeBack()}
             <div id="loginBox">
