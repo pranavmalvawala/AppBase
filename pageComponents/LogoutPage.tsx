@@ -7,14 +7,14 @@ import { UserContextInterface } from "../interfaces";
 interface Props { context: UserContextInterface, }
 
 export const LogoutPage: React.FC<Props> = (props) => {
-    const [, , removeCookie] = useCookies(["jwt", "email", "name"]);
-    
-    removeCookie("jwt");
-    removeCookie("email");
-    removeCookie("name");
+  const [, , removeCookie] = useCookies(["jwt", "email", "name"]);
 
-    ApiHelper.clearPermissions();
-    props.context.setUserName("");
-    setTimeout(() => { window.location.href = "/"; }, 300);
-    return null;
+  removeCookie("jwt");
+  removeCookie("email");
+  removeCookie("name");
+
+  ApiHelper.clearPermissions();
+  props.context.setUserName("");
+  setTimeout(() => { window.location.href = "/"; }, 300);
+  return null;
 }
