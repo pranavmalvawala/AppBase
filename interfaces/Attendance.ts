@@ -1,4 +1,4 @@
-import { CampusInterface, ServiceInterface, ServiceTimeInterface, PersonInterface } from '.'
+import { CampusInterface, ServiceInterface, ServiceTimeInterface, PersonInterface } from "."
 
 export interface AttendanceInterface { campus: CampusInterface, service: ServiceInterface, serviceTime: ServiceTimeInterface, groupId: string }
 export interface AttendanceRecordInterface { serviceTime: ServiceTimeInterface, service: ServiceInterface, campus: CampusInterface, week: number, count: number, visitDate: Date, groupId: string }
