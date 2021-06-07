@@ -5,7 +5,6 @@ interface Props { report?: ReportInterface }
 
 export const GroupedReport = (props: Props) => {
 
-
   const getTableHeader = () => {
     if (props.report === undefined || props.report === null || props.report.headings === undefined) return null;
     const cells: JSX.Element[] = [];
@@ -48,7 +47,6 @@ export const GroupedReport = (props: Props) => {
     return result;
 
   }
-
 
   if (props.report?.data.length === 0) return <>Group report will appear once attendance has been added.</>;
   return (

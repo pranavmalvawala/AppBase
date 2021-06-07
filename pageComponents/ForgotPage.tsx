@@ -56,5 +56,4 @@ export const ForgotPage: React.FC<Props> = ({registerUrl}) => {
     </div>
   );
 
-
 }

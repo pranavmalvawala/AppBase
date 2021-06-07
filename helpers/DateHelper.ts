@@ -14,7 +14,6 @@ export class DateHelper {
     } catch { return ""; }
   }
 
-
   static formatDateTime(date: Date, format: string) {
     try {
       return dateFormat(date, format);
@@ -25,7 +24,6 @@ export class DateHelper {
     if (date === undefined || date === null) return "";
     return this.formatDate(date, "MMM d, yyyy");
   }
-
 
   static prettyDateTime(date: Date) {
     if (date === undefined || date === null) return "";

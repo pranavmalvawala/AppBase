@@ -5,7 +5,6 @@ export class ApiHelper {
     static apiConfigs: ApiConfig[] = [];
     static isAuthenticated = false;
 
-
     static getConfig(keyName: string) {
       let result: ApiConfig;
       this.apiConfigs.forEach(config => { if (config.keyName === keyName) result = config });
