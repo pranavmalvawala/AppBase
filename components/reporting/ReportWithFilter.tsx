@@ -4,7 +4,6 @@ import { Row, Col } from "react-bootstrap";
 import { ReportView } from "./ReportView";
 import { ReportFilter } from "./ReportFilter";
 
-
 interface Props { filter: ReportFilterInterface, fetchReport: (filter: ReportFilterInterface) => Promise<ReportInterface> }
 
 export const ReportWithFilter = (props: Props) => {

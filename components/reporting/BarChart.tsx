@@ -64,5 +64,4 @@ export const BarChart = (props: Props) => {
     return result;
   }
 
-
 }

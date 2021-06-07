@@ -4,7 +4,6 @@ import { InputBox } from "../InputBox";
 import { DateHelper } from "../../helpers";
 import { FormControl, FormGroup, FormLabel } from "react-bootstrap";
 
-
 interface Props { filter: ReportFilterInterface, updateFunction: (filter: ReportFilterInterface) => void }
 
 export const ReportFilter = (props: Props) => {
@@ -22,7 +21,6 @@ export const ReportFilter = (props: Props) => {
     _filter.fields.forEach(f => { if (f.keyName === key) f.value = value });
     setFilter(_filter);
   }
-
 
   const getOptions = (data: ReportFilterOptionInterface[]) => {
     let result: JSX.Element[] = [];
