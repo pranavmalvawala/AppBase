@@ -10,12 +10,11 @@ export const ReportView = (props: Props) => {
 
   const handlePrint = (e: React.MouseEvent) => {
     e.preventDefault();
-    let content = document.getElementById("chartBox").getElementsByClassName("content")[0].innerHTML;
+    let content = document.getElementById(`chartBox-${props.report?.keyName}`).getElementsByClassName("content")[0].innerHTML;
     let printFrame: any = document.getElementById("printFrame");
     let cw = printFrame.contentWindow;
-    //cw.document.open;
+
     cw.document.write(content);
-    //cw.document.close();
     cw.focus();
     cw.print();
   }
