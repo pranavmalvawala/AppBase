@@ -8,14 +8,14 @@ import { Redirect, useLocation } from "react-router-dom";
 import { useCookies } from "react-cookie"
 
 interface Props {
-    accessApi?: string,
-    context: UserContextInterface,
-    jwt: string, auth: string,
-    successCallback?: () => void,
-    requiredKeyName?: boolean,
-    logoSquare?: string,
-    appName?: string,
-    performGuestLogin?: (churches: ChurchInterface[]) => void;
+  accessApi?: string,
+  context: UserContextInterface,
+  jwt: string, auth: string,
+  successCallback?: () => void,
+  requiredKeyName?: boolean,
+  logo?: string,
+  appName?: string,
+  performGuestLogin?: (churches: ChurchInterface[]) => void;
 }
 
 export const LoginPage: React.FC<Props> = (props) => {
@@ -141,7 +141,7 @@ export const LoginPage: React.FC<Props> = (props) => {
   }
   return (
     <div className="smallCenterBlock">
-      <img src={props.logoSquare || "/images/logo-login.png"} alt="logo" className="img-fluid" style={{ width: "100%" }} />
+      <img src={props.logo || "/images/logo.png"} alt="logo" className="img-fluid" style={{ width: "100%", marginTop: 100, marginBottom: 60 }} />
       <ErrorMessages errors={errors} />
       {getWelcomeBack()}
       <div id="loginBox">
