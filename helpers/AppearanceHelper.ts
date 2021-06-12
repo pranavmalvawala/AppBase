@@ -19,10 +19,10 @@ export class AppearanceHelper {
     return (appearanceSettings?.logoLight) ? appearanceSettings.logoLight : defaultLogo;
   }
 
-  public static getLogo(appearanceSettings: AppearanceInterface, defaultLogo: string, backgroundColor: string) {
+  public static getLogo(appearanceSettings: AppearanceInterface, defaultLogoLight: string, defaultLogoDark: string, backgroundColor: string) {
     const isDark = (appearanceSettings.logoDark) ? this.isDark(backgroundColor) : false;
-    if (isDark) return this.getLogoDark(appearanceSettings, defaultLogo);
-    else return this.getLogoLight(appearanceSettings, defaultLogo);
+    if (isDark) return this.getLogoDark(appearanceSettings, defaultLogoDark);
+    else return this.getLogoLight(appearanceSettings, defaultLogoLight);
   }
 
   private static isDark(backgroundColor: string) {
