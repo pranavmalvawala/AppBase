@@ -11,7 +11,7 @@ interface Props {
     "data-cy"?: string
 }
 
-export const DisplayBox: React.FC<Props> = (props) => {
+export const DisplayBox = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
   let editContent: JSX.Element;
   if (props.editFunction !== undefined) editContent = <a data-cy="edit-button" onClick={e => { e.preventDefault(); props.editFunction(); }} href="about:blank"><i className="fas fa-pencil-alt"></i></a>;
   else if (props.editContent !== undefined) editContent = <div>{props.editContent}</div>;
@@ -23,9 +23,9 @@ export const DisplayBox: React.FC<Props> = (props) => {
           <Col xs={4} style={{ textAlign: "right" }}>{editContent}</Col>
         </Row>
       </div>
-      <div className="content" data-cy="content">
+      <div className="content" ref={ref} data-cy="content">
         {props.children}
       </div>
     </div>
   );
-}
+})
