@@ -2,17 +2,17 @@ import React from "react";
 import { CSVLink } from "react-csv";
 
 interface Props {
-    data: any[],
-    spaceAfter?: boolean,
-    spaceBefore?: boolean,
-    filename?: string
+  data: any[],
+  spaceAfter?: boolean,
+  spaceBefore?: boolean,
+  filename?: string
 }
 
 export const ExportLink: React.FC<Props> = (props) => {
 
   const getHeaders = () => {
     let result = [];
-    if (props.data.length > 0) {
+    if (props.data?.length > 0) {
       let names = getAllPropertyNames();
       for (let i = 0; i < names.length; i++) { result.push({ label: names[i], key: names[i] }); }
     }
@@ -34,22 +34,22 @@ export const ExportLink: React.FC<Props> = (props) => {
     for (let i = 0; i < names.length; i++) {
       let t = typeof obj[names[i]];
       switch (t) {
-      case "number":
-      case "string":
-      case "boolean":
-        result.push(prefix + names[i]);
-        break;
-      case "object":
-        if ((obj[names[i]] !== null)) {
-          let children: string[] = getPropertyNames(prefix + names[i] + ".", obj[names[i]]);
-          for (let j = 0; j < children.length; j++) result.push(children[j]);
-        }
+        case "number":
+        case "string":
+        case "boolean":
+          result.push(prefix + names[i]);
+          break;
+        case "object":
+          if ((obj[names[i]] !== null)) {
+            let children: string[] = getPropertyNames(prefix + names[i] + ".", obj[names[i]]);
+            for (let j = 0; j < children.length; j++) result.push(children[j]);
+          }
       }
     }
     return result;
   }
 
-  if (props.data?.length === 0) return null;
+  if (!props.data || !Array.isArray(props.data) || props.data.length === 0) return null;
   else {
     let items = [];
     if (props.spaceBefore) items.push(" ");
