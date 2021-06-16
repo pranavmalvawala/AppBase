@@ -3,11 +3,11 @@ import { ReportFilterInterface, ReportInterface } from "../../interfaces/ReportI
 import { Row, Col } from "react-bootstrap";
 import { ReportView } from "./ReportView";
 import { ReportFilter } from "./ReportFilter";
+import { Loading } from "../Loading"
 
 interface Props { filter: ReportFilterInterface, fetchReport: (filter: ReportFilterInterface) => Promise<ReportInterface> }
 
 export const ReportWithFilter = (props: Props) => {
-
   const [report, setReport] = React.useState<ReportInterface>(null);
   const [filter, setFilter] = React.useState<ReportFilterInterface>(null);
 
@@ -19,7 +19,7 @@ export const ReportWithFilter = (props: Props) => {
 
   React.useEffect(() => { setFilter(props.filter) }, [props.filter]);
 
-  if (report === null || report === undefined) return null;
+  if (!report) return <Loading />;
   else {
     return (
       <Row>
