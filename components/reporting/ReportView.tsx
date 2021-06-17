@@ -27,13 +27,13 @@ export const ReportView = (props: Props) => {
   const getChart = () => {
     let result = <></>
     switch (props.report.reportType) {
-    case "Area Chart":
-    case "Bar Chart":
-      result = (<BarChart report={props.report} />);
-      break;
-    default:
-      result = (<GroupedReport report={props.report} />);
-      break;
+      case "Area Chart":
+      case "Bar Chart":
+        result = (<BarChart report={props.report} />);
+        break;
+      default:
+        result = (<GroupedReport report={props.report} />);
+        break;
     }
     return result;
   }

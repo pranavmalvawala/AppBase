@@ -49,7 +49,7 @@ export const ExportLink: React.FC<Props> = (props) => {
     return result;
   }
 
-  if (!props.data || !Array.isArray(props.data) || props.data.length === 0) return null;
+  if (props.data?.length === 0) return null;
   else {
     let items = [];
     if (props.spaceBefore) items.push(" ");

@@ -31,12 +31,12 @@ export const ReportFilter = (props: Props) => {
   const getControl = (field: ReportFilterFieldInterface) => {
     let result = null;
     switch (field.dataType) {
-    case "date":
-      result = <FormControl type="date" data-cy="select-date" name={field.keyName} value={DateHelper.formatHtml5Date(field.value)} onChange={handleChange} onKeyDown={handleKeyDown} />;
-      break;
-    case "list":
-      result = (<FormControl as="select" data-cy={`select-${field.keyName}`} name={field.keyName} onChange={handleChange} onKeyDown={handleKeyDown}>{getOptions(field.options())}</FormControl>);
-      break;
+      case "date":
+        result = <FormControl type="date" data-cy="select-date" name={field.keyName} value={DateHelper.formatHtml5Date(field.value)} onChange={handleChange} onKeyDown={handleKeyDown} />;
+        break;
+      case "list":
+        result = (<FormControl as="select" data-cy={`select-${field.keyName}`} name={field.keyName} onChange={handleChange} onKeyDown={handleKeyDown}>{getOptions(field.options())}</FormControl>);
+        break;
 
     }
     return result;
