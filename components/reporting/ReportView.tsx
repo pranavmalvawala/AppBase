@@ -11,7 +11,7 @@ export const ReportView = (props: Props) => {
   const contentRef = useRef<HTMLDivElement>(null);
 
   const handlePrint = useReactToPrint({
-    content: () => contentRef.current,
+    content: () => contentRef.current
   })
 
   const getEditContent = () => {

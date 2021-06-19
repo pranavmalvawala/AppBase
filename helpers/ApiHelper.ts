@@ -60,7 +60,7 @@ export class ApiHelper {
       const requestOptions = {
         method: "POST",
         headers: { Authorization: "Bearer " + config.jwt, "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        body: JSON.stringify(data)
       };
       return fetch(config.url + path, requestOptions).then(response => response.json())
     }
@@ -69,7 +69,7 @@ export class ApiHelper {
       const config = this.getConfig(apiName);
       const requestOptions = {
         method: "DELETE",
-        headers: { Authorization: "Bearer " + config.jwt },
+        headers: { Authorization: "Bearer " + config.jwt }
       };
       return fetch(config.url + path, requestOptions);
     }
@@ -79,7 +79,7 @@ export class ApiHelper {
       const requestOptions = {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        body: JSON.stringify(data)
       };
       return fetch(config.url + path, requestOptions).then(response => response.json())
     }

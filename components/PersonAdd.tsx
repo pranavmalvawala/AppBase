@@ -46,7 +46,7 @@ export const PersonAdd: React.FC<Props> = (props) => {
           <td><img src={props.getPhotoUrl(sr)} alt="avatar" /></td>
           <td>{sr.name.display}</td>
           <td><a className="text-success" data-cy="add-to-list" data-index={i} href="about:blank" onClick={handleAdd}><i className="fas fa-user"></i> Add</a></td>
-        </tr>,
+        </tr>
       );
     }
   }

@@ -37,7 +37,7 @@ export class PersonHelper {
       address2: contactInfo2.address2,
       city: contactInfo2.city,
       state: contactInfo2.state,
-      zip: contactInfo2.zip,
+      zip: contactInfo2.zip
     }
 
     return updatedAddress
