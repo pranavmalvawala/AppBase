@@ -15,8 +15,8 @@ export interface StripeBankAccountUpdateInterface { paymentMethodId: string, cus
 export interface StripeBankAccountHolderDataInterface { account_holder_name: string, account_holder_type: string }
 export interface StripeBankAccountVerifyInterface { customerId: string, paymentMethodId: string, amountData: { amounts: string[] } }
 export interface StripePersonDonationInterface { id: string, email: string, name: string };
-export interface StripeFundDonationInterface { id: string, amount: number };
-export interface StripeDonationInterface { id: string, type: string, amount: number, customerId: string, billing_cycle_anchor?: number, proration_behavior?: string, interval?: StripeDonationIntervalInterface, person: StripePersonDonationInterface, funds: StripeFundDonationInterface[] };
+export interface StripeFundDonationInterface { id: string, amount: number, name?: string };
+export interface StripeDonationInterface { id?: string, type?: string, amount?: number, customerId?: string, billing_cycle_anchor?: number, proration_behavior?: string, interval?: StripeDonationIntervalInterface, person?: StripePersonDonationInterface, funds?: StripeFundDonationInterface[], notes?: string };
 export interface StripeDonationIntervalInterface { interval: string, interval_count: number };
 
 export class StripePaymentMethod {
