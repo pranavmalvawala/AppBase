@@ -18,7 +18,7 @@ export interface UserInterface { id?: string, email?: string, authGuid?: string,
 export interface GenericSettingInterface { id?: string, churchId?: string, keyName?: string, value?: string, public?: number }
 
 export interface ApiConfig { keyName: string, url: string, jwt: string, permisssions: RolePermissionInterface[] }
-export type ApiListType = "AccessApi" | "MembershipApi" | "AttendanceApi" | "GivingApi" | "MessagingApi" | "StreamingLiveApi" | "B1Api";
+export type ApiListType = "AccessApi" | "MembershipApi" | "AttendanceApi" | "GivingApi" | "MessagingApi" | "StreamingLiveApi" | "B1Api" | "LessonsApi";
 export interface IPermission {
     api: string;
     contentType: string;
