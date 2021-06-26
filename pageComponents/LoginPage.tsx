@@ -72,10 +72,10 @@ export const LoginPage: React.FC<Props> = (props) => {
     selectChurch();
 
     /**
-         * if user doesn't belong to the church but still wants to log in to that church.
-         * We allow them to log in as "Guest", this feature is only supported
-         * for "streamingLive" app.
-         */
+     * if user doesn't belong to the church but still wants to log in to that church.
+     * We allow them to log in as "Guest", this feature is only supported
+     * for "streamingLive" app.
+     */
     if (props.appName === "StreamingLive" && !UserHelper.currentChurch) {
       props.performGuestLogin(resp.churches);
       return;
