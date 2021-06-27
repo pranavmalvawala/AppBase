@@ -18,6 +18,7 @@ export interface StripePersonDonationInterface { id: string, email: string, name
 export interface StripeFundDonationInterface { id: string, amount: number, name?: string };
 export interface StripeDonationInterface { id?: string, type?: string, amount?: number, customerId?: string, billing_cycle_anchor?: number, proration_behavior?: string, interval?: StripeDonationIntervalInterface, person?: StripePersonDonationInterface, funds?: StripeFundDonationInterface[], notes?: string };
 export interface StripeDonationIntervalInterface { interval: string, interval_count: number };
+export interface SubscriptionInterface { id: string, funds: [], billing_cycle_anchor: number, default_payment_method: string, default_source: string, plan: { amount: number, interval: string, interval_count: number }, customer: string };
 
 export class StripePaymentMethod {
     id: string;
