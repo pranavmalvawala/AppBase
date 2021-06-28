@@ -9,7 +9,7 @@ export interface PermissionInterface { apiName?: string, section?: string, actio
 export interface RegisterInterface { churchName?: string, displayName?: string, email?: string, password?: string, subDomain?: string }
 export interface RoleInterface { id?: string, churchId?: string, name?: string }
 export interface RolePermissionInterface { id?: string, churchId?: string, roleId?: string, apiName?: string, contentType?: string, contentId?: string, action?: string }
-export interface RoleMemberInterface { id?: string, churchId?: string, roleId?: string, userId?: string, user?: UserInterface }
+export interface RoleMemberInterface { id?: string, churchId?: string, roleId?: string, userId?: string, user?: UserInterface, personId?: string }
 export interface ResetPasswordRequestInterface { userEmail: string }
 export interface ResetPasswordResponseInterface { emailed: boolean }
 export interface SwitchAppRequestInterface { appName: string, churchId: string }

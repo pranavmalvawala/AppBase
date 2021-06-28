@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { ApiHelper } from "../helpers";
 import { PersonInterface } from "../interfaces"
 import { Table, Button, FormControl, InputGroup } from "react-bootstrap";
@@ -8,22 +8,25 @@ interface Props {
     person?: PersonInterface,
     getPhotoUrl: (person: PersonInterface) => string,
     searchClicked?: () => void,
+    filterList?: string[]
 }
 
-export const PersonAdd: React.FC<Props> = (props) => {
-  const [searchResults, setSearchResults] = React.useState<PersonInterface[]>(null);
-  const [searchText, setSearchText] = React.useState("");
+export const PersonAdd: React.FC<Props> = ({ addFunction, getPhotoUrl, searchClicked, filterList = [] }) => {
+  const [searchResults, setSearchResults] = useState<PersonInterface[]>([]);
+  const [searchText, setSearchText] = useState("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => { e.preventDefault(); setSearchText(e.currentTarget.value); }
   const handleKeyDown = (e: React.KeyboardEvent<any>) => { if (e.key === "Enter") { e.preventDefault(); handleSearch(null); } }
+
   const handleSearch = (e: React.MouseEvent) => {
     if (e !== null) e.preventDefault();
     let term = escape(searchText.trim());
     ApiHelper.get("/people/search?term=" + term, "MembershipApi")
-      .then(data => {
-        setSearchResults(data);
-        if (props.searchClicked) {
-          props.searchClicked();
+      .then((data: PersonInterface[]) => {
+        const filteredResult = data.filter(s => !filterList.includes(s.id))
+        setSearchResults(filteredResult);
+        if (searchClicked) {
+          searchClicked();
         }
       });
   }
@@ -34,21 +37,19 @@ export const PersonAdd: React.FC<Props> = (props) => {
     let sr: PersonInterface[] = [...searchResults];
     let person: PersonInterface = sr.splice(parseInt(idx), 1)[0];
     setSearchResults(sr);
-    props.addFunction(person);
+    addFunction(person);
   }
 
   let rows = [];
-  if (searchResults !== null) {
-    for (let i = 0; i < searchResults.length; i++) {
-      let sr = searchResults[i];
-      rows.push(
-        <tr key={sr.id}>
-          <td><img src={props.getPhotoUrl(sr)} alt="avatar" /></td>
-          <td>{sr.name.display}</td>
-          <td><a className="text-success" data-cy="add-to-list" data-index={i} href="about:blank" onClick={handleAdd}><i className="fas fa-user"></i> Add</a></td>
-        </tr>
-      );
-    }
+  for (let i = 0; i < searchResults.length; i++) {
+    let sr = searchResults[i];
+    rows.push(
+      <tr key={sr.id}>
+        <td><img src={getPhotoUrl(sr)} alt="avatar" /></td>
+        <td>{sr.name.display}</td>
+        <td><a className="text-success" data-cy="add-to-list" data-index={i} href="about:blank" onClick={handleAdd}><i className="fas fa-user"></i> Add</a></td>
+      </tr>
+    );
   }
 
   return (
