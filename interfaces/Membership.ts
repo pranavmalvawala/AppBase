@@ -9,7 +9,7 @@ export interface GroupServiceTimeInterface { id?: string, groupId?: string, serv
 export interface HouseholdInterface { id?: string, name?: string }
 export interface HouseholdMemberInterface { id?: string, householdId?: string, household?: HouseholdInterface, personId?: string, person?: PersonInterface, role?: string }
 export interface NameInterface { first?: string, middle?: string, last?: string, nick?: string, display?: string }
-export interface NoteInterface { id?: string, churchId?: string, contentType?: string, contentId?: string, noteType?: string, addedBy?: string, contents?: string, dateAdded?: string, person?: PersonInterface }
+export interface NoteInterface { id?: string, churchId?: string, contentType?: string, contentId?: string, noteType?: string, addedBy?: string, contents?: string, createdAt?: string, updatedAt?: string, person?: PersonInterface }
 export interface ReportInterface { id?: string, keyName?: string, title?: string, query?: string, parameters?: string, reportType: string, columns?: ReportColumnInterface[], values?: ReportValueInterface[], results?: any[] }
 export interface ReportColumnInterface { field?: string, heading?: string, grouped?: boolean, formatType?: string }
 export interface ReportValueInterface { key?: string, value?: any }
