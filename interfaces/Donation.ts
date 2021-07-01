@@ -6,7 +6,7 @@ export interface DonationSummaryInterface { week: number, donations?: DonationSu
 export interface DonationSummaryDonation { totalAmount: number, fund?: FundInterface }
 export interface FundInterface { id: string, name: string }
 export interface FundDonationInterface { id?: string, donationId?: string, fundId?: string, amount?: number, donation?: DonationInterface }
-export interface PaymentMethodInterface { id?: string, churchId?: string, personId?: string, customerId?: string, email?: string }
+export interface PaymentMethodInterface { id?: string, churchId?: string, personId?: string, customerId?: string, email?: string, name?: string }
 export interface StripeCardUpdateInterface { paymentMethodId: string, cardData: StripeCardDataInterface }
 export interface StripeCardDataInterface { card: StripeCardExpirationInterface }
 export interface StripeCardExpirationInterface { exp_month: string, exp_year: string }
