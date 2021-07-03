@@ -30,15 +30,6 @@ export class DateHelper {
     return this.formatDateTime(date, "MMM d, yyyy h:mm a");
   }
 
-  static formatCurrency(amount: number) {
-    const formatter = new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "USD",
-      minimumFractionDigits: 2
-    });
-    return formatter.format(amount);
-  }
-
   static getLastSunday() {
     let result = new Date();
     while (result.getDay() !== 0) result.setDate(result.getDate() - 1);
