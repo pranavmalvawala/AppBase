@@ -12,29 +12,28 @@ interface Props {
     deleteFunction?: () => void;
     saveFunction: () => void;
     "data-cy"?: string;
+    className?: string
 }
-export const InputBox: React.FC<Props> = (props) => {
-  let saveText = "Save";
-  if (props.saveText !== undefined) saveText = props.saveText;
-
-  const handleCancel = (e: React.MouseEvent) => { e.preventDefault(); props.cancelFunction(); }
-  const handleDelete = (e: React.MouseEvent) => { e.preventDefault(); props.deleteFunction(); }
-  const handleSave = (e: React.MouseEvent) => { e.preventDefault(); props.saveFunction(); }
-
+export const InputBox = ({ id, children, headerIcon, headerText, saveText = "Save", headerActionContent, "data-cy": dataCy, cancelFunction, deleteFunction, saveFunction, className = "" }: Props) => {
   let buttons = [];
-  if (props.cancelFunction !== undefined) buttons.push(<Col key="cancel"><Button variant="warning" block onClick={handleCancel}>Cancel</Button></Col>);
-  if (props.deleteFunction !== undefined) buttons.push(<Col key="delete"><Button id="delete" data-cy="delete-button" variant="danger" block onClick={handleDelete}>Delete</Button></Col>);
-  if (props.saveFunction !== undefined) buttons.push(<Col key="save"><Button variant="success" data-cy="save-button" block onClick={handleSave}>{saveText}</Button></Col>);
+  if (cancelFunction) buttons.push(<Col key="cancel"><Button variant="warning" block onClick={cancelFunction}>Cancel</Button></Col>);
+  if (deleteFunction) buttons.push(<Col key="delete"><Button id="delete" data-cy="delete-button" variant="danger" block onClick={deleteFunction}>Delete</Button></Col>);
+  if (saveFunction) buttons.push(<Col key="save"><Button variant="success" data-cy="save-button" block onClick={saveFunction}>{saveText}</Button></Col>);
+
+  let classNames = ["inputBox"];
+  if (className) {
+    classNames.push(className);
+  }
 
   return (
-    <div id={props.id} className="inputBox" data-cy={props["data-cy"]}>
+    <div id={id} className={classNames.join(" ").trim()} data-cy={dataCy}>
       <div className="header" data-cy="header">
         <Row>
-          <Col xs={8}><i className={props.headerIcon}></i> {props.headerText}</Col>
-          <Col xs={4} style={{ textAlign: "right" }}>{props.headerActionContent}</Col>
+          <Col xs={8}><i className={headerIcon}></i> {headerText}</Col>
+          <Col xs={4} style={{ textAlign: "right" }}>{headerActionContent}</Col>
         </Row>
       </div>
-      <div className="content">{props.children}</div>
+      <div className="content">{children}</div>
       <div className="footer"><Row>{buttons}</Row></div>
     </div>
   );
