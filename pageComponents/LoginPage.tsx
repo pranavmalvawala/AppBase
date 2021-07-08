@@ -66,7 +66,7 @@ export const LoginPage: React.FC<Props> = (props) => {
     })
     UserHelper.churches = churches;
 
-    setCookie("name", resp.user.displayName, { path: "/" });
+    setCookie("name", `${resp.user.firstName} ${resp.user.lastName}`, { path: "/" });
     setCookie("email", resp.user.email, { path: "/" });
     UserHelper.user = resp.user;
     selectChurch();
