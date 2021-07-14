@@ -10,7 +10,7 @@ type Props = {
 export function PasswordField({ value = "", onChange, containerClass = "" }: Props) {
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
-  const iconColor = showPassword ? "" : "icon-lightgrey";
+  const iconColor = showPassword ? "icon-grey" : "icon-lightgrey";
 
   const eyeIcon = value && (
     <i
