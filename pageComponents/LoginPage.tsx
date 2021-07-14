@@ -1,6 +1,6 @@
 import React from "react";
 import "./Login.css";
-import { ErrorMessages } from "../components";
+import { ErrorMessages, PasswordField } from "../components";
 import { LoginResponseInterface, UserContextInterface, ChurchInterface } from "../interfaces";
 import { ApiHelper, UserHelper } from "../helpers";
 import { Button, FormControl, Alert } from "react-bootstrap";
@@ -147,7 +147,7 @@ export const LoginPage: React.FC<Props> = (props) => {
       <div id="loginBox">
         <h2 data-cy="sign-in-call-to-action">Please sign in</h2>
         <FormControl id="email" name="email" data-cy="email" value={email} onChange={(e) => { e.preventDefault(); setEmail(e.currentTarget.value); }} placeholder="Email address" onKeyDown={handleKeyDown} />
-        <FormControl id="password" name="password" data-cy="password" type="password" placeholder="Password" value={password} onChange={(e) => { e.preventDefault(); setPassword(e.currentTarget.value); }} onKeyDown={handleKeyDown} />
+        <PasswordField data-cy="password" value={password} onChange={(e) => { e.preventDefault(); setPassword(e.currentTarget.value); }} onKeyDown={handleKeyDown} />
         <Button id="signInButton" data-cy="sign-in-button" size="lg" variant="primary" block onClick={!loading ? handleSubmit : null} disabled={loading}>
           {loading ? "Please wait..." : "Sign in"}
         </Button>

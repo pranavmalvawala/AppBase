@@ -5,9 +5,19 @@ type Props = {
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   containerClass?: string;
+  id?: string;
+  name?: string;
+  "data-cy"?: string;
+  placeholder?: string;
+  onKeyDown?: (e: React.KeyboardEvent) => void;
+  className?: string;
 };
 
-export function PasswordField({ value = "", onChange, containerClass = "" }: Props) {
+export function PasswordField({
+  value = "",
+  containerClass = "",
+  ...inputProps
+}: Props) {
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const iconColor = showPassword ? "icon-grey" : "icon-lightgrey";
@@ -26,7 +36,7 @@ export function PasswordField({ value = "", onChange, containerClass = "" }: Pro
         placeholder="Password"
         name="password"
         value={value}
-        onChange={onChange}
+        {...inputProps}
       />
       {eyeIcon}
     </div>
