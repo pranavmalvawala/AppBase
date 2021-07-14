@@ -4,9 +4,10 @@ import "./PasswordField.css";
 type Props = {
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  containerClass?: string;
 };
 
-export function PasswordField({ value = "", onChange }: Props) {
+export function PasswordField({ value = "", onChange, containerClass = "" }: Props) {
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const iconColor = showPassword ? "" : "icon-lightgrey";
@@ -18,7 +19,7 @@ export function PasswordField({ value = "", onChange }: Props) {
     />
   );
   return (
-    <div className="form-group pwd-container">
+    <div className={`${containerClass} pwd-container`.trim()}>
       <input
         type={showPassword ? "text" : "password"}
         className="form-control"
