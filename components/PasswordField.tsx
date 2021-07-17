@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Form } from "react-bootstrap";
 import "./PasswordField.css";
 
 type Props = {
@@ -11,11 +12,14 @@ type Props = {
   placeholder?: string;
   onKeyDown?: (e: React.KeyboardEvent) => void;
   className?: string;
+  isInvalid?: boolean;
+  errorText?: string;
 };
 
 export function PasswordField({
   value = "",
   containerClass = "",
+  errorText = "",
   ...inputProps
 }: Props) {
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -30,7 +34,7 @@ export function PasswordField({
   );
   return (
     <div className={`${containerClass} pwd-container`.trim()}>
-      <input
+      <Form.Control
         type={showPassword ? "text" : "password"}
         className="form-control"
         placeholder="Password"
@@ -39,6 +43,9 @@ export function PasswordField({
         {...inputProps}
       />
       {eyeIcon}
+      <Form.Control.Feedback type="invalid">
+        {errorText}
+      </Form.Control.Feedback>
     </div>
   );
 }
