@@ -48,7 +48,7 @@ export const ForgotPage: React.FC<Props> = ({registerUrl}) => {
       <div id="loginBox">
         <h2>Reset Password</h2>
         <p>Enter your email address to request a password reset.</p>
-        <input name="email" type="text" className="form-control" value={email} onChange={e => { e.preventDefault(); setEmail(e.currentTarget.value) }} placeholder="Email address" onKeyDown={handleKeyDown} />
+        <input name="email" type="text" aria-label="email" className="form-control" value={email} onChange={e => { e.preventDefault(); setEmail(e.currentTarget.value) }} placeholder="Email address" onKeyDown={handleKeyDown} />
         <Button size="lg" variant="primary" block onClick={handleSubmit}>Reset</Button>
         <br />
         <div className="text-right"><a href={registerUrl}>Register</a> &nbsp; | &nbsp;<a href="/login">Login</a>&nbsp;</div>
