@@ -34,7 +34,9 @@ export function PasswordField({
   );
   return (
     <div className={`${containerClass} pwd-container`.trim()}>
+      <Form.Label htmlFor="password" style={{ display: "none" }}>Password</Form.Label>
       <Form.Control
+        id="password"
         type={showPassword ? "text" : "password"}
         className="form-control"
         placeholder="Password"

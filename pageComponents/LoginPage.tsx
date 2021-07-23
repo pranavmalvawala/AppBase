@@ -145,10 +145,10 @@ export const LoginPage: React.FC<Props> = (props) => {
       <ErrorMessages errors={errors} />
       {getWelcomeBack()}
       <div id="loginBox">
-        <h2 data-cy="sign-in-call-to-action">Please sign in</h2>
-        <FormControl id="email" name="email" data-cy="email" value={email} onChange={(e) => { e.preventDefault(); setEmail(e.currentTarget.value); }} placeholder="Email address" onKeyDown={handleKeyDown} />
-        <PasswordField data-cy="password" value={password} onChange={(e) => { e.preventDefault(); setPassword(e.currentTarget.value); }} onKeyDown={handleKeyDown} />
-        <Button id="signInButton" data-cy="sign-in-button" size="lg" variant="primary" block onClick={!loading ? handleSubmit : null} disabled={loading}>
+        <h2>Please sign in</h2>
+        <FormControl aria-label="email" id="email" name="email" value={email} onChange={(e) => { e.preventDefault(); setEmail(e.currentTarget.value); }} placeholder="Email address" onKeyDown={handleKeyDown} />
+        <PasswordField value={password} onChange={(e) => { e.preventDefault(); setPassword(e.currentTarget.value); }} onKeyDown={handleKeyDown} />
+        <Button id="signInButton" size="lg" variant="primary" block onClick={!loading ? handleSubmit : null} disabled={loading}>
           {loading ? "Please wait..." : "Sign in"}
         </Button>
         <br />
