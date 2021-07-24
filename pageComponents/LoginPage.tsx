@@ -11,7 +11,7 @@ import { Formik, FormikHelpers } from "formik"
 
 const schema = yup.object().shape({
   email: yup.string().required("Please enter your email address.").email("Please enter a valid email address."),
-  password: yup.string().required("Please enter a password.")
+  password: yup.string().required("Please enter your password.")
 })
 
 interface Props {
