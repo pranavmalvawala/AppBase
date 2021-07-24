@@ -3,9 +3,16 @@ import "./Login.css";
 import { ErrorMessages, PasswordField } from "../components";
 import { LoginResponseInterface, UserContextInterface, ChurchInterface } from "../interfaces";
 import { ApiHelper, UserHelper } from "../helpers";
-import { Button, FormControl, Alert } from "react-bootstrap";
+import { Button, FormControl, Alert, Form } from "react-bootstrap";
 import { Redirect, useLocation } from "react-router-dom";
 import { useCookies } from "react-cookie"
+import * as yup from "yup"
+import { Formik, FormikHelpers } from "formik"
+
+const schema = yup.object().shape({
+  email: yup.string().required("Please enter your email address.").email("Please enter a valid email address."),
+  password: yup.string().required("Please enter a password.")
+})
 
 interface Props {
   accessApi?: string,
@@ -20,38 +27,14 @@ interface Props {
 
 export const LoginPage: React.FC<Props> = (props) => {
   const [welcomeBackName, setWelcomeBackName] = React.useState("");
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
   const [errors, setErrors] = React.useState([]);
-  const [loading, setLoading] = React.useState(false);
   const [redirectTo, setRedirectTo] = React.useState<string>("");
   const [cookies, setCookie] = useCookies(["jwt", "name", "email"]);
   const location = useLocation();
 
-  const handleKeyDown = (e: React.KeyboardEvent<any>) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      handleSubmit(null);
-    }
-  };
-
-  const validate = () => {
-    let errors = [];
-    if (email === "") errors.push("Please enter your email address.");
-    if (password === "") errors.push("Please enter your password.");
-    setErrors(errors);
-    return errors.length === 0;
-  };
-
-  const handleSubmit = (e: React.MouseEvent) => {
-    if (e !== null) e.preventDefault();
-    if (validate()) login({ email: email, password: password });
-  };
-
   const init = () => {
     if (props.auth) login({ authGuid: props.auth });
     if (props.jwt) {
-      setEmail(cookies.email);
       setWelcomeBackName(cookies.name);
       login({ jwt: props.jwt });
     }
@@ -106,17 +89,18 @@ export const LoginPage: React.FC<Props> = (props) => {
     setWelcomeBackName("");
     if (errors[0] === "No permissions") setErrors(["The provided login does not have access to this application."]);
     else setErrors(["Invalid login. Please check your email or password."]);
-    setLoading(false);
   }
 
-  const login = (data: any) => {
-    setLoading(true);
+  const login = (data: any, helpers?: FormikHelpers<any>) => {
     ApiHelper.postAnonymous("/users/login", data, "AccessApi")
       .then((resp: LoginResponseInterface) => {
         if (resp.errors) handleLoginErrors(resp.errors);
         else handleLoginSuccess(resp);
       })
-      .catch((e) => { setErrors([e.toString()]); setLoading(false); throw e; });
+      .catch((e) => { setErrors([e.toString()]); throw e; })
+      .finally(() => {
+        helpers?.setSubmitting(false)
+      });
   };
 
   const selectChurch = () => {
@@ -136,6 +120,8 @@ export const LoginPage: React.FC<Props> = (props) => {
 
   React.useEffect(init, []);
 
+  const initialValues = { email: "", password: "" }
+
   if (redirectTo) {
     return <Redirect to={redirectTo} />;
   }
@@ -146,11 +132,50 @@ export const LoginPage: React.FC<Props> = (props) => {
       {getWelcomeBack()}
       <div id="loginBox">
         <h2>Please sign in</h2>
-        <FormControl aria-label="email" id="email" name="email" value={email} onChange={(e) => { e.preventDefault(); setEmail(e.currentTarget.value); }} placeholder="Email address" onKeyDown={handleKeyDown} />
-        <PasswordField value={password} onChange={(e) => { e.preventDefault(); setPassword(e.currentTarget.value); }} onKeyDown={handleKeyDown} />
-        <Button id="signInButton" size="lg" variant="primary" block onClick={!loading ? handleSubmit : null} disabled={loading}>
-          {loading ? "Please wait..." : "Sign in"}
-        </Button>
+        <Formik
+          validationSchema={schema}
+          initialValues={initialValues}
+          onSubmit={login}
+        >
+          {({
+            handleSubmit,
+            handleChange,
+            values,
+            touched,
+            errors,
+            isSubmitting
+          }) => (
+            <Form noValidate onSubmit={handleSubmit}>
+              <Form.Group>
+                <FormControl
+                  type="text"
+                  aria-label="email"
+                  id="email"
+                  name="email"
+                  value={values.email}
+                  onChange={handleChange}
+                  placeholder="Email address"
+                  isInvalid={touched.email && !!errors.email}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {errors.email}
+                </Form.Control.Feedback>
+              </Form.Group>
+              <Form.Group>
+                <PasswordField
+                  value={values.password}
+                  onChange={handleChange}
+                  onKeyDown={e => e.key === "Enter" && login}
+                  isInvalid={touched.password && !!errors.password}
+                  errorText={errors.password}
+                />
+              </Form.Group>
+              <Button type="submit" id="signInButton" size="lg" variant="primary" block disabled={isSubmitting}>
+                {isSubmitting ? "Please wait..." : "Sign in"}
+              </Button>
+            </Form>
+          )}
+        </Formik>
         <br />
         <div className="text-right"><a href="/forgot">Forgot Password</a>&nbsp;</div>
       </div>

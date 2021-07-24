@@ -3,31 +3,23 @@ import "./Login.css";
 import { ApiHelper } from "../helpers";
 import { ErrorMessages } from "../components";
 import { ResetPasswordRequestInterface, ResetPasswordResponseInterface } from "../interfaces";
-import { Button } from "react-bootstrap";
+import { Button, Form } from "react-bootstrap";
+import * as yup from "yup"
+import { Formik, FormikHelpers } from "formik"
+
+const schema = yup.object().shape({
+  email: yup.string().required("Please enter your email address.").email("Please enter a valid email address.")
+})
 
 interface Props {
     registerUrl?: string;
 }
 
 export const ForgotPage: React.FC<Props> = ({registerUrl}) => {
-  const [email, setEmail] = React.useState("");
   const [errors, setErrors] = React.useState([]);
   const [successMessage, setSuccessMessage] = React.useState<React.ReactElement>(null);
 
-  const handleKeyDown = (e: React.KeyboardEvent<any>) => { if (e.key === "Enter") { e.preventDefault(); handleSubmit(null); } }
-  const validate = () => {
-    let errors = [];
-    if (email === "") errors.push("Please enter your email address.");
-    setErrors(errors);
-    return errors.length === 0;
-  }
-
-  const handleSubmit = (e: React.MouseEvent) => {
-    if (e !== null) e.preventDefault();
-    if (validate()) reset(email);
-  }
-
-  const reset = (email: string) => {
+  const reset = ({ email }: { email: string }, helpers?: FormikHelpers<any>) => {
     let req: ResetPasswordRequestInterface = { userEmail: email };
 
     ApiHelper.postAnonymous("/users/forgot", req, "AccessApi").then((resp: ResetPasswordResponseInterface) => {
@@ -38,8 +30,12 @@ export const ForgotPage: React.FC<Props> = ({registerUrl}) => {
         setErrors(["We could not find an account with this email address"]);
         setSuccessMessage(<></>);
       }
+    }).finally(() => {
+      helpers?.setSubmitting(false)
     });
   }
+
+  const initialValues = { email: "" }
 
   return (
     <div className="smallCenterBlock">
@@ -48,8 +44,40 @@ export const ForgotPage: React.FC<Props> = ({registerUrl}) => {
       <div id="loginBox">
         <h2>Reset Password</h2>
         <p>Enter your email address to request a password reset.</p>
-        <input name="email" type="text" aria-label="email" className="form-control" value={email} onChange={e => { e.preventDefault(); setEmail(e.currentTarget.value) }} placeholder="Email address" onKeyDown={handleKeyDown} />
-        <Button size="lg" variant="primary" block onClick={handleSubmit}>Reset</Button>
+        <Formik
+          validationSchema={schema}
+          initialValues={initialValues}
+          onSubmit={reset}
+        >
+          {({
+            handleSubmit,
+            handleChange,
+            values,
+            touched,
+            errors,
+            isSubmitting
+          }) => (
+            <Form noValidate onSubmit={handleSubmit}>
+              <Form.Group>
+                <Form.Control
+                  type="text"
+                  aria-label="email"
+                  id="email"
+                  name="email"
+                  value={values.email}
+                  onChange={handleChange}
+                  placeholder="Email address"
+                  isInvalid={touched.email && !!errors.email}
+                  onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => e.key === "Enter" && reset}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {errors.email}
+                </Form.Control.Feedback>
+              </Form.Group>
+              <Button type="submit" size="lg" variant="primary" block disabled={isSubmitting}>Reset</Button>
+            </Form>
+          )}
+        </Formik>
         <br />
         <div className="text-right"><a href={registerUrl}>Register</a> &nbsp; | &nbsp;<a href="/login">Login</a>&nbsp;</div>
       </div>
