@@ -8,12 +8,13 @@ interface Props {
     headerText: string,
     editFunction?: () => void
     editContent?: React.ReactNode;
-    "data-cy"?: string
+    "data-cy"?: string;
+    ariaLabel?: string;
 }
 
 export const DisplayBox = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
   let editContent: JSX.Element;
-  if (props.editFunction !== undefined) editContent = <a data-cy="edit-button" onClick={e => { e.preventDefault(); props.editFunction(); }} href="about:blank"><i className="fas fa-pencil-alt"></i></a>;
+  if (props.editFunction !== undefined) editContent = <button className="no-default-style" aria-label={props.ariaLabel || "editButton"} onClick={props.editFunction}><i className="fas fa-pencil-alt"></i></button>;
   else if (props.editContent !== undefined) editContent = <div>{props.editContent}</div>;
   return (
     <div className="inputBox" id={props.id} data-cy={props["data-cy"] || ""}>

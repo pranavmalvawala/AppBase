@@ -31,7 +31,6 @@ export const PersonAdd: React.FC<Props> = ({ addFunction, getPhotoUrl, searchCli
       });
   }
   const handleAdd = (e: React.MouseEvent) => {
-    e.preventDefault();
     let anchor = e.currentTarget as HTMLAnchorElement;
     let idx = anchor.getAttribute("data-index");
     let sr: PersonInterface[] = [...searchResults];
@@ -47,7 +46,7 @@ export const PersonAdd: React.FC<Props> = ({ addFunction, getPhotoUrl, searchCli
       <tr key={sr.id}>
         <td><img src={getPhotoUrl(sr)} alt="avatar" /></td>
         <td>{sr.name.display}</td>
-        <td><a className="text-success" data-cy="add-to-list" data-index={i} href="about:blank" onClick={handleAdd}><i className="fas fa-user"></i> Add</a></td>
+        <td><button className="text-success no-default-style" aria-label="addPerson" data-index={i} onClick={handleAdd}><i className="fas fa-user"></i> Add</button></td>
       </tr>
     );
   }
@@ -55,8 +54,8 @@ export const PersonAdd: React.FC<Props> = ({ addFunction, getPhotoUrl, searchCli
   return (
     <>
       <InputGroup>
-        <FormControl id="personAddText" data-cy="person-search-bar" value={searchText} onChange={handleChange} onKeyDown={handleKeyDown} />
-        <div className="input-group-append"><Button data-cy="person-search-button" id="personAddButton" variant="primary" onClick={handleSearch}><i className="fas fa-search"></i> Search</Button></div>
+        <FormControl id="personAddText" aria-label="searchbox" value={searchText} onChange={handleChange} onKeyDown={handleKeyDown} />
+        <div className="input-group-append"><Button id="personAddButton" variant="primary" onClick={handleSearch}><i className="fas fa-search"></i> Search</Button></div>
       </InputGroup>
       <Table size="sm" id="householdMemberAddTable"><tbody>{rows}</tbody></Table>
     </>
