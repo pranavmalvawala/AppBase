@@ -14,6 +14,7 @@ interface Props {
   "data-cy"?: string;
   className?: string;
   isSubmitting?: boolean;
+  ariaLabelDelete?: string;
 }
 export function InputBox({
   id,
@@ -27,7 +28,8 @@ export function InputBox({
   deleteFunction,
   saveFunction,
   className = "",
-  isSubmitting = false
+  isSubmitting = false,
+  ariaLabelDelete = ""
 }: Props) {
   let buttons = [];
 
@@ -47,6 +49,7 @@ export function InputBox({
           id="delete"
           variant="danger"
           block
+          aria-label={ariaLabelDelete}
           onClick={deleteFunction}
         >
           Delete
