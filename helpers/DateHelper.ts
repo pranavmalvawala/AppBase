@@ -7,22 +7,9 @@ export class DateHelper {
     return date;
   }
 
-  static formatDate(date: Date, format: string) {
-    try {
-      let cleanDate = new Date(new Date(date).toISOString().split("T")[0]); //truncate the time
-      return dateFormat(cleanDate, format);
-    } catch { return ""; }
-  }
-
-  static formatDateTime(date: Date, format: string) {
-    try {
-      return dateFormat(date, format);
-    } catch { return ""; }
-  }
-
   static prettyDate(date: Date) {
     if (date === undefined || date === null) return "";
-    return this.formatDate(date, "MMM d, yyyy");
+    return this.formatDateTime(date, "MMM d, yyyy");
   }
 
   static prettyDateTime(date: Date) {
@@ -79,5 +66,11 @@ export class DateHelper {
 
   static getShortDate(d: Date): string {
     return (d.getMonth() + 1).toString() + "/" + (d.getDate() + 1).toString() + "/" + d.getFullYear().toString();
+  }
+
+  private static formatDateTime(date: Date, format: string) {
+    try {
+      return dateFormat(date, format);
+    } catch { return ""; }
   }
 }
