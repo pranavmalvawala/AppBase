@@ -15,6 +15,7 @@ interface Props {
   className?: string;
   isSubmitting?: boolean;
   ariaLabelDelete?: string;
+  ariaLabelSave?: string;
 }
 export function InputBox({
   id,
@@ -29,7 +30,8 @@ export function InputBox({
   saveFunction,
   className = "",
   isSubmitting = false,
-  ariaLabelDelete = ""
+  ariaLabelDelete = "",
+  ariaLabelSave = ""
 }: Props) {
   let buttons = [];
 
@@ -64,6 +66,7 @@ export function InputBox({
           type="submit"
           variant="success"
           block
+          aria-label={ariaLabelSave}
           onClick={saveFunction}
           disabled={isSubmitting}
         >
