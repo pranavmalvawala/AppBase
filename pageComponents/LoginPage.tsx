@@ -118,6 +118,11 @@ export const LoginPage: React.FC<Props> = (props) => {
     }
   }
 
+  const getCheckEmail = () => {
+    const search = new URLSearchParams(location.search);
+    if (search.get("checkEmail") === "1") return <Alert variant="info">Thank you for registering.  Please check your email for your temporary password.</Alert>
+  }
+
   React.useEffect(init, []);
 
   const initialValues = { email: "", password: "" }
@@ -126,49 +131,25 @@ export const LoginPage: React.FC<Props> = (props) => {
     return <Redirect to={redirectTo} />;
   }
   return (
+
     <div className="smallCenterBlock">
       <img src={props.logo || "/images/logo.png"} alt="logo" className="img-fluid" style={{ width: "100%", marginTop: 100, marginBottom: 60 }} />
       <ErrorMessages errors={errors} />
       {getWelcomeBack()}
+      {getCheckEmail()}
       <div id="loginBox">
         <h2>Please sign in</h2>
-        <Formik
-          validationSchema={schema}
-          initialValues={initialValues}
-          onSubmit={login}
-        >
-          {({
-            handleSubmit,
-            handleChange,
-            values,
-            touched,
-            errors,
-            isSubmitting
-          }) => (
+        <Formik validationSchema={schema} initialValues={initialValues} onSubmit={login} >
+          {({ handleSubmit, handleChange, values, touched, errors, isSubmitting }) => (
             <Form noValidate onSubmit={handleSubmit}>
               <Form.Group>
-                <FormControl
-                  type="text"
-                  aria-label="email"
-                  id="email"
-                  name="email"
-                  value={values.email}
-                  onChange={handleChange}
-                  placeholder="Email address"
-                  isInvalid={touched.email && !!errors.email}
-                />
+                <FormControl type="text" aria-label="email" id="email" name="email" value={values.email} onChange={handleChange} placeholder="Email address" isInvalid={touched.email && !!errors.email} />
                 <Form.Control.Feedback type="invalid">
                   {errors.email}
                 </Form.Control.Feedback>
               </Form.Group>
               <Form.Group>
-                <PasswordField
-                  value={values.password}
-                  onChange={handleChange}
-                  onKeyDown={e => e.key === "Enter" && login}
-                  isInvalid={touched.password && !!errors.password}
-                  errorText={errors.password}
-                />
+                <PasswordField value={values.password} onChange={handleChange} onKeyDown={e => e.key === "Enter" && login} isInvalid={touched.password && !!errors.password} errorText={errors.password} />
               </Form.Group>
               <Button type="submit" id="signInButton" size="lg" variant="primary" block disabled={isSubmitting}>
                 {isSubmitting ? "Please wait..." : "Sign in"}
