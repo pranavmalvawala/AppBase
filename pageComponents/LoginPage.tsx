@@ -8,6 +8,7 @@ import { Redirect, useLocation } from "react-router-dom";
 import { useCookies } from "react-cookie"
 import * as yup from "yup"
 import { Formik, FormikHelpers } from "formik"
+import { Register } from "./components/Register"
 
 const schema = yup.object().shape({
   email: yup.string().required("Please enter your email address.").email("Please enter a valid email address."),
@@ -22,7 +23,9 @@ interface Props {
   requiredKeyName?: boolean,
   logo?: string,
   appName?: string,
-  performGuestLogin?: (churches: ChurchInterface[]) => void;
+  appUrl?: string,
+  performGuestLogin?: (loginResponse: LoginResponseInterface) => void;
+  allowRegister?: boolean
 }
 
 export const LoginPage: React.FC<Props> = (props) => {
@@ -31,6 +34,7 @@ export const LoginPage: React.FC<Props> = (props) => {
   const [redirectTo, setRedirectTo] = React.useState<string>("");
   const [cookies, setCookie] = useCookies(["jwt", "name", "email"]);
   const location = useLocation();
+  const [showRegister, setShowRegister] = React.useState(false);
 
   const init = () => {
     if (props.auth) login({ authGuid: props.auth });
@@ -60,7 +64,7 @@ export const LoginPage: React.FC<Props> = (props) => {
      * for "streamingLive" app.
      */
     if (props.appName === "StreamingLive" && !UserHelper.currentChurch) {
-      props.performGuestLogin(resp.churches);
+      props.performGuestLogin(resp);
       return;
     }
 
@@ -123,20 +127,17 @@ export const LoginPage: React.FC<Props> = (props) => {
     if (search.get("checkEmail") === "1") return <Alert variant="info">Thank you for registering.  Please check your email for your temporary password.</Alert>
   }
 
-  React.useEffect(init, []);
-
-  const initialValues = { email: "", password: "" }
-
-  if (redirectTo) {
-    return <Redirect to={redirectTo} />;
+  const handleShowRegister = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setShowRegister(true);
   }
-  return (
 
-    <div className="smallCenterBlock">
-      <img src={props.logo || "/images/logo.png"} alt="logo" className="img-fluid" style={{ width: "100%", marginTop: 100, marginBottom: 60 }} />
-      <ErrorMessages errors={errors} />
-      {getWelcomeBack()}
-      {getCheckEmail()}
+  const getRegisterLink = () => {
+    return (<><a href="about:blank" onClick={handleShowRegister}>Register</a> &nbsp; | &nbsp; </>);
+  }
+
+  const getLoginBox = () => {
+    return (
       <div id="loginBox">
         <h2>Please sign in</h2>
         <Formik validationSchema={schema} initialValues={initialValues} onSubmit={login} >
@@ -144,9 +145,7 @@ export const LoginPage: React.FC<Props> = (props) => {
             <Form noValidate onSubmit={handleSubmit}>
               <Form.Group>
                 <FormControl type="text" aria-label="email" id="email" name="email" value={values.email} onChange={handleChange} placeholder="Email address" isInvalid={touched.email && !!errors.email} />
-                <Form.Control.Feedback type="invalid">
-                  {errors.email}
-                </Form.Control.Feedback>
+                <Form.Control.Feedback type="invalid">{errors.email}</Form.Control.Feedback>
               </Form.Group>
               <Form.Group>
                 <PasswordField value={values.password} onChange={handleChange} onKeyDown={e => e.key === "Enter" && login} isInvalid={touched.password && !!errors.password} errorText={errors.password} />
@@ -158,8 +157,33 @@ export const LoginPage: React.FC<Props> = (props) => {
           )}
         </Formik>
         <br />
-        <div className="text-right"><a href="/forgot">Forgot Password</a>&nbsp;</div>
-      </div>
+        <div className="text-right">
+          {getRegisterLink()}
+          <a href="/forgot">Forgot Password</a>&nbsp;
+        </div>
+      </div>);
+  }
+
+
+  const getLoginRegister = () => {
+    if (!showRegister) return getLoginBox();
+    else return <Register updateErrors={setErrors} appName={props.appName} appUrl={props.appUrl} />
+  }
+
+
+  React.useEffect(init, []);
+
+  const initialValues = { email: "", password: "" }
+
+  if (redirectTo) return <Redirect to={redirectTo} />;
+  else return (
+
+    <div className="smallCenterBlock">
+      <img src={props.logo || "/images/logo.png"} alt="logo" className="img-fluid" style={{ width: "100%", marginTop: 100, marginBottom: 60 }} />
+      <ErrorMessages errors={errors} />
+      {getWelcomeBack()}
+      {getCheckEmail()}
+      {getLoginRegister()}
     </div>
   );
 
