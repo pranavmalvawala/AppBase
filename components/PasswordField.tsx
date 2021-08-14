@@ -13,7 +13,7 @@ type Props = {
   onKeyDown?: (e: React.KeyboardEvent) => void;
   className?: string;
   isInvalid?: boolean;
-  errorText?: string;
+  errorText?: any;
 };
 
 export function PasswordField({
@@ -34,7 +34,9 @@ export function PasswordField({
   );
   return (
     <div className={`${containerClass} pwd-container`.trim()}>
-      <Form.Label htmlFor="password" style={{ display: "none" }}>Password</Form.Label>
+      <Form.Label htmlFor="password" style={{ display: "none" }}>
+        Password
+      </Form.Label>
       <Form.Control
         id="password"
         type={showPassword ? "text" : "password"}
@@ -45,9 +47,7 @@ export function PasswordField({
         {...inputProps}
       />
       {eyeIcon}
-      <Form.Control.Feedback type="invalid">
-        {errorText}
-      </Form.Control.Feedback>
+      <Form.Control.Feedback type="invalid">{errorText}</Form.Control.Feedback>
     </div>
   );
 }
