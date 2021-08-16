@@ -38,7 +38,7 @@ export class UserHelper {
     return { church: church, person: personData.person };
   }
 
-  static selectChurch = (context: UserContextInterface, churchId?: string, keyName?: string) => {
+  static selectChurch = (context?: UserContextInterface, churchId?: string, keyName?: string) => {
     let church = null;
 
     if (churchId) UserHelper.churches.forEach(c => { if (c.id === churchId) church = c; });
@@ -48,8 +48,12 @@ export class UserHelper {
     else {
       UserHelper.currentChurch = church;
       UserHelper.setupApiHelper(UserHelper.currentChurch);
-      if (context.churchName !== "") UserHelper.churchChanged = true;
-      context.setChurchName(UserHelper.currentChurch.name);
+      // TODO - remove context code from here and perform the logic in the component itself.
+      if (context) {
+        if (context.churchName !== "") UserHelper.churchChanged = true;
+        context.setChurchName(UserHelper.currentChurch.name);
+      }
+
     }
   }
 
