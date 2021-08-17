@@ -63,7 +63,7 @@ export const LoginPage: React.FC<Props> = (props) => {
      * We allow them to log in as "Guest", this feature is only supported
      * for "streamingLive" app.
      */
-    if (props.appName === "StreamingLive" && !UserHelper.currentChurch) {
+    if (props.performGuestLogin && !UserHelper.currentChurch) {
       props.performGuestLogin(resp);
       return;
     }
