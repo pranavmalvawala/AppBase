@@ -68,16 +68,21 @@ export const LoginPage: React.FC<Props> = (props) => {
       return;
     }
 
-    const hasAccess = UserHelper.currentChurch?.apps.some((app => app.appName === props.appName));
 
+
+    /*
+    const hasAccess = UserHelper.currentChurch?.apps.some((app => app.appName === props.appName));
     if (!hasAccess) {
       handleLoginErrors(["No permissions"]);
       return;
-    }
+    }*/
+
     // App has access so lets cookie selected church's access API JWT.
-    UserHelper.currentChurch.apis.forEach(api => {
-      if (api.keyName === "AccessApi") setCookie("jwt", api.jwt, { path: "/" });
-    })
+    if (UserHelper.currentChurch) {
+      UserHelper.currentChurch.apis.forEach(api => {
+        if (api.keyName === "AccessApi") setCookie("jwt", api.jwt, { path: "/" });
+      })
+    }
 
     const search = new URLSearchParams(location.search);
     const returnUrl = search.get("returnUrl");
@@ -91,8 +96,10 @@ export const LoginPage: React.FC<Props> = (props) => {
 
   const handleLoginErrors = (errors: string[]) => {
     setWelcomeBackName("");
-    if (errors[0] === "No permissions") setErrors(["The provided login does not have access to this application."]);
-    else setErrors(["Invalid login. Please check your email or password."]);
+    //if (errors[0] === "No permissions") setErrors(["The provided login does not have access to this application."]);
+    //else 
+    console.log(errors);
+    setErrors(["Invalid login. Please check your email or password."]);
   }
 
   const login = (data: any, helpers?: FormikHelpers<any>) => {
