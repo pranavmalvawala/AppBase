@@ -174,7 +174,12 @@ export const LoginPage: React.FC<Props> = (props) => {
 
   const getLoginRegister = () => {
     if (!showRegister) return getLoginBox();
-    else return <Register updateErrors={setErrors} appName={props.appName} appUrl={props.appUrl} />
+    else return (
+      <div id="loginBox">
+        <h2>Create an Account</h2>
+        <Register updateErrors={setErrors} appName={props.appName} appUrl={props.appUrl} />
+      </div>
+    );
   }
 
 
