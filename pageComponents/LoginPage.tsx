@@ -1,14 +1,15 @@
-import React from "react";
+import * as React from "react";
 import "./Login.css";
 import { ErrorMessages, PasswordField } from "../components";
 import { LoginResponseInterface, UserContextInterface, ChurchInterface } from "../interfaces";
 import { ApiHelper, UserHelper } from "../helpers";
-import { Button, FormControl, Alert, Form } from "react-bootstrap";
+import { Button, FormControl, Alert, Form, Modal, Container, Row, Col } from "react-bootstrap";
 import { Redirect, useLocation } from "react-router-dom";
 import { useCookies } from "react-cookie"
 import * as yup from "yup"
 import { Formik, FormikHelpers } from "formik"
 import { Register } from "./components/Register"
+import { SelectChurchModal } from "./components/SelectChurchModal"
 
 const schema = yup.object().shape({
   email: yup.string().required("Please enter your email address.").email("Please enter a valid email address."),
@@ -35,6 +36,8 @@ export const LoginPage: React.FC<Props> = (props) => {
   const [cookies, setCookie] = useCookies(["jwt", "name", "email"]);
   const location = useLocation();
   const [showRegister, setShowRegister] = React.useState(false);
+  const [showSelectModal, setShowSelectModal] = React.useState(false);
+  const [loginResponse, setLoginResponse] = React.useState<LoginResponseInterface>(null)
 
   const init = () => {
     if (props.auth) login({ authGuid: props.auth });
@@ -46,6 +49,7 @@ export const LoginPage: React.FC<Props> = (props) => {
 
   const handleLoginSuccess = (resp: LoginResponseInterface) => {
     let churches: ChurchInterface[] = [];
+    setLoginResponse(resp)
     resp.churches.forEach(church => {
       if (church.apps.some(c => c.appName === props.appName)) {
         churches.push(church)
@@ -56,15 +60,24 @@ export const LoginPage: React.FC<Props> = (props) => {
     setCookie("name", `${resp.user.firstName} ${resp.user.lastName}`, { path: "/" });
     setCookie("email", resp.user.email, { path: "/" });
     UserHelper.user = resp.user;
-    selectChurch();
 
+    if (props.requiredKeyName) {
+      const keyName = window.location.hostname.split(".")[0];
+      UserHelper.selectChurch(props.context, undefined, keyName);
+      continuedLoginProcess()
+      return
+    }
+    setShowSelectModal(true);
+  }
+
+  function continuedLoginProcess() {
     /**
      * if user doesn't belong to the church but still wants to log in to that church.
      * We allow them to log in as "Guest", this feature is only supported
      * for "streamingLive" app.
      */
     if (props.performGuestLogin && !UserHelper.currentChurch) {
-      props.performGuestLogin(resp);
+      props.performGuestLogin(loginResponse);
       return;
     }
 
@@ -94,6 +107,11 @@ export const LoginPage: React.FC<Props> = (props) => {
     else props.context.setUserName(UserHelper.currentChurch.id.toString());
   }
 
+  function selectChurch(churchId: string) {
+    UserHelper.selectChurch(props.context, churchId, null)
+    continuedLoginProcess()
+  }
+
   const handleLoginErrors = (errors: string[]) => {
     setWelcomeBackName("");
     //if (errors[0] === "No permissions") setErrors(["The provided login does not have access to this application."]);
@@ -112,14 +130,6 @@ export const LoginPage: React.FC<Props> = (props) => {
       .finally(() => {
         helpers?.setSubmitting(false)
       });
-  };
-
-  const selectChurch = () => {
-    let keyName: string;
-    if (props.requiredKeyName) {
-      keyName = window.location.hostname.split(".")[0];
-    }
-    UserHelper.selectChurch(props.context, undefined, keyName);
   };
 
   const getWelcomeBack = () => {
@@ -196,6 +206,7 @@ export const LoginPage: React.FC<Props> = (props) => {
       {getWelcomeBack()}
       {getCheckEmail()}
       {getLoginRegister()}
+      <SelectChurchModal show={showSelectModal} churches={loginResponse?.churches} selectChurch={selectChurch} />
     </div>
   );
 
