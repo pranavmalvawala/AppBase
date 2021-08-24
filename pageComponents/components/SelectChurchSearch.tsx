@@ -7,6 +7,7 @@ import { SelectChurchRegister } from "./SelectChurchRegister";
 
 interface Props {
   selectChurch: (churchId: string) => void
+  registeredChurchCallback?: (church: ChurchInterface) => void
 }
 
 export const SelectChurchSearch: React.FC<Props> = (props) => {
@@ -54,7 +55,7 @@ export const SelectChurchSearch: React.FC<Props> = (props) => {
     else return getChurches();
   }
 
-  if (showRegister) return (<SelectChurchRegister selectChurch={props.selectChurch} />)
+  if (showRegister) return (<SelectChurchRegister selectChurch={props.selectChurch} registeredChurchCallback={props.registeredChurchCallback} />)
   else return (
     <>
       <InputGroup>

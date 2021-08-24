@@ -7,6 +7,7 @@ import { Formik, FormikHelpers } from "formik"
 import { InputBox } from "../../components"
 
 interface Props {
+  registeredChurchCallback?: (church: ChurchInterface) => void
   selectChurch: (churchId: string) => void
 }
 
@@ -30,13 +31,16 @@ export const SelectChurchRegister: React.FC<Props> = (props) => {
 
   const handleSave = (church: ChurchInterface, { setSubmitting }: FormikHelpers<ChurchInterface>) => {
     setSubmitting(true);
-    ApiHelper.post("/churches/add", church, "AccessApi").then(resp => {
+    ApiHelper.post("/churches/add", church, "AccessApi").then(async resp => {
       setSubmitting(false);
       if (resp.errors !== undefined) {
         let handleError = formikRef.current.setErrors;
         handleError({ subDomain: resp.errors[0] })
       }
-      else props.selectChurch(resp.id);
+      else {
+        if (props.registeredChurchCallback) props.registeredChurchCallback(resp);
+        props.selectChurch(resp.id);
+      }
     });
 
   }

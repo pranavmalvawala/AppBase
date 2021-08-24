@@ -10,6 +10,7 @@ import { Formik, FormikHelpers } from "formik"
 import { Register } from "./components/Register"
 import { SelectChurchModal } from "./components/SelectChurchModal"
 import { PersonInterface, UserChurchInterface } from "../interfaces"
+import { Forgot } from "./components/Forgot";
 
 const schema = yup.object().shape({
   email: yup.string().required("Please enter your email address.").email("Please enter a valid email address."),
@@ -27,6 +28,7 @@ interface Props {
   appUrl?: string,
   performGuestLogin?: (loginResponse: LoginResponseInterface) => void;
   allowRegister?: boolean
+  registerChurchCallback?: (church: ChurchInterface) => Promise<void>
 }
 
 export const LoginPage: React.FC<Props> = (props) => {
@@ -35,11 +37,13 @@ export const LoginPage: React.FC<Props> = (props) => {
   const [redirectTo, setRedirectTo] = React.useState<string>("");
   const [cookies, setCookie] = useCookies(["jwt", "name", "email"]);
   var location = null;
+  const [showForgot, setShowForgot] = React.useState(false);
   const [showRegister, setShowRegister] = React.useState(false);
   const [showSelectModal, setShowSelectModal] = React.useState(false);
   const [loginResponse, setLoginResponse] = React.useState<LoginResponseInterface>(null)
   const [userJwt, setUserJwt] = React.useState("")
   var selectedChurchId = "";
+  var registeredChurch: ChurchInterface = null;
 
 
   try { location = useLocation(); }
@@ -76,8 +80,19 @@ export const LoginPage: React.FC<Props> = (props) => {
     UserHelper.user = resp.user;
 
     if (selectedChurchId) {
+
+      console.log(selectedChurchId);
+      console.log(userJwt);
+
       await UserHelper.selectChurch(props.context, selectedChurchId, undefined);
-      continuedLoginProcess();
+      if (props.registerChurchCallback && registeredChurch) {
+        console.log("Making register church callback");
+        const uJwt = userJwt;
+        props.registerChurchCallback(registeredChurch).then(() => {
+          registeredChurch = null;
+          login({ jwt: uJwt }, undefined);
+        });
+      } else continuedLoginProcess();
       return;
     }
     else if (props.requiredKeyName) {
@@ -129,9 +144,11 @@ export const LoginPage: React.FC<Props> = (props) => {
   async function selectChurch(churchId: string) {
     selectedChurchId = churchId;
     if (!ArrayHelper.getOne(UserHelper.churches, "id", churchId)) {
+      console.log("selecting church");
       const church: ChurchInterface = await ApiHelper.post("/churches/select", { churchId: churchId }, "AccessApi");
       UserHelper.setupApiHelper(church);
 
+      console.log("selecting person");
       //create/claim the person record and relogin
       const personClaim = await ApiHelper.get("/people/claim/" + churchId, "MembershipApi");
       await ApiHelper.post("/userChurch/claim", { encodedPerson: personClaim.encodedPerson }, "AccessApi");
@@ -184,6 +201,16 @@ export const LoginPage: React.FC<Props> = (props) => {
     return (<><a href="about:blank" onClick={handleShowRegister}>Register</a> &nbsp; | &nbsp; </>);
   }
 
+  const handleRegisterCallback = () => {
+    setShowForgot(false);
+    setShowRegister(true);
+  }
+
+  const handleLoginCallback = () => {
+    setShowForgot(false);
+    setShowRegister(false);
+  }
+
   const getLoginBox = () => {
     return (
       <div id="loginBox" style={{ backgroundColor: "#FFF", border: "1px solid #CCC", borderRadius: 5, padding: 20 }} >
@@ -207,22 +234,31 @@ export const LoginPage: React.FC<Props> = (props) => {
         <br />
         <div className="text-right">
           {getRegisterLink()}
-          <a href="/forgot">Forgot Password</a>&nbsp;
+          <a href="about:blank" onClick={(e) => { e.preventDefault(); setShowForgot(true); }}>Forgot Password</a>&nbsp;
         </div>
       </div>);
   }
 
 
   const getLoginRegister = () => {
-    if (!showRegister) return getLoginBox();
-    else return (
-      <div id="loginBox">
+    if (showRegister) return (
+      <div id="loginBox" style={{ backgroundColor: "#FFF", border: "1px solid #CCC", borderRadius: 5, padding: 20 }} >
         <h2>Create an Account</h2>
         <Register updateErrors={setErrors} appName={props.appName} appUrl={props.appUrl} />
       </div>
     );
+    if (showForgot) return (
+      <div id="loginBox" style={{ backgroundColor: "#FFF", border: "1px solid #CCC", borderRadius: 5, padding: 20 }} >
+        <h2>Reset Password</h2>
+        <Forgot registerCallback={handleRegisterCallback} loginCallback={handleLoginCallback} />
+      </div>
+    );
+    else return getLoginBox();
   }
 
+  const handleChurchRegistered = (church: ChurchInterface) => {
+    registeredChurch = church;
+  }
 
   React.useEffect(init, []);
 
@@ -230,14 +266,13 @@ export const LoginPage: React.FC<Props> = (props) => {
 
   if (redirectTo) return <Redirect to={redirectTo} />;
   else return (
-
     <div style={{ maxWidth: 350, marginLeft: "auto", marginRight: "auto" }} >
       <img src={props.logo || "/images/logo.png"} alt="logo" className="img-fluid" style={{ width: "100%", marginTop: 100, marginBottom: 60 }} />
       <ErrorMessages errors={errors} />
       {getWelcomeBack()}
       {getCheckEmail()}
       {getLoginRegister()}
-      <SelectChurchModal show={showSelectModal} churches={loginResponse?.churches} selectChurch={selectChurch} />
+      <SelectChurchModal show={showSelectModal} churches={loginResponse?.churches} selectChurch={selectChurch} registeredChurchCallback={handleChurchRegistered} />
     </div>
   );
 
