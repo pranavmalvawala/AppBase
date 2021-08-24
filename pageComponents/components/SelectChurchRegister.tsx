@@ -36,7 +36,7 @@ export const SelectChurchRegister: React.FC<Props> = (props) => {
         let handleError = formikRef.current.setErrors;
         handleError({ subDomain: resp.errors[0] })
       }
-      else props.selectChurch(church.id);
+      else props.selectChurch(resp.id);
     });
 
   }
