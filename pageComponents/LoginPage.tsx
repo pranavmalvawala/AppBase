@@ -1,5 +1,4 @@
 import * as React from "react";
-import "./Login.css";
 import { ErrorMessages, PasswordField } from "../components";
 import { LoginResponseInterface, UserContextInterface, ChurchInterface } from "../interfaces";
 import { ApiHelper, ArrayHelper, UserHelper } from "../helpers";
@@ -35,12 +34,18 @@ export const LoginPage: React.FC<Props> = (props) => {
   const [errors, setErrors] = React.useState([]);
   const [redirectTo, setRedirectTo] = React.useState<string>("");
   const [cookies, setCookie] = useCookies(["jwt", "name", "email"]);
-  const location = useLocation();
+  var location = null;
   const [showRegister, setShowRegister] = React.useState(false);
   const [showSelectModal, setShowSelectModal] = React.useState(false);
   const [loginResponse, setLoginResponse] = React.useState<LoginResponseInterface>(null)
   const [userJwt, setUserJwt] = React.useState("")
   var selectedChurchId = "";
+
+
+  try { location = useLocation(); }
+  catch {
+    //nextjs
+  }
 
   const init = () => {
     if (props.auth) login({ authGuid: props.auth });
@@ -111,7 +116,7 @@ export const LoginPage: React.FC<Props> = (props) => {
       })
     }
 
-    const search = new URLSearchParams(location.search);
+    const search = new URLSearchParams(location?.search);
     const returnUrl = search.get("returnUrl");
     if (returnUrl) {
       setRedirectTo(returnUrl);
@@ -166,7 +171,7 @@ export const LoginPage: React.FC<Props> = (props) => {
   }
 
   const getCheckEmail = () => {
-    const search = new URLSearchParams(location.search);
+    const search = new URLSearchParams(location?.search);
     if (search.get("checkEmail") === "1") return <Alert variant="info">Thank you for registering.  Please check your email for your temporary password.</Alert>
   }
 
@@ -181,7 +186,7 @@ export const LoginPage: React.FC<Props> = (props) => {
 
   const getLoginBox = () => {
     return (
-      <div id="loginBox">
+      <div id="loginBox" style={{ backgroundColor: "#FFF", border: "1px solid #CCC", borderRadius: 5, padding: 20 }} >
         <h2>Please sign in</h2>
         <Formik validationSchema={schema} initialValues={initialValues} onSubmit={login} >
           {({ handleSubmit, handleChange, values, touched, errors, isSubmitting }) => (
@@ -193,7 +198,7 @@ export const LoginPage: React.FC<Props> = (props) => {
               <Form.Group>
                 <PasswordField value={values.password} onChange={handleChange} onKeyDown={e => e.key === "Enter" && login} isInvalid={touched.password && !!errors.password} errorText={errors.password} />
               </Form.Group>
-              <Button type="submit" id="signInButton" size="lg" variant="primary" block disabled={isSubmitting}>
+              <Button type="submit" id="signInButton" size="lg" variant="primary" block disabled={isSubmitting} style={{ width: "100%" }}>
                 {isSubmitting ? "Please wait..." : "Sign in"}
               </Button>
             </Form>
@@ -226,7 +231,7 @@ export const LoginPage: React.FC<Props> = (props) => {
   if (redirectTo) return <Redirect to={redirectTo} />;
   else return (
 
-    <div className="smallCenterBlock">
+    <div style={{ maxWidth: 350, marginLeft: "auto", marginRight: "auto" }} >
       <img src={props.logo || "/images/logo.png"} alt="logo" className="img-fluid" style={{ width: "100%", marginTop: 100, marginBottom: 60 }} />
       <ErrorMessages errors={errors} />
       {getWelcomeBack()}
