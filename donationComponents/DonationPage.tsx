@@ -56,8 +56,8 @@ export const DonationPage: React.FC<Props> = (props) => {
       let d = donations[i];
       rows.push(
         <tr key={i}>
-          <td><Link to={"/donations/" + d.batchId}>{d.batchId}</Link></td>
-          <td>{DateHelper.formatHtml5Date(d.donationDate)}</td>
+          { process.env.REACT_APP_NAME !== "B1App" && <td><Link to={"/donations/" + d.batchId}>{d.batchId}</Link></td> }
+          <td>{DateHelper.prettyDate(new Date(d.donationDate))}</td>
           <td>{d.method}</td>
           <td>{d.fund.name}</td>
           <td>{CurrencyHelper.formatCurrency(d.fund.amount)}</td>
@@ -71,7 +71,15 @@ export const DonationPage: React.FC<Props> = (props) => {
     const rows: JSX.Element[] = []
 
     if (donations.length > 0) {
-      rows.push(<tr key="header"><th>Batch</th><th>Date</th><th>Method</th><th>Fund</th><th>Amount</th></tr>);
+      rows.push(
+        <tr key="header">
+          { process.env.REACT_APP_NAME !== "B1App" && <th>Batch</th> }
+          <th>Date</th>
+          <th>Method</th>
+          <th>Fund</th>
+          <th>Amount</th>
+        </tr>
+      );
     }
 
     return rows;
@@ -81,7 +89,7 @@ export const DonationPage: React.FC<Props> = (props) => {
 
   const getTable = () => {
     if (!donations) return <Loading />;
-    else return (<Table>
+    else return (<Table style={{fontSize: "12px"}}>
       <thead>{getTableHeader()}</thead>
       <tbody>{getRows()}</tbody>
     </Table>);

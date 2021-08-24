@@ -69,6 +69,10 @@ export const DonationForm: React.FC<Props> = (props) => {
     if (donation.amount < .5) setErrorMessage("Donation amount must be greater than $0.50");
     else setShowDonationPreviewModal(true);
   }
+  const handleDonationSelect = (type: string) => {
+    let dt = donationType === type ? null : type;
+    setDonationType(dt);
+  }
 
   const makeDonation = async () => {
     let results;
@@ -111,19 +115,17 @@ export const DonationForm: React.FC<Props> = (props) => {
     <>
       <DonationPreviewModal show={showDonationPreviewModal} onHide={() => setShowDonationPreviewModal(false)} handleDonate={makeDonation} donation={donation} donationType={donationType} paymentMethodName={paymentMethodName} funds={funds} />
       <InputBox id="donationBox" aria-label="donation-box" headerIcon="fas fa-hand-holding-usd" headerText="Donate" ariaLabelSave="save-button" cancelFunction={donationType ? handleCancel : undefined} saveFunction={donationType ? handleSave : undefined} saveText="Preview Donation">
-        <FormGroup>
-          <Row>
-            <Col>
-              <Button name="type" aria-label="single-donation" value="once" size="lg" variant={donationType === "once" ? "primary" : "light"}  onClick={(e: React.MouseEvent) => { e.preventDefault(); setDonationType("once"); }} block>Make a Donation</Button>
-            </Col>
-            <Col>
-              <Button name="type" aria-label="recurring-donation" value="recurring" size="lg" variant={donationType === "recurring" ? "primary" : "light"} onClick={(e: React.MouseEvent) => { e.preventDefault(); setDonationType("recurring"); }} block>Make a Recurring Donation</Button>
-            </Col>
-          </Row>
-        </FormGroup>
+        <Row>
+          <Col>
+            <Button aria-label="single-donation" size="sm" block style={{minHeight: "50px"}} variant={donationType === "once" ? "primary" : "light"} onClick={() => handleDonationSelect("once")}>Make a Donation</Button>
+          </Col>
+          <Col>
+            <Button aria-label="recurring-donation" size="sm" block style={{minHeight: "50px"}} variant={donationType === "recurring" ? "primary" : "light"} onClick={() => handleDonationSelect("recurring")}>Make a Recurring Donation</Button>
+          </Col>
+        </Row>
         { successMessage && <Alert variant="success">{successMessage}</Alert> }
         { donationType
-          && <>
+          && <div style={{marginTop: "20px"}}>
             <FormGroup>
               <FormLabel>Method</FormLabel>
               <FormControl as="select" name="method" aria-label="method" value={donation.id} className="capitalize" onChange={handleChange}>
@@ -167,7 +169,7 @@ export const DonationForm: React.FC<Props> = (props) => {
               <textarea className="form-control" aria-label="note" name="notes" value={donation.notes || ""} onChange={handleChange} onKeyDown={handleKeyDown}></textarea>
             </div>
             {errorMessage && <ErrorMessages errors={[errorMessage]}></ErrorMessages>}
-          </>
+          </div>
         }
       </InputBox>
     </>

@@ -112,11 +112,11 @@ export const BankForm: React.FC<Props> = (props) => {
           </Row>
           : <>
             <Row>
-              <Col>
+              <Col xs="12" style={{marginBottom: "20px"}}>
                 <label>Account Holder Name</label>
                 <input type="text" name="account_holder_name" aria-label="account-holder-name" placeholder="Account Holder Name" value={bankAccount.account_holder_name} className="form-control" onChange={handleChange} />
               </Col>
-              <Col>
+              <Col xs="12" style={{marginBottom: "20px"}}>
                 <label>Account Holder Type</label>
                 <FormControl as="select" name="account_holder_type" aria-label="account-holder-type" value={bankAccount.account_holder_type} onChange={handleChange}>
                   <option value="individual">Individual</option>
@@ -126,11 +126,11 @@ export const BankForm: React.FC<Props> = (props) => {
             </Row>
             { !props.bank.id
                             && <Row>
-                              <Col>
+                              <Col xs="12" style={{marginBottom: "20px"}}>
                                 <label>Routing Number</label>
                                 <input type="number" name="routing_number" aria-label="routing-number" placeholder="Routing Number" className="form-control" onChange={handleChange} />
                               </Col>
-                              <Col>
+                              <Col xs="12" style={{marginBottom: "20px"}}>
                                 <label>Account Number</label>
                                 <input type="number" name="account_number" aria-label="account-number" placeholder="Account Number" className="form-control" onChange={handleChange} />
                               </Col>
