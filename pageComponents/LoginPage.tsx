@@ -80,13 +80,8 @@ export const LoginPage: React.FC<Props> = (props) => {
     UserHelper.user = resp.user;
 
     if (selectedChurchId) {
-
-      console.log(selectedChurchId);
-      console.log(userJwt);
-
       await UserHelper.selectChurch(props.context, selectedChurchId, undefined);
       if (props.registerChurchCallback && registeredChurch) {
-        console.log("Making register church callback");
         const uJwt = userJwt;
         props.registerChurchCallback(registeredChurch).then(() => {
           registeredChurch = null;
@@ -144,11 +139,9 @@ export const LoginPage: React.FC<Props> = (props) => {
   async function selectChurch(churchId: string) {
     selectedChurchId = churchId;
     if (!ArrayHelper.getOne(UserHelper.churches, "id", churchId)) {
-      console.log("selecting church");
       const church: ChurchInterface = await ApiHelper.post("/churches/select", { churchId: churchId }, "AccessApi");
       UserHelper.setupApiHelper(church);
 
-      console.log("selecting person");
       //create/claim the person record and relogin
       const personClaim = await ApiHelper.get("/people/claim/" + churchId, "MembershipApi");
       await ApiHelper.post("/userChurch/claim", { encodedPerson: personClaim.encodedPerson }, "AccessApi");

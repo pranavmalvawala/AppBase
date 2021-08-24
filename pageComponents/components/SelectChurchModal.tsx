@@ -15,7 +15,7 @@ export const SelectChurchModal: React.FC<Props> = (props) => {
   const [showSearch, setShowSearch] = React.useState(false);
 
   const getContents = () => {
-    if (showSearch) return <SelectChurchSearch selectChurch={props.selectChurch} registeredChurchCallback={props.registeredChurchCallback} />
+    if (showSearch || props.churches?.length === 0) return <SelectChurchSearch selectChurch={props.selectChurch} registeredChurchCallback={props.registeredChurchCallback} />
     else return (<>
       {props.churches?.map(c => (<SelectableChurch church={c} selectChurch={props.selectChurch} />))}
       <a href="#" style={{ color: "#999", display: "block", textAlign: "center" }} onClick={(e) => { e.preventDefault(); setShowSearch(true); }} >Choose another church</a>
