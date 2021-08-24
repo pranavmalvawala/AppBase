@@ -2,7 +2,7 @@ import * as React from "react";
 import "./Login.css";
 import { ErrorMessages, PasswordField } from "../components";
 import { LoginResponseInterface, UserContextInterface, ChurchInterface } from "../interfaces";
-import { ApiHelper, UserHelper } from "../helpers";
+import { ApiHelper, ArrayHelper, UserHelper } from "../helpers";
 import { Button, FormControl, Alert, Form } from "react-bootstrap";
 import { Redirect, useLocation } from "react-router-dom";
 import { useCookies } from "react-cookie"
@@ -10,6 +10,7 @@ import * as yup from "yup"
 import { Formik, FormikHelpers } from "formik"
 import { Register } from "./components/Register"
 import { SelectChurchModal } from "./components/SelectChurchModal"
+import { PersonInterface, UserChurchInterface } from "../interfaces"
 
 const schema = yup.object().shape({
   email: yup.string().required("Please enter your email address.").email("Please enter a valid email address."),
@@ -38,6 +39,8 @@ export const LoginPage: React.FC<Props> = (props) => {
   const [showRegister, setShowRegister] = React.useState(false);
   const [showSelectModal, setShowSelectModal] = React.useState(false);
   const [loginResponse, setLoginResponse] = React.useState<LoginResponseInterface>(null)
+  const [userJwt, setUserJwt] = React.useState("")
+  var selectedChurchId = "";
 
   const init = () => {
     if (props.auth) login({ authGuid: props.auth });
@@ -47,23 +50,34 @@ export const LoginPage: React.FC<Props> = (props) => {
     }
   };
 
-  const handleLoginSuccess = (resp: LoginResponseInterface) => {
-    let churches: ChurchInterface[] = [];
+  const handleLoginSuccess = async (resp: LoginResponseInterface) => {
+    //let churches: ChurchInterface[] = [];
+    setUserJwt(resp.user.jwt);
+    ApiHelper.setDefaultPermissions(resp.user.jwt);
     setLoginResponse(resp)
+    resp.churches.forEach(church => {
+      if (!church.apis) church.apis = [];
+    });
+    /*
     resp.churches.forEach(church => {
       if (church.apps.some(c => c.appName === props.appName)) {
         churches.push(church)
       }
-    })
-    UserHelper.churches = churches;
+    })*/;
+    UserHelper.churches = resp.churches;
 
     setCookie("name", `${resp.user.firstName} ${resp.user.lastName}`, { path: "/" });
     setCookie("email", resp.user.email, { path: "/" });
     UserHelper.user = resp.user;
 
-    if (props.requiredKeyName) {
+    if (selectedChurchId) {
+      await UserHelper.selectChurch(props.context, selectedChurchId, undefined);
+      continuedLoginProcess();
+      return;
+    }
+    else if (props.requiredKeyName) {
       const keyName = window.location.hostname.split(".")[0];
-      UserHelper.selectChurch(props.context, undefined, keyName);
+      await UserHelper.selectChurch(props.context, undefined, keyName);
       continuedLoginProcess()
       return
     }
@@ -107,9 +121,23 @@ export const LoginPage: React.FC<Props> = (props) => {
     else props.context.setUserName(UserHelper.currentChurch.id.toString());
   }
 
-  function selectChurch(churchId: string) {
-    UserHelper.selectChurch(props.context, churchId, null)
-    continuedLoginProcess()
+  async function selectChurch(churchId: string) {
+    selectedChurchId = churchId;
+    if (!ArrayHelper.getOne(UserHelper.churches, "id", churchId)) {
+      const church: ChurchInterface = await ApiHelper.post("/churches/select", { churchId: churchId }, "AccessApi");
+      UserHelper.setupApiHelper(church);
+
+      //create/claim the person record and relogin
+      const personClaim = await ApiHelper.get("/people/claim/" + churchId, "MembershipApi");
+      await ApiHelper.post("/userChurch/claim", { encodedPerson: personClaim.encodedPerson }, "AccessApi");
+      login({ jwt: userJwt }, undefined);
+      return;
+    }
+
+
+    UserHelper.selectChurch(props.context, churchId, null).then(() => {
+      continuedLoginProcess()
+    });
   }
 
   const handleLoginErrors = (errors: string[]) => {
@@ -124,12 +152,10 @@ export const LoginPage: React.FC<Props> = (props) => {
     ApiHelper.postAnonymous("/users/login", data, "AccessApi")
       .then((resp: LoginResponseInterface) => {
         if (resp.errors) handleLoginErrors(resp.errors);
-        else handleLoginSuccess(resp);
+        else handleLoginSuccess(resp).then(() => { helpers?.setSubmitting(false) });
       })
-      .catch((e) => { setErrors([e.toString()]); throw e; })
-      .finally(() => {
-        helpers?.setSubmitting(false)
-      });
+      .catch((e) => { setErrors([e.toString()]); helpers?.setSubmitting(false); throw e; });
+
   };
 
   const getWelcomeBack = () => {

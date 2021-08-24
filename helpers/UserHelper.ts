@@ -38,12 +38,19 @@ export class UserHelper {
     return { church: church, person: personData.person };
   }
 
-  static selectChurch = (context?: UserContextInterface, churchId?: string, keyName?: string) => {
+  static selectChurch = async (context?: UserContextInterface, churchId?: string, keyName?: string) => {
     let church = null;
 
-    if (churchId) UserHelper.churches.forEach(c => { if (c.id === churchId) church = c; });
+    if (churchId) {
+      UserHelper.churches.forEach(c => {
+        if (c.id === churchId) church = c;
+      });
+    }
     else if (keyName) UserHelper.churches.forEach(c => { if (c.subDomain === keyName) church = c; });
     else church = UserHelper.churches[0];
+
+
+
     if (!church) return;
     else {
       UserHelper.currentChurch = church;

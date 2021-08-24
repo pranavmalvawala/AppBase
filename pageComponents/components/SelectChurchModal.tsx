@@ -27,9 +27,9 @@ export const SelectChurchModal: React.FC<Props> = (props) => {
         <Modal.Title>Select Church</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Container>
-          {getContents()}
-        </Container>
+
+        {getContents()}
+
       </Modal.Body>
     </Modal>
   );

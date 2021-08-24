@@ -3,6 +3,7 @@ import { InputGroup, Button, FormControl } from "react-bootstrap";
 import { ApiHelper } from "../../helpers"
 import { ChurchInterface } from "../../interfaces";
 import { SelectableChurch } from "./SelectableChurch";
+import { SelectChurchRegister } from "./SelectChurchRegister";
 
 interface Props {
   selectChurch: (churchId: string) => void
@@ -11,6 +12,7 @@ interface Props {
 export const SelectChurchSearch: React.FC<Props> = (props) => {
   const [searchText, setSearchText] = React.useState("");
   const [churches, setChurches] = React.useState<ChurchInterface[]>(null);
+  const [showRegister, setShowRegister] = React.useState(false);
 
   const handleSubmit = (e: React.MouseEvent) => {
     if (e !== null) e.preventDefault();
@@ -22,13 +24,16 @@ export const SelectChurchSearch: React.FC<Props> = (props) => {
 
   const handleKeyDown = (e: React.KeyboardEvent<any>) => { if (e.key === "Enter") { e.preventDefault(); handleSubmit(null); } }
 
+  const handleRegisterClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (window.confirm("Are you sure you wish to register a new church?")) {
+      setShowRegister(true);
+    }
+  }
+
   const getRegisterLink = () => {
     return <div>
-      <a
-        style={{ color: "#999", display: "block", textAlign: "center" }}
-        href={process.env.REACT_APP_ACCOUNTS_URL + "/churches/add"}
-        onClick={(e) => { return window.confirm("Are you sure you wish to register a new church?") }}
-      >
+      <a style={{ color: "#999", display: "block", textAlign: "center" }} href="about:blank" onClick={handleRegisterClick}>
         Register a New Church
       </a>
     </div>
@@ -49,7 +54,8 @@ export const SelectChurchSearch: React.FC<Props> = (props) => {
     else return getChurches();
   }
 
-  return (
+  if (showRegister) return (<SelectChurchRegister selectChurch={props.selectChurch} />)
+  else return (
     <>
       <InputGroup>
         <FormControl id="searchText" aria-label="searchBox" name="searchText" type="text" placeholder="Name" value={searchText} onChange={handleChange} onKeyDown={handleKeyDown} />
