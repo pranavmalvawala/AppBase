@@ -3,7 +3,7 @@ import { ErrorMessages, PasswordField } from "../components";
 import { LoginResponseInterface, UserContextInterface, ChurchInterface } from "../interfaces";
 import { ApiHelper, ArrayHelper, UserHelper } from "../helpers";
 import { Button, FormControl, Alert, Form } from "react-bootstrap";
-import { Redirect, useLocation } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import { useCookies } from "react-cookie"
 import * as yup from "yup"
 import { Formik, FormikHelpers } from "formik"
@@ -27,8 +27,8 @@ interface Props {
   appName?: string,
   appUrl?: string,
   performGuestLogin?: (loginResponse: LoginResponseInterface) => void;
-  allowRegister?: boolean
-  registerChurchCallback?: (church: ChurchInterface) => Promise<void>
+  allowRegister?: boolean;
+  registerChurchCallback?: (church: ChurchInterface) => Promise<void>;
 }
 
 export const LoginPage: React.FC<Props> = (props) => {
@@ -36,20 +36,14 @@ export const LoginPage: React.FC<Props> = (props) => {
   const [errors, setErrors] = React.useState([]);
   const [redirectTo, setRedirectTo] = React.useState<string>("");
   const [cookies, setCookie] = useCookies(["jwt", "name", "email"]);
-  var location = null;
   const [showForgot, setShowForgot] = React.useState(false);
   const [showRegister, setShowRegister] = React.useState(false);
   const [showSelectModal, setShowSelectModal] = React.useState(false);
   const [loginResponse, setLoginResponse] = React.useState<LoginResponseInterface>(null)
   const [userJwt, setUserJwt] = React.useState("")
+  const location = typeof window !== "undefined" && window.location;
   var selectedChurchId = "";
   var registeredChurch: ChurchInterface = null;
-
-
-  try { location = useLocation(); }
-  catch {
-    //nextjs
-  }
 
   const init = () => {
     if (props.auth) login({ authGuid: props.auth });
@@ -91,7 +85,7 @@ export const LoginPage: React.FC<Props> = (props) => {
       return;
     }
     else if (props.requiredKeyName) {
-      const keyName = window.location.hostname.split(".")[0];
+      const keyName = location.hostname.split(".")[0];
       await UserHelper.selectChurch(props.context, undefined, keyName);
       continuedLoginProcess()
       return
