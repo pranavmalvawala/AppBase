@@ -158,10 +158,15 @@ export const LoginPage: React.FC<Props> = (props) => {
   }
 
   const login = (data: any, helpers?: FormikHelpers<any>) => {
+    setErrors([])
     ApiHelper.postAnonymous("/users/login", data, "AccessApi")
       .then((resp: LoginResponseInterface) => {
-        if (resp.errors) handleLoginErrors(resp.errors);
-        else handleLoginSuccess(resp).then(() => { helpers?.setSubmitting(false) });
+        if (resp.errors) {
+          handleLoginErrors(resp.errors);
+          helpers?.setSubmitting(false);
+        } else {
+          handleLoginSuccess(resp);
+        }
       })
       .catch((e) => { setErrors([e.toString()]); helpers?.setSubmitting(false); throw e; });
 

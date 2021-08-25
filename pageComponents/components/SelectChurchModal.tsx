@@ -24,7 +24,7 @@ export const SelectChurchModal: React.FC<Props> = (props) => {
 
   return (
     <Modal show={props.show} backdrop="static" keyboard={false} >
-      <Modal.Header closeButton>
+      <Modal.Header>
         <Modal.Title>Select Church</Modal.Title>
       </Modal.Header>
       <Modal.Body>
