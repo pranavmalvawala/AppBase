@@ -9,7 +9,6 @@ import * as yup from "yup"
 import { Formik, FormikHelpers } from "formik"
 import { Register } from "./components/Register"
 import { SelectChurchModal } from "./components/SelectChurchModal"
-import { PersonInterface, UserChurchInterface } from "../interfaces"
 import { Forgot } from "./components/Forgot";
 
 const schema = yup.object().shape({
