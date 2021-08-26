@@ -17,17 +17,14 @@ const schema = yup.object().shape({
 })
 
 interface Props {
-  accessApi?: string,
   context: UserContextInterface,
   jwt: string, auth: string,
-  successCallback?: () => void,
   requiredKeyName?: boolean,
   logo?: string,
   appName?: string,
   appUrl?: string,
-  performGuestLogin?: (loginResponse: LoginResponseInterface) => void;
-  allowRegister?: boolean;
-  registerChurchCallback?: (church: ChurchInterface) => Promise<void>;
+  successCallback?: () => void,
+  churchRegisteredCallback?: (church: ChurchInterface) => Promise<void>;
 }
 
 export const LoginPage: React.FC<Props> = (props) => {
@@ -70,8 +67,8 @@ export const LoginPage: React.FC<Props> = (props) => {
 
   const selectChurchById = async () => {
     await UserHelper.selectChurch(props.context, selectedChurchId, undefined);
-    if (props.registerChurchCallback && registeredChurch) {
-      props.registerChurchCallback(registeredChurch).then(() => {
+    if (props.churchRegisteredCallback && registeredChurch) {
+      props.churchRegisteredCallback(registeredChurch).then(() => {
         registeredChurch = null;
         login({ jwt: userJwt }, undefined);
       });
@@ -101,10 +98,11 @@ export const LoginPage: React.FC<Props> = (props) => {
      * We allow them to log in as "Guest", this feature is only supported
      * for "streamingLive" app.
      */
+    /*
     if (props.performGuestLogin && !UserHelper.currentChurch) {
       props.performGuestLogin(loginResponse);
       return;
-    }
+    }*/
 
     // App has access so lets cookie selected church's access API JWT.
     if (UserHelper.currentChurch) {
