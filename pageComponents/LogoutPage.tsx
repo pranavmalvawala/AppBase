@@ -1,6 +1,5 @@
 import React from "react";
 import { useCookies } from "react-cookie"
-import "./Login.css"
 import { ApiHelper } from "../helpers";
 import { UserContextInterface } from "../interfaces";
 
