@@ -40,10 +40,10 @@ export const LoginPage: React.FC<Props> = (props) => {
   const [showRegister, setShowRegister] = React.useState(false);
   const [showSelectModal, setShowSelectModal] = React.useState(false);
   const [loginResponse, setLoginResponse] = React.useState<LoginResponseInterface>(null)
-  const [userJwt, setUserJwt] = React.useState("")
   const location = typeof window !== "undefined" && window.location;
   var selectedChurchId = "";
   var registeredChurch: ChurchInterface = null;
+  var userJwt = ""
 
   const init = () => {
     if (props.auth) login({ authGuid: props.auth });
@@ -54,44 +54,47 @@ export const LoginPage: React.FC<Props> = (props) => {
   };
 
   const handleLoginSuccess = async (resp: LoginResponseInterface) => {
-    //let churches: ChurchInterface[] = [];
-    setUserJwt(resp.user.jwt);
+    userJwt = resp.user.jwt;
     ApiHelper.setDefaultPermissions(resp.user.jwt);
     setLoginResponse(resp)
-    resp.churches.forEach(church => {
-      if (!church.apis) church.apis = [];
-    });
-    /*
-    resp.churches.forEach(church => {
-      if (church.apps.some(c => c.appName === props.appName)) {
-        churches.push(church)
-      }
-    })*/;
+    resp.churches.forEach(church => { if (!church.apis) church.apis = []; });
     UserHelper.churches = resp.churches;
 
     setCookie("name", `${resp.user.firstName} ${resp.user.lastName}`, { path: "/" });
     setCookie("email", resp.user.email, { path: "/" });
     UserHelper.user = resp.user;
 
-    if (selectedChurchId) {
-      await UserHelper.selectChurch(props.context, selectedChurchId, undefined);
-      if (props.registerChurchCallback && registeredChurch) {
-        const uJwt = userJwt;
-        props.registerChurchCallback(registeredChurch).then(() => {
-          registeredChurch = null;
-          login({ jwt: uJwt }, undefined);
-        });
-      } else continuedLoginProcess();
+    if (selectedChurchId) selectChurchById();
+    else if (props.requiredKeyName) selectChurchByKeyName();
+    else setShowSelectModal(true);
+  }
+
+  const selectChurchById = async () => {
+    await UserHelper.selectChurch(props.context, selectedChurchId, undefined);
+    if (props.registerChurchCallback && registeredChurch) {
+      props.registerChurchCallback(registeredChurch).then(() => {
+        registeredChurch = null;
+        login({ jwt: userJwt }, undefined);
+      });
+    } else continuedLoginProcess();
+  }
+
+  const selectChurchByKeyName = async () => {
+    const keyName = location.hostname.split(".")[0];
+    if (!ArrayHelper.getOne(UserHelper.churches, "subDomain", keyName)) {
+      const church: ChurchInterface = await ApiHelper.post("/churches/select", { subDomain: keyName }, "AccessApi");
+      UserHelper.setupApiHelper(church);
+      //create/claim the person record and relogin
+      const personClaim = await ApiHelper.get("/people/claim/" + church.id, "MembershipApi");
+      await ApiHelper.post("/userChurch/claim", { encodedPerson: personClaim.encodedPerson }, "AccessApi");
+      login({ jwt: userJwt }, undefined);
       return;
     }
-    else if (props.requiredKeyName) {
-      const keyName = location.hostname.split(".")[0];
-      await UserHelper.selectChurch(props.context, undefined, keyName);
-      continuedLoginProcess()
-      return
-    }
-    setShowSelectModal(true);
+    await UserHelper.selectChurch(props.context, undefined, keyName);
+    continuedLoginProcess()
+    return;
   }
+
 
   function continuedLoginProcess() {
     /**
@@ -103,15 +106,6 @@ export const LoginPage: React.FC<Props> = (props) => {
       props.performGuestLogin(loginResponse);
       return;
     }
-
-
-
-    /*
-    const hasAccess = UserHelper.currentChurch?.apps.some((app => app.appName === props.appName));
-    if (!hasAccess) {
-      handleLoginErrors(["No permissions"]);
-      return;
-    }*/
 
     // App has access so lets cookie selected church's access API JWT.
     if (UserHelper.currentChurch) {
@@ -151,8 +145,6 @@ export const LoginPage: React.FC<Props> = (props) => {
 
   const handleLoginErrors = (errors: string[]) => {
     setWelcomeBackName("");
-    //if (errors[0] === "No permissions") setErrors(["The provided login does not have access to this application."]);
-    //else 
     console.log(errors);
     setErrors(["Invalid login. Please check your email or password."]);
   }
