@@ -1,5 +1,5 @@
 import React from "react";
-import { LoginResponseInterface, RegisterUserInterface } from "../../interfaces";
+import { LoginResponseInterface, RegisterUserInterface, UserInterface } from "../../interfaces";
 import { ApiHelper } from "../../helpers";
 import { Button, FormControl, Form } from "react-bootstrap";
 import * as yup from "yup"
@@ -15,6 +15,7 @@ interface Props {
   appName?: string,
   appUrl?: string,
   updateErrors: (errors: string[]) => void,
+  userRegisteredCallback?: (user: UserInterface) => Promise<void>;
 }
 
 
@@ -28,6 +29,7 @@ export const Register: React.FC<Props> = (props) => {
 
   const handleRegisterSuccess = (resp: LoginResponseInterface) => {
     setRegistered(true);
+    if (props.userRegisteredCallback) props.userRegisteredCallback(resp.user);
   }
 
   const register = (data: RegisterUserInterface, helpers?: FormikHelpers<any>) => {

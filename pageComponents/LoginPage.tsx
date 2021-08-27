@@ -1,6 +1,6 @@
 import * as React from "react";
 import { ErrorMessages, PasswordField } from "../components";
-import { LoginResponseInterface, UserContextInterface, ChurchInterface } from "../interfaces";
+import { LoginResponseInterface, UserContextInterface, ChurchInterface, UserInterface } from "../interfaces";
 import { ApiHelper, ArrayHelper, UserHelper } from "../helpers";
 import { Button, FormControl, Alert, Form } from "react-bootstrap";
 import { Redirect } from "react-router-dom";
@@ -23,7 +23,8 @@ interface Props {
   logo?: string,
   appName?: string,
   appUrl?: string,
-  successCallback?: () => void,
+  loginSuccessOverride?: () => void,
+  userRegisteredCallback?: (user: UserInterface) => Promise<void>;
   churchRegisteredCallback?: (church: ChurchInterface) => Promise<void>;
 }
 
@@ -95,18 +96,6 @@ export const LoginPage: React.FC<Props> = (props) => {
 
 
   function continuedLoginProcess() {
-    /**
-     * if user doesn't belong to the church but still wants to log in to that church.
-     * We allow them to log in as "Guest", this feature is only supported
-     * for "streamingLive" app.
-     */
-    /*
-    if (props.performGuestLogin && !UserHelper.currentChurch) {
-      props.performGuestLogin(loginResponse);
-      return;
-    }*/
-
-    // App has access so lets cookie selected church's access API JWT.
     if (UserHelper.currentChurch) {
       UserHelper.currentChurch.apis.forEach(api => {
         if (api.keyName === "AccessApi") setCookie("jwt", api.jwt, { path: "/" });
@@ -119,7 +108,7 @@ export const LoginPage: React.FC<Props> = (props) => {
       setRedirectTo(returnUrl);
     }
 
-    if (props.successCallback !== undefined) props.successCallback();
+    if (props.loginSuccessOverride !== undefined) props.loginSuccessOverride();
     else props.context.setUserName(UserHelper.currentChurch.id.toString());
   }
 
@@ -227,7 +216,7 @@ export const LoginPage: React.FC<Props> = (props) => {
     if (showRegister) return (
       <div id="loginBox" style={{ backgroundColor: "#FFF", border: "1px solid #CCC", borderRadius: 5, padding: 20 }} >
         <h2>Create an Account</h2>
-        <Register updateErrors={setErrors} appName={props.appName} appUrl={props.appUrl} />
+        <Register updateErrors={setErrors} appName={props.appName} appUrl={props.appUrl} userRegisteredCallback={props.userRegisteredCallback} />
       </div>
     );
     if (showForgot) return (
