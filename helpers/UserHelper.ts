@@ -7,36 +7,37 @@ export class UserHelper {
   static user: UserInterface;
   static churchChanged: boolean = false;
 
-
-  static async loginAsGuest(loginResponse: LoginResponseInterface) {
-    /**
+  /**
        * The api for fetching church (/churches/select) requires jwt.
        * Jwt is used only to check who the user is and not to check if he/she
        * belongs to the church, that's why we setup ApiHelper with whatever
        * church the user is already part of cause it doesn't matter,
        * the jwt is used only to find user details.
        */
-    if (loginResponse.churches.length > 0) {
-      const currentChurch = loginResponse.churches[0];
-      UserHelper.setupApiHelper(currentChurch);
-    } else {
-      UserHelper.setupApiHelperNoChurch(loginResponse.user)
+  /*
+    static async loginAsGuest(loginResponse: LoginResponseInterface) {
+      if (loginResponse.churches.length > 0) {
+        const currentChurch = loginResponse.churches[0];
+        UserHelper.setupApiHelper(currentChurch);
+      } else {
+        UserHelper.setupApiHelperNoChurch(loginResponse.user)
+      }
+      const keyName = window.location.hostname.split(".")[0];
+      let church: ChurchInterface = await ApiHelper.post("/churches/select", { subDomain: keyName }, "AccessApi");
+  
+      //Get or create a Person record
+      const personData: { person: any, encodedPerson: string } = await ApiHelper.get("/people/claim/" + church.id, "MembershipApi");
+      //Associate that person with this user for this church
+      await ApiHelper.post("/userchurch/claim", { encodedPerson: personData.encodedPerson }, "AccessApi");
+      //Refetch this church's data
+      church = await ApiHelper.post("/churches/select", { subDomain: keyName }, "AccessApi");
+  
+      UserHelper.churches.push(church);
+  
+  
+      return { church: church, person: personData.person };
     }
-    const keyName = window.location.hostname.split(".")[0];
-    let church: ChurchInterface = await ApiHelper.post("/churches/select", { subDomain: keyName }, "AccessApi");
-
-    //Get or create a Person record
-    const personData: { person: any, encodedPerson: string } = await ApiHelper.get("/people/claim/" + church.id, "MembershipApi");
-    //Associate that person with this user for this church
-    await ApiHelper.post("/userchurch/claim", { encodedPerson: personData.encodedPerson }, "AccessApi");
-    //Refetch this church's data
-    church = await ApiHelper.post("/churches/select", { subDomain: keyName }, "AccessApi");
-
-    UserHelper.churches.push(church);
-
-
-    return { church: church, person: personData.person };
-  }
+  */
 
   static selectChurch = async (context?: UserContextInterface, churchId?: string, keyName?: string) => {
     let church = null;

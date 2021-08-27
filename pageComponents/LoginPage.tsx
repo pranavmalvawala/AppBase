@@ -36,10 +36,11 @@ export const LoginPage: React.FC<Props> = (props) => {
   const [showRegister, setShowRegister] = React.useState(false);
   const [showSelectModal, setShowSelectModal] = React.useState(false);
   const [loginResponse, setLoginResponse] = React.useState<LoginResponseInterface>(null)
+  const [userJwt, setUserJwt] = React.useState("");
   const location = typeof window !== "undefined" && window.location;
   var selectedChurchId = "";
   var registeredChurch: ChurchInterface = null;
-  var userJwt = ""
+  var userJwtBackup = ""; //use state copy for storing between page updates.  This copy for instant availability.
 
   const init = () => {
     if (props.auth) login({ authGuid: props.auth });
@@ -50,7 +51,8 @@ export const LoginPage: React.FC<Props> = (props) => {
   };
 
   const handleLoginSuccess = async (resp: LoginResponseInterface) => {
-    userJwt = resp.user.jwt;
+    userJwtBackup = resp.user.jwt;
+    setUserJwt(userJwtBackup);
     ApiHelper.setDefaultPermissions(resp.user.jwt);
     setLoginResponse(resp)
     resp.churches.forEach(church => { if (!church.apis) church.apis = []; });
@@ -70,7 +72,7 @@ export const LoginPage: React.FC<Props> = (props) => {
     if (props.churchRegisteredCallback && registeredChurch) {
       props.churchRegisteredCallback(registeredChurch).then(() => {
         registeredChurch = null;
-        login({ jwt: userJwt }, undefined);
+        login({ jwt: userJwt || userJwtBackup }, undefined);
       });
     } else continuedLoginProcess();
   }
@@ -83,7 +85,7 @@ export const LoginPage: React.FC<Props> = (props) => {
       //create/claim the person record and relogin
       const personClaim = await ApiHelper.get("/people/claim/" + church.id, "MembershipApi");
       await ApiHelper.post("/userChurch/claim", { encodedPerson: personClaim.encodedPerson }, "AccessApi");
-      login({ jwt: userJwt }, undefined);
+      login({ jwt: userJwt || userJwtBackup }, undefined);
       return;
     }
     await UserHelper.selectChurch(props.context, undefined, keyName);
@@ -130,7 +132,7 @@ export const LoginPage: React.FC<Props> = (props) => {
       //create/claim the person record and relogin
       const personClaim = await ApiHelper.get("/people/claim/" + churchId, "MembershipApi");
       await ApiHelper.post("/userChurch/claim", { encodedPerson: personClaim.encodedPerson }, "AccessApi");
-      login({ jwt: userJwt }, undefined);
+      login({ jwt: userJwt || userJwtBackup }, undefined);
       return;
     }
 
