@@ -14,6 +14,11 @@ export const LogoutPage: React.FC<Props> = (props) => {
 
   ApiHelper.clearPermissions();
   props.context?.setUserName("");
-  setTimeout(() => { window.location.href = "/"; }, 300);
+  setTimeout(() => {
+    // a must check for Nextjs
+    if (typeof window !== "undefined") {
+      window.location.href = "/"; 
+    } 
+  }, 300);
   return null;
 }
