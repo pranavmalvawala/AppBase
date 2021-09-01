@@ -3,7 +3,7 @@ import { useCookies } from "react-cookie"
 import { ApiHelper } from "../helpers";
 import { UserContextInterface } from "../interfaces";
 
-interface Props { context: UserContextInterface, }
+interface Props { context?: UserContextInterface, }
 
 export const LogoutPage: React.FC<Props> = (props) => {
   const [, , removeCookie] = useCookies(["jwt", "email", "name"]);
@@ -13,7 +13,7 @@ export const LogoutPage: React.FC<Props> = (props) => {
   removeCookie("name");
 
   ApiHelper.clearPermissions();
-  props.context.setUserName("");
+  props.context?.setUserName("");
   setTimeout(() => { window.location.href = "/"; }, 300);
   return null;
 }
