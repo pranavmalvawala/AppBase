@@ -23,6 +23,7 @@ interface Props {
   logo?: string,
   appName?: string,
   appUrl?: string,
+  returnUrl?: string,
   loginSuccessOverride?: () => void,
   userRegisteredCallback?: (user: UserInterface) => Promise<void>;
   churchRegisteredCallback?: (church: ChurchInterface) => Promise<void>;
@@ -103,7 +104,7 @@ export const LoginPage: React.FC<Props> = (props) => {
     }
 
     const search = new URLSearchParams(location?.search);
-    const returnUrl = search.get("returnUrl");
+    const returnUrl = props.returnUrl || search.get("returnUrl");
     if (returnUrl) {
       setRedirectTo(returnUrl);
     }
