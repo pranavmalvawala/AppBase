@@ -101,7 +101,6 @@ export const LoginPage: React.FC<Props> = (props) => {
     return;
   }
 
-
   function continuedLoginProcess() {
     if (UserHelper.currentChurch) {
       UserHelper.currentChurch.apis.forEach(api => {
@@ -110,7 +109,7 @@ export const LoginPage: React.FC<Props> = (props) => {
     }
 
     const search = new URLSearchParams(location?.search);
-    const returnUrl = props.returnUrl || search.get("returnUrl");
+    const returnUrl = search.get("returnUrl") || props.returnUrl;
     if (returnUrl) {
       setRedirectTo(returnUrl);
     }
@@ -131,7 +130,6 @@ export const LoginPage: React.FC<Props> = (props) => {
       login({ jwt: userJwt || userJwtBackup }, undefined);
       return;
     }
-
 
     UserHelper.selectChurch(props.context, churchId, null).then(() => {
       continuedLoginProcess()
@@ -217,7 +215,6 @@ export const LoginPage: React.FC<Props> = (props) => {
         </div>
       </div>);
   }
-
 
   const getLoginRegister = () => {
     if (showRegister) return (
