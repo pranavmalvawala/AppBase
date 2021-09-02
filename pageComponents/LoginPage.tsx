@@ -7,6 +7,7 @@ import { Redirect } from "react-router-dom";
 import { useCookies } from "react-cookie"
 import * as yup from "yup"
 import { Formik, FormikHelpers } from "formik"
+import jwt_decode from "jwt-decode"
 import { Register } from "./components/Register"
 import { SelectChurchModal } from "./components/SelectChurchModal"
 import { Forgot } from "./components/Forgot";
@@ -64,8 +65,13 @@ export const LoginPage: React.FC<Props> = (props) => {
     setCookie("email", resp.user.email, { path: "/" });
     UserHelper.user = resp.user;
 
-    if (selectedChurchId) selectChurchById();
-    else if (props.requiredKeyName) selectChurchByKeyName();
+    if (props.jwt) {
+      const decoded: any = jwt_decode(props.jwt)
+      selectedChurchId = decoded.churchId
+    }
+  
+    if (props.requiredKeyName) selectChurchByKeyName();
+    else if (selectedChurchId) selectChurchById();
     else setShowSelectModal(true);
   }
 
