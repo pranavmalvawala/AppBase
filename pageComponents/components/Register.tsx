@@ -33,6 +33,7 @@ export const Register: React.FC<Props> = (props) => {
   }
 
   const register = (data: RegisterUserInterface, helpers?: FormikHelpers<any>) => {
+    props.updateErrors([])
     ApiHelper.postAnonymous("/users/register", data, "AccessApi")
       .then((resp: any) => {
         if (resp.errors) handleRegisterErrors(resp.errors);
