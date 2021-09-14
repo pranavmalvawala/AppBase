@@ -28,6 +28,7 @@ interface Props {
   loginSuccessOverride?: () => void,
   userRegisteredCallback?: (user: UserInterface) => Promise<void>;
   churchRegisteredCallback?: (church: ChurchInterface) => Promise<void>;
+  callbackErrors?: string[];
 }
 
 export const LoginPage: React.FC<Props> = (props) => {
@@ -44,6 +45,12 @@ export const LoginPage: React.FC<Props> = (props) => {
   var selectedChurchId = "";
   var registeredChurch: ChurchInterface = null;
   var userJwtBackup = ""; //use state copy for storing between page updates.  This copy for instant availability.
+
+  React.useEffect(() => {
+    if (props.callbackErrors?.length > 0) {
+      setErrors(props.callbackErrors)
+    }
+  }, [props.callbackErrors])
 
   const init = () => {
     if (props.auth) login({ authGuid: props.auth });
@@ -119,6 +126,7 @@ export const LoginPage: React.FC<Props> = (props) => {
   }
 
   async function selectChurch(churchId: string) {
+    setErrors([])
     selectedChurchId = churchId;
     if (!ArrayHelper.getOne(UserHelper.churches, "id", churchId)) {
       const church: ChurchInterface = await ApiHelper.post("/churches/select", { churchId: churchId }, "AccessApi");
@@ -248,7 +256,7 @@ export const LoginPage: React.FC<Props> = (props) => {
       {getWelcomeBack()}
       {getCheckEmail()}
       {getLoginRegister()}
-      <SelectChurchModal show={showSelectModal} churches={loginResponse?.churches} selectChurch={selectChurch} registeredChurchCallback={handleChurchRegistered} />
+      <SelectChurchModal show={showSelectModal} churches={loginResponse?.churches} selectChurch={selectChurch} registeredChurchCallback={handleChurchRegistered} errors={errors} />
     </div>
   );
 

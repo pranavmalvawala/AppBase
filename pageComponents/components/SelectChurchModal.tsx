@@ -3,12 +3,14 @@ import { ChurchInterface } from "../../interfaces";
 import { Modal } from "react-bootstrap";
 import { SelectChurchSearch } from "./SelectChurchSearch";
 import { SelectableChurch } from "./SelectableChurch";
+import { ErrorMessages } from "../../components"
 
 interface Props {
   show: boolean,
   churches?: ChurchInterface[],
   selectChurch: (churchId: string) => void,
-  registeredChurchCallback?: (church: ChurchInterface) => void
+  registeredChurchCallback?: (church: ChurchInterface) => void,
+  errors?: string[]
 }
 
 export const SelectChurchModal: React.FC<Props> = (props) => {
@@ -28,7 +30,7 @@ export const SelectChurchModal: React.FC<Props> = (props) => {
         <Modal.Title>Select Church</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-
+        <ErrorMessages errors={props.errors} />
         {getContents()}
 
       </Modal.Body>
