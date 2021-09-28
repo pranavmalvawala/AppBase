@@ -20,7 +20,7 @@ const schema = yup.object().shape({
 interface Props {
   context: UserContextInterface,
   jwt: string, auth: string,
-  requiredKeyName?: boolean,
+  keyName?: string,
   logo?: string,
   appName?: string,
   appUrl?: string,
@@ -76,8 +76,8 @@ export const LoginPage: React.FC<Props> = (props) => {
       const decoded: any = jwt_decode(props.jwt)
       selectedChurchId = decoded.churchId
     }
-  
-    if (props.requiredKeyName) selectChurchByKeyName();
+
+    if (props.keyName) selectChurchByKeyName();
     else if (selectedChurchId) selectChurchById();
     else setShowSelectModal(true);
   }
@@ -93,9 +93,8 @@ export const LoginPage: React.FC<Props> = (props) => {
   }
 
   const selectChurchByKeyName = async () => {
-    const keyName = location.hostname.split(".")[0];
-    if (!ArrayHelper.getOne(UserHelper.churches, "subDomain", keyName)) {
-      const church: ChurchInterface = await ApiHelper.post("/churches/select", { subDomain: keyName }, "AccessApi");
+    if (!ArrayHelper.getOne(UserHelper.churches, "subDomain", props.keyName)) {
+      const church: ChurchInterface = await ApiHelper.post("/churches/select", { subDomain: props.keyName }, "AccessApi");
       UserHelper.setupApiHelper(church);
       //create/claim the person record and relogin
       const personClaim = await ApiHelper.get("/people/claim/" + church.id, "MembershipApi");
@@ -103,7 +102,7 @@ export const LoginPage: React.FC<Props> = (props) => {
       login({ jwt: userJwt || userJwtBackup }, undefined);
       return;
     }
-    await UserHelper.selectChurch(props.context, undefined, keyName);
+    await UserHelper.selectChurch(props.context, undefined, props.keyName);
     continuedLoginProcess()
     return;
   }
@@ -120,6 +119,8 @@ export const LoginPage: React.FC<Props> = (props) => {
     if (returnUrl) {
       setRedirectTo(returnUrl);
     }
+    console.log("Loginsuccess")
+    console.log(props.loginSuccessOverride);
 
     if (props.loginSuccessOverride !== undefined) props.loginSuccessOverride();
     else props.context.setUserName(UserHelper.currentChurch.id.toString());
