@@ -35,6 +35,7 @@ export const RecurringDonations: React.FC<Props> = (props) => {
 
   const getPaymentMethod = (sub: SubscriptionInterface) => {
     const pm = props.paymentMethods.find((pm: any) => pm.id === (sub.default_payment_method || sub.default_source));
+    if (!pm) return 'Payment method not found.';
     return `${pm.name} ****${pm.last4}`;
   }
 

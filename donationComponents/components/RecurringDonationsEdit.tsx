@@ -11,7 +11,13 @@ export const RecurringDonationsEdit: React.FC<Props> = (props) => {
 
   const handleCancel = () => { props.subscriptionUpdated(); }
   const handleSave = () => {
-    ApiHelper.post("/subscriptions", [editSubscription], "GivingApi").then(() => props.subscriptionUpdated())
+    let sub = { ...editSubscription } as SubscriptionInterface;
+    if (props.paymentMethods.length === 1) {
+      let pm = props.paymentMethods[0];
+      sub.default_payment_method = pm.type === "card" ? pm.id : null;
+      sub.default_source = pm.type === "bank" ? pm.id : null;
+    }
+    ApiHelper.post("/subscriptions", [sub], "GivingApi").then(() => props.subscriptionUpdated())
   }
 
   const handleDelete = () => {
