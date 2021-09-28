@@ -86,5 +86,11 @@ export class UserHelper {
     return result;
   }
 
+  static createAppUrl(appUrl: string, returnUrl: string) {
+    const jwt = ApiHelper.getConfig("AccessApi").jwt;
+
+    return `${appUrl}/login/?jwt=${jwt}&returnUrl=${returnUrl}`;
+  }
+
 }
 
