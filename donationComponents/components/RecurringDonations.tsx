@@ -62,7 +62,7 @@ export const RecurringDonations: React.FC<Props> = (props) => {
   }
 
   const getEditOptions = (sub: SubscriptionInterface) => {
-    if (!UserHelper.checkAccess(Permissions.givingApi.settings.edit)) return null;
+    if (!UserHelper.checkAccess(Permissions.givingApi.settings.edit) && process.env.REACT_APP_NAME !== "B1App") return null;
     return <a aria-label="edit-button" onClick={handleEdit(sub)} href="about:blank"><i className="fas fa-pencil-alt"></i></a>;
   }
 

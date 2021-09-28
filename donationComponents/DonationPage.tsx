@@ -89,7 +89,7 @@ export const DonationPage: React.FC<Props> = (props) => {
 
   const getTable = () => {
     if (!donations) return <Loading />;
-    else return (<Table style={{fontSize: "12px"}}>
+    else return (<Table>
       <thead>{getTableHeader()}</thead>
       <tbody>{getRows()}</tbody>
     </Table>);

@@ -7,11 +7,11 @@ export interface DonationSummaryDonation { totalAmount: number, fund?: FundInter
 export interface FundInterface { id: string, name: string, amount?: number }
 export interface FundDonationInterface { id?: string, donationId?: string, fundId?: string, amount?: number, donation?: DonationInterface }
 export interface PaymentMethodInterface { id?: string, churchId?: string, personId?: string, customerId?: string, email?: string, name?: string }
-export interface StripeCardUpdateInterface { paymentMethodId: string, cardData: StripeCardDataInterface }
+export interface StripeCardUpdateInterface { paymentMethodId: string, cardData: StripeCardDataInterface, personId?: string }
 export interface StripeCardDataInterface { card: StripeCardExpirationInterface }
 export interface StripeCardExpirationInterface { exp_month: string, exp_year: string }
 export interface StripeBankAccountInterface { account_holder_name: any, account_holder_type: any, country: string, currency: string, account_number: any, routing_number: any }
-export interface StripeBankAccountUpdateInterface { paymentMethodId: string, customerId: string, bankData: StripeBankAccountHolderDataInterface }
+export interface StripeBankAccountUpdateInterface { paymentMethodId: string, customerId: string, personId?: string, bankData: StripeBankAccountHolderDataInterface }
 export interface StripeBankAccountHolderDataInterface { account_holder_name: string, account_holder_type: string }
 export interface StripeBankAccountVerifyInterface { customerId: string, paymentMethodId: string, amountData: { amounts: string[] } }
 export interface StripePersonDonationInterface { id: string, email: string, name: string };
