@@ -5,7 +5,7 @@ import { ApiHelper, UserHelper, CurrencyHelper, DateHelper } from "../../helpers
 import { Permissions, SubscriptionInterface } from "../../interfaces";
 import { RecurringDonationsEdit } from ".";
 
-interface Props { customerId: string, paymentMethods: any };
+interface Props { customerId: string, paymentMethods: any[], dataUpdate: (message?: string) => void, };
 
 export const RecurringDonations: React.FC<Props> = (props) => {
   const [subscriptions, setSubscriptions] = React.useState<SubscriptionInterface[]>([]);
@@ -25,7 +25,11 @@ export const RecurringDonations: React.FC<Props> = (props) => {
     });
   }
 
-  const handleUpdate = () => { loadData(); setMode("display"); }
+  const handleUpdate = (message: string) => {
+    loadData();
+    setMode("display");
+    if (message) props.dataUpdate(message);
+  }
 
   const handleEdit = (sub: SubscriptionInterface) => (e: React.MouseEvent) => {
     e.preventDefault();
@@ -35,7 +39,7 @@ export const RecurringDonations: React.FC<Props> = (props) => {
 
   const getPaymentMethod = (sub: SubscriptionInterface) => {
     const pm = props.paymentMethods.find((pm: any) => pm.id === (sub.default_payment_method || sub.default_source));
-    if (!pm) return 'Payment method not found.';
+    if (!pm) return <span style={{color: "red"}}>Payment method not found.</span>;
     return `${pm.name} ****${pm.last4}`;
   }
 
@@ -63,13 +67,13 @@ export const RecurringDonations: React.FC<Props> = (props) => {
   }
 
   const getEditOptions = (sub: SubscriptionInterface) => {
-    if (!UserHelper.checkAccess(Permissions.givingApi.settings.edit) && process.env.REACT_APP_NAME !== "B1App") return null;
+    if ((!UserHelper.checkAccess(Permissions.givingApi.settings.edit) && process.env.REACT_APP_NAME !== "B1App") || props?.paymentMethods?.length === 0) return null;
     return <a aria-label="edit-button" onClick={handleEdit(sub)} href="about:blank"><i className="fas fa-pencil-alt"></i></a>;
   }
 
   const getTableHeader = () => {
     let result: JSX.Element[] = [];
-    result.push(<tr key="header"><th>Start Date</th><th>Amount</th><th>Interval</th><th>Payment Method</th><th>Edit</th></tr>);
+    result.push(<tr key="header"><th>Start Date</th><th>Amount</th><th>Interval</th><th>Payment Method</th>{props?.paymentMethods?.length > 0 && <th>Edit</th>}</tr>);
     return result;
   }
 
@@ -102,7 +106,7 @@ export const RecurringDonations: React.FC<Props> = (props) => {
   if (!subscriptions.length) return null;
   if (mode === "display") {
     return (
-      <DisplayBox data-cy="recurring-donations" headerIcon="fas fa-credit-card" headerText="Recurring Donations">
+      <DisplayBox data-cy="recurring-donations" headerIcon="fas fa-sync-alt" headerText="Recurring Donations">
         {getSubscriptionsTable()}
       </DisplayBox>
     );

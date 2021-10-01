@@ -5,7 +5,7 @@ import { InputBox, ErrorMessages } from "../../components";
 import { ApiHelper } from "../../helpers";
 import { PersonInterface, StripePaymentMethod, PaymentMethodInterface, StripeBankAccountInterface, StripeBankAccountUpdateInterface, StripeBankAccountVerifyInterface } from "../../interfaces";
 
-interface Props { bank: StripePaymentMethod, showVerifyForm: boolean, customerId: string, person: PersonInterface, setMode: any, deletePayment: any, updateList: () => void }
+interface Props { bank: StripePaymentMethod, showVerifyForm: boolean, customerId: string, person: PersonInterface, setMode: any, deletePayment: any, updateList: (message?: string) => void }
 
 export const BankForm: React.FC<Props> = (props) => {
   const stripe = useStripe();
@@ -21,56 +21,60 @@ export const BankForm: React.FC<Props> = (props) => {
   const handleSave = () => {
     setShowSave(false);
     if (props.showVerifyForm) verifyBank();
-    else {
-      props.bank.id ? updateBank() : createBank();
-    }
+    else props.bank.id ? updateBank() : createBank();
   }
 
   const createBank = async () => {
-    await stripe.createToken("bank_account", bankAccount).then(response => {
-      if (response?.error?.message) {
-        setErrorMessage(response.error.message);
-        setShowSave(true);
-      }
-      else {
-        const pm = { ...paymentMethod };
-        pm.id = response.token.id;
-        ApiHelper.post("/paymentmethods/addbankaccount", pm, "GivingApi").then(result => {
-          if (result?.raw?.message) {
-            setErrorMessage(result.raw.message);
-            setShowSave(true);
-          }
-          else {
-            props.updateList();
-            props.setMode("display");
-          }
-        });
-      }
-    });
+    if (!bankAccount.routing_number || !bankAccount.account_number) setErrorMessage("Routing and account number are required.")
+    else {
+      await stripe.createToken("bank_account", bankAccount).then(response => {
+        if (response?.error?.message) setErrorMessage(response.error.message);
+        else {
+          const pm = { ...paymentMethod };
+          pm.id = response.token.id;
+          ApiHelper.post("/paymentmethods/addbankaccount", pm, "GivingApi").then(result => {
+            if (result?.raw?.message) setErrorMessage(result.raw.message);
+            else {
+              props.updateList("Bank account added. Verify your bank account to make a donation.");
+              props.setMode("display");
+            }
+          });
+        }
+      });
+    }
+    setShowSave(true);
   }
 
   const updateBank = () => {
-    let bank = { ...updateBankData };
-    bank.bankData.account_holder_name = bankAccount.account_holder_name;
-    bank.bankData.account_holder_type = bankAccount.account_holder_type;
-    ApiHelper.post("/paymentmethods/updatebank", bank, "GivingApi");
-    props.updateList();
-    props.setMode("display");
-  }
-
-  const verifyBank = () => {
-    if (verifyBankData?.amountData?.amounts?.length === 2) {
-      ApiHelper.post("/paymentmethods/verifyBank", verifyBankData, "GivingApi").then(response => {
-        if (response?.raw?.message) {
-          setErrorMessage(response.raw.message);
-          setShowSave(true);
-        }
+    if (bankAccount.account_holder_name === "") setErrorMessage("Account holder name is required.");
+    else {
+      let bank = { ...updateBankData };
+      bank.bankData.account_holder_name = bankAccount.account_holder_name;
+      bank.bankData.account_holder_type = bankAccount.account_holder_type;
+      ApiHelper.post("/paymentmethods/updatebank", bank, "GivingApi").then(response => {
+        if (response?.raw?.message) setErrorMessage(response.raw.message);
         else {
-          props.updateList();
+          props.updateList("Bank account updated.");
           props.setMode("display");
         }
       });
     }
+    setShowSave(true);
+  }
+
+  const verifyBank = () => {
+    const amounts = verifyBankData?.amountData?.amounts;
+    if (amounts && amounts.length === 2 && amounts[0] !== "" && amounts[1] !== "") {
+      ApiHelper.post("/paymentmethods/verifyBank", verifyBankData, "GivingApi").then(response => {
+        if (response?.raw?.message) setErrorMessage(response.raw.message);
+        else {
+          props.updateList("Bank account verified.");
+          props.setMode("display");
+        }
+      });
+    }
+    else setErrorMessage("Both deposit amounts are required.");
+    setShowSave(true);
   }
 
   const getHeaderText = () => props.bank.id
@@ -81,6 +85,7 @@ export const BankForm: React.FC<Props> = (props) => {
     const bankData = { ...bankAccount };
     const inputData = { [e.currentTarget.name]: e.currentTarget.value };
     setBankAccount({ ...bankData, ...inputData });
+    setShowSave(true);
   }
 
   const handleKeyPress = (e: React.KeyboardEvent<any>) => {
@@ -100,7 +105,9 @@ export const BankForm: React.FC<Props> = (props) => {
       { errorMessage && <ErrorMessages errors={[errorMessage]}></ErrorMessages> }
       <form style={{margin: "10px"}}>
         { props.showVerifyForm
-          ?   <Row>
+          ?
+          <Row style={{marginLeft: "10px", marginRight: "10px"}}>
+            <p>To verify your bank account, check your account for two small deposits and enter those amounts here. It could take 1-3 business days to see the deposits.</p>
             <Col>
               <label>First Deposit</label>
               <input type="text" name="amount1" aria-label="amount1" placeholder="00" className="form-control" maxLength={2} onChange={handleVerify} onKeyPress={handleKeyPress} />
@@ -114,7 +121,7 @@ export const BankForm: React.FC<Props> = (props) => {
             <Row>
               <Col xs="12" style={{marginBottom: "20px"}}>
                 <label>Account Holder Name</label>
-                <input type="text" name="account_holder_name" aria-label="account-holder-name" placeholder="Account Holder Name" value={bankAccount.account_holder_name} className="form-control" onChange={handleChange} />
+                <input type="text" name="account_holder_name" required aria-label="account-holder-name" placeholder="Account Holder Name" value={bankAccount.account_holder_name} className="form-control" onChange={handleChange} />
               </Col>
               <Col xs="12" style={{marginBottom: "20px"}}>
                 <label>Account Holder Type</label>

@@ -4,7 +4,7 @@ import { ApiHelper } from "../../helpers";
 import { InputBox } from "../../components";
 import { StripePaymentMethod, SubscriptionInterface } from "../../interfaces";
 
-interface Props { subscriptionUpdated: () => void, customerId: string, paymentMethods: StripePaymentMethod[], editSubscription: SubscriptionInterface };
+interface Props { subscriptionUpdated: (message?: string) => void, customerId: string, paymentMethods: StripePaymentMethod[], editSubscription: SubscriptionInterface };
 
 export const RecurringDonationsEdit: React.FC<Props> = (props) => {
   const [editSubscription, setEditSubscription] = React.useState<SubscriptionInterface>(props.editSubscription);
@@ -12,12 +12,13 @@ export const RecurringDonationsEdit: React.FC<Props> = (props) => {
   const handleCancel = () => { props.subscriptionUpdated(); }
   const handleSave = () => {
     let sub = { ...editSubscription } as SubscriptionInterface;
-    if (props.paymentMethods.length === 1) {
+    const pmFound = props.paymentMethods.find((pm: StripePaymentMethod) => pm.id === sub.id);
+    if (!pmFound) {
       let pm = props.paymentMethods[0];
       sub.default_payment_method = pm.type === "card" ? pm.id : null;
       sub.default_source = pm.type === "bank" ? pm.id : null;
     }
-    ApiHelper.post("/subscriptions", [sub], "GivingApi").then(() => props.subscriptionUpdated())
+    ApiHelper.post("/subscriptions", [sub], "GivingApi").then(() => props.subscriptionUpdated("Recurring donation updated."))
   }
 
   const handleDelete = () => {
@@ -26,7 +27,7 @@ export const RecurringDonationsEdit: React.FC<Props> = (props) => {
     let promises = [];
     promises.push(ApiHelper.delete("/subscriptions/" + props.editSubscription.id, "GivingApi"));
     promises.push(ApiHelper.delete("/subscriptionfunds/subscription/" + props.editSubscription.id, "GivingApi"));
-    Promise.all(promises).then(() => props.subscriptionUpdated());
+    Promise.all(promises).then(() => props.subscriptionUpdated("Recurring donation canceled."));
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {

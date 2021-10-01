@@ -7,20 +7,19 @@ import { DonationPreviewModal } from "../modals/DonationPreviewModal";
 import { ApiHelper, DateHelper } from "../../helpers";
 import { PersonInterface, StripePaymentMethod, StripeDonationInterface, FundDonationInterface, FundInterface } from "../../interfaces";
 
-interface Props { person: PersonInterface, customerId: string, paymentMethods: StripePaymentMethod[], stripePromise: Promise<Stripe>, donationSuccess: () => void }
+interface Props { person: PersonInterface, customerId: string, paymentMethods: StripePaymentMethod[], stripePromise: Promise<Stripe>, donationSuccess: (message: string) => void }
 
 export const DonationForm: React.FC<Props> = (props) => {
   const [errorMessage, setErrorMessage] = React.useState<string>();
-  const [successMessage, setSuccessMessage] = React.useState<string>();
   const [fundDonations, setFundDonations] = React.useState<FundDonationInterface[]>();
   const [funds, setFunds] = React.useState<FundInterface[]>([]);
   const [total, setTotal] = React.useState<number>(0);
-  const [paymentMethodName, setPaymentMethodName] = React.useState<string>(`${props.paymentMethods[0].name} ****${props.paymentMethods[0].last4}`);
+  const [paymentMethodName, setPaymentMethodName] = React.useState<string>(`${props?.paymentMethods[0]?.name} ****${props?.paymentMethods[0]?.last4}`);
   const [donationType, setDonationType] = React.useState<string>();
   const [showDonationPreviewModal, setShowDonationPreviewModal] = React.useState<boolean>(false);
   const [donation, setDonation] = React.useState<StripeDonationInterface>({
-    id: props.paymentMethods[0].id,
-    type: props.paymentMethods[0].type,
+    id: props?.paymentMethods[0]?.id,
+    type: props?.paymentMethods[0]?.type,
     customerId: props.customerId,
     person: {
       id: props.person.id,
@@ -74,16 +73,15 @@ export const DonationForm: React.FC<Props> = (props) => {
     setDonationType(dt);
   }
 
-  const makeDonation = async () => {
+  const makeDonation = async (message: string) => {
     let results;
     if (donationType === "once") results = await ApiHelper.post("/donate/charge/", donation, "GivingApi");
     if (donationType === "recurring") results = await ApiHelper.post("/donate/subscribe/", donation, "GivingApi");
 
     if (results?.status === "succeeded" || results?.status === "pending" || results?.status === "active") {
-      setSuccessMessage("Donation successful!");
       setShowDonationPreviewModal(false);
       setDonationType(null);
-      props.donationSuccess();
+      props.donationSuccess(message);
     }
     if (results?.raw?.message) {
       setShowDonationPreviewModal(false);
@@ -110,7 +108,7 @@ export const DonationForm: React.FC<Props> = (props) => {
 
   React.useEffect(loadData, [props.person?.id]);
 
-  if (!funds.length) return null;
+  if (!funds.length || !props?.paymentMethods[0]?.id) return null;
   else return (
     <>
       <DonationPreviewModal show={showDonationPreviewModal} onHide={() => setShowDonationPreviewModal(false)} handleDonate={makeDonation} donation={donation} donationType={donationType} paymentMethodName={paymentMethodName} funds={funds} />
@@ -123,7 +121,6 @@ export const DonationForm: React.FC<Props> = (props) => {
             <Button aria-label="recurring-donation" size="sm" block style={{minHeight: "50px"}} variant={donationType === "recurring" ? "primary" : "light"} onClick={() => handleDonationSelect("recurring")}>Make a Recurring Donation</Button>
           </Col>
         </Row>
-        { successMessage && <Alert variant="success">{successMessage}</Alert> }
         { donationType
           && <div style={{marginTop: "20px"}}>
             <FormGroup>
@@ -137,32 +134,32 @@ export const DonationForm: React.FC<Props> = (props) => {
               <FormControl name="date" type="date" aria-label="date" min={DateHelper.formatHtml5Date(new Date())} value={DateHelper.formatHtml5Date(new Date(donation.billing_cycle_anchor))} onChange={handleChange} onKeyDown={handleKeyDown} />
             </FormGroup>
             {donationType === "recurring"
-            && <Row>
-              <Col>
-                <FormGroup>
-                  <FormLabel>Interval Number</FormLabel>
-                  <FormControl name="interval-number" type="number" value={donation.interval.interval_count} aria-label="interval-number" min="1" step="1" onChange={handleChange} />
-                </FormGroup>
-              </Col>
-              <Col>
-                <FormGroup>
-                  <FormLabel>Interval Type</FormLabel>
-                  <FormControl as="select" name="interval-type" aria-label="interval-type" value={donation.interval.interval} onChange={handleChange}>
-                    <option value="day">Day(s)</option>
-                    <option value="week">Week(s)</option>
-                    <option value="month">Month(s)</option>
-                    <option value="year">Year(s)</option>
-                  </FormControl>
-                </FormGroup>
-              </Col>
-            </Row>
+              && <Row>
+                <Col>
+                  <FormGroup>
+                    <FormLabel>Interval Number</FormLabel>
+                    <FormControl name="interval-number" type="number" value={donation.interval.interval_count} aria-label="interval-number" min="1" step="1" onChange={handleChange} />
+                  </FormGroup>
+                </Col>
+                <Col>
+                  <FormGroup>
+                    <FormLabel>Interval Type</FormLabel>
+                    <FormControl as="select" name="interval-type" aria-label="interval-type" value={donation.interval.interval} onChange={handleChange}>
+                      <option value="day">Day(s)</option>
+                      <option value="week">Week(s)</option>
+                      <option value="month">Month(s)</option>
+                      <option value="year">Year(s)</option>
+                    </FormControl>
+                  </FormGroup>
+                </Col>
+              </Row>
             }
             { funds && fundDonations
-            && <FormGroup>
-              <FormLabel>Fund</FormLabel>
-              <FundDonations fundDonations={fundDonations} funds={funds} updatedFunction={handleFundDonationsChange} />
-              { fundDonations.length > 1 && <p>Total Donation Amount: ${total}</p> }
-            </FormGroup>
+              && <FormGroup>
+                <FormLabel>Fund</FormLabel>
+                <FundDonations fundDonations={fundDonations} funds={funds} updatedFunction={handleFundDonationsChange} />
+                { fundDonations.length > 1 && <p>Total Donation Amount: ${total}</p> }
+              </FormGroup>
             }
             <div className="form-group">
               <label>Notes</label>

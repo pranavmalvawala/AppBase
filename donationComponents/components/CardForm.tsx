@@ -5,7 +5,7 @@ import { InputBox, ErrorMessages } from "../../components";
 import { ApiHelper } from "../../helpers";
 import { PersonInterface, StripePaymentMethod, PaymentMethodInterface, StripeCardUpdateInterface } from "../../interfaces";
 
-interface Props { card: StripePaymentMethod, customerId: string, person: PersonInterface, setMode: any, deletePayment: any, updateList: () => void }
+interface Props { card: StripePaymentMethod, customerId: string, person: PersonInterface, setMode: any, deletePayment: any, updateList: (message: string) => void }
 
 export const CardForm: React.FC<Props> = (props) => {
   const stripe = useStripe();
@@ -30,6 +30,7 @@ export const CardForm: React.FC<Props> = (props) => {
     if (e.currentTarget.name === "exp_month") card.cardData.card.exp_month = e.currentTarget.value;
     if (e.currentTarget.name === "exp_year") card.cardData.card.exp_year = e.currentTarget.value;
     setCardUpdate(card);
+    setShowSave(true);
   }
 
   const createCard = async () => {
@@ -50,7 +51,7 @@ export const CardForm: React.FC<Props> = (props) => {
           setShowSave(true);
         }
         else {
-          props.updateList();
+          props.updateList("Card added successfully");
           props.setMode("display");
         }
       });
@@ -58,8 +59,19 @@ export const CardForm: React.FC<Props> = (props) => {
   }
 
   const updateCard = async () => {
-    ApiHelper.post("/paymentmethods/updatecard", cardUpdate, "GivingApi");
-    props.setMode("display");
+    if (!cardUpdate.cardData.card.exp_month || !cardUpdate.cardData.card.exp_year) setErrorMessage("Expiration month and year cannot be blank.");
+    else {
+      await ApiHelper.post("/paymentmethods/updatecard", cardUpdate, "GivingApi").then(result => {
+        if (result?.raw?.message) {
+          setErrorMessage(result.raw.message);
+          setShowSave(true);
+        }
+        else {
+          props.updateList("Card updated successfully");
+          props.setMode("display");
+        }
+      });
+    }
   }
 
   const getHeaderText = () => props.card.id

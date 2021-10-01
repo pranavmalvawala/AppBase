@@ -5,7 +5,7 @@ import { DisplayBox, Loading } from "../components";
 import { ApiHelper, DateHelper, UniqueIdHelper, CurrencyHelper } from "../helpers";
 import { DonationInterface, PersonInterface, StripePaymentMethod } from "../interfaces";
 import { Link } from "react-router-dom"
-import { Table } from "react-bootstrap";
+import { Alert, Table } from "react-bootstrap";
 
 interface Props { personId: string }
 
@@ -15,6 +15,7 @@ export const DonationPage: React.FC<Props> = (props) => {
   const [paymentMethods, setPaymentMethods] = React.useState<StripePaymentMethod[]>(null);
   const [customerId, setCustomerId] = React.useState(null);
   const [person, setPerson] = React.useState<PersonInterface>(null);
+  const [message, setMessage] = React.useState<string>(null);
 
   const loadData = () => {
     if (!UniqueIdHelper.isMissing(props.personId)) {
@@ -39,7 +40,8 @@ export const DonationPage: React.FC<Props> = (props) => {
     }
   }
 
-  const handleDataUpdate = () => {
+  const handleDataUpdate = (message?: string) => {
+    setMessage(message)
     setPaymentMethods(null);
     loadData();
   }
@@ -58,7 +60,7 @@ export const DonationPage: React.FC<Props> = (props) => {
         <tr key={i}>
           { process.env.REACT_APP_NAME !== "B1App" && <td><Link to={"/donations/" + d.batchId}>{d.batchId}</Link></td> }
           <td>{DateHelper.prettyDate(new Date(d.donationDate))}</td>
-          <td>{d.method}</td>
+          <td>{d.method} - {d.methodDetails}</td>
           <td>{d.fund.name}</td>
           <td>{CurrencyHelper.formatCurrency(d.fund.amount)}</td>
         </tr>
@@ -97,22 +99,22 @@ export const DonationPage: React.FC<Props> = (props) => {
 
   const getPaymentMethodComponents = () => {
     if (!paymentMethods) return <Loading />;
-    if (paymentMethods.length) return (
+    else return (
       <>
-        <PaymentMethods person={person} customerId={customerId} paymentMethods={paymentMethods} stripePromise={stripePromise} dataUpdate={handleDataUpdate} />
-        <RecurringDonations customerId={customerId} paymentMethods={paymentMethods} />
         <DonationForm person={person} customerId={customerId} paymentMethods={paymentMethods} stripePromise={stripePromise} donationSuccess={handleDataUpdate} />
+        <DisplayBox headerIcon="fas fa-file-invoice-dollar" headerText="Donations">
+          {getTable()}
+        </DisplayBox>
+        <RecurringDonations customerId={customerId} paymentMethods={paymentMethods} dataUpdate={handleDataUpdate} />
+        <PaymentMethods person={person} customerId={customerId} paymentMethods={paymentMethods} stripePromise={stripePromise} dataUpdate={handleDataUpdate} />
       </>
     );
-    return <PaymentMethods person={person} customerId={customerId} paymentMethods={paymentMethods} stripePromise={stripePromise} dataUpdate={handleDataUpdate} />;
   }
 
   return (
     <>
+      { paymentMethods && message && <Alert variant="success">{message}</Alert> }
       {getPaymentMethodComponents()}
-      <DisplayBox headerIcon="fas fa-hand-holding-usd" headerText="Donations">
-        {getTable()}
-      </DisplayBox>
     </>
   );
 }

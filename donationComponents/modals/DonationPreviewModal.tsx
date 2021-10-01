@@ -6,7 +6,7 @@ import { StripeDonationInterface } from "../../interfaces";
 interface Props {
   show: boolean;
   onHide: () => void;
-  handleDonate: () => void;
+  handleDonate: (message: string) => void;
   donation: StripeDonationInterface;
   donationType: string;
   paymentMethodName: string;
@@ -19,7 +19,9 @@ export const DonationPreviewModal: React.FC<Props> = (props) => {
 
   const handleClick = () => {
     setLoading(true);
-    props.handleDonate();
+    let message = "Thank you for your donation.";
+    if (props.donationType === "recurring") message = "Recurring donation created. " + message;
+    props.handleDonate(message);
   }
 
   const formatInterval = () => {
