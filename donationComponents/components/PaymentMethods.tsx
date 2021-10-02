@@ -11,7 +11,6 @@ interface Props { person: PersonInterface, customerId: string, paymentMethods: S
 
 export const PaymentMethods: React.FC<Props> = (props) => {
   const [editPaymentMethod, setEditPaymentMethod] = React.useState<StripePaymentMethod>(new StripePaymentMethod());
-  const [paymentMethods, setPaymentMethods] = React.useState<StripePaymentMethod[]>(props.paymentMethods);
   const [mode, setMode] = React.useState("display");
   const [verify, setVerify] = React.useState<boolean>(false);
 
@@ -59,7 +58,7 @@ export const PaymentMethods: React.FC<Props> = (props) => {
   const getPaymentRows = () => {
     let rows: JSX.Element[] = [];
 
-    paymentMethods.forEach((method: StripePaymentMethod) => {
+    props.paymentMethods.forEach((method: StripePaymentMethod) => {
       rows.push(
         <tr key={method.id}>
           <td className="capitalize">{getPMIcon(method.type)} {method.name + " ****" + method.last4}</td>
@@ -72,8 +71,8 @@ export const PaymentMethods: React.FC<Props> = (props) => {
   }
 
   const PaymentMethodsTable = () => {
-    if (!paymentMethods) return <Loading></Loading>
-    if (paymentMethods.length) {
+    if (!props.paymentMethods) return <Loading></Loading>
+    if (props.paymentMethods.length) {
       return (
         <Table>
           <tbody>

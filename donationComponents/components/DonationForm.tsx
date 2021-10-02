@@ -1,6 +1,6 @@
 import React from "react";
 import { Stripe } from "@stripe/stripe-js";
-import { Alert, Button, Col, FormControl, FormGroup, FormLabel, Row } from "react-bootstrap";
+import { Button, Col, FormControl, FormGroup, FormLabel, Row } from "react-bootstrap";
 import { InputBox, ErrorMessages } from "../../components";
 import { FundDonations } from ".";
 import { DonationPreviewModal } from "../modals/DonationPreviewModal";
