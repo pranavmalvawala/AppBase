@@ -15,11 +15,11 @@ export const RecurringDonations: React.FC<Props> = (props) => {
   const loadData = () => {
     ApiHelper.get("/customers/" + props.customerId + "/subscriptions", "GivingApi").then(subResult => {
       const subs: SubscriptionInterface[] = [];
-      const requests = subResult.data.map((s: any) => ApiHelper.get("/subscriptionfunds?subscriptionId=" + s.id, "GivingApi").then(subFunds => {
+      const requests = subResult.data?.map((s: any) => ApiHelper.get("/subscriptionfunds?subscriptionId=" + s.id, "GivingApi").then(subFunds => {
         s.funds = subFunds;
         subs.push(s);
       }));
-      return Promise.all(requests).then(() => {
+      return requests && Promise.all(requests).then(() => {
         setSubscriptions(subs);
       });
     });

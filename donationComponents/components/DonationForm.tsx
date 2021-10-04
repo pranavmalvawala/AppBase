@@ -22,9 +22,9 @@ export const DonationForm: React.FC<Props> = (props) => {
     type: props?.paymentMethods[0]?.type,
     customerId: props.customerId,
     person: {
-      id: props.person.id,
-      email: props.person.contactInfo.email,
-      name: props.person.name.display
+      id: props.person?.id,
+      email: props.person?.contactInfo.email,
+      name: props.person?.name.display
     },
     amount: 0,
     billing_cycle_anchor: + new Date(),
