@@ -104,19 +104,22 @@ export const BankForm: React.FC<Props> = (props) => {
     <InputBox headerIcon="fas fa-hand-holding-usd" headerText={getHeaderText()} ariaLabelSave="save-button" ariaLabelDelete="delete-button" cancelFunction={handleCancel} saveFunction={showSave ? handleSave : saveDisabled} deleteFunction={props.bank.id && !props.showVerifyForm ? handleDelete : undefined}>
       { errorMessage && <ErrorMessages errors={[errorMessage]}></ErrorMessages> }
       <form style={{margin: "10px"}}>
+        { !props.bank.id && <p>Bank accounts will need to be verified before making any donations. Your account will receive two small deposits in approximately 1-3 business days. You will need to enter those deposit amounts to finish verifying your account by selecting the verify account link next to your bank account under the payment methods section.</p> }
         { props.showVerifyForm
           ?
-          <Row style={{marginLeft: "10px", marginRight: "10px"}}>
-            <p>To verify your bank account, check your account for two small deposits and enter those amounts here. It could take 1-3 business days to see the deposits.</p>
-            <Col>
-              <label>First Deposit</label>
-              <input type="text" name="amount1" aria-label="amount1" placeholder="00" className="form-control" maxLength={2} onChange={handleVerify} onKeyPress={handleKeyPress} />
-            </Col>
-            <Col>
-              <label>Second Deposit</label>
-              <input type="text" name="amount2" aria-label="amount2" placeholder="00" className="form-control" maxLength={2} onChange={handleVerify} onKeyPress={handleKeyPress} />
-            </Col>
-          </Row>
+          <>
+            <p>Enter the two deposits you received in your account to finish verifying your bank account.</p>
+            <Row style={{marginLeft: "10px", marginRight: "10px"}}>
+              <Col>
+                <label>First Deposit</label>
+                <input type="text" name="amount1" aria-label="amount1" placeholder="00" className="form-control" maxLength={2} onChange={handleVerify} onKeyPress={handleKeyPress} />
+              </Col>
+              <Col>
+                <label>Second Deposit</label>
+                <input type="text" name="amount2" aria-label="amount2" placeholder="00" className="form-control" maxLength={2} onChange={handleVerify} onKeyPress={handleKeyPress} />
+              </Col>
+            </Row>
+          </>
           : <>
             <Row>
               <Col xs="12" style={{marginBottom: "20px"}}>
