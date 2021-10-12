@@ -7,7 +7,7 @@ import { DonationInterface, PersonInterface, StripePaymentMethod } from "../inte
 import { Link } from "react-router-dom"
 import { Alert, Table } from "react-bootstrap";
 
-interface Props { personId: string }
+interface Props { personId: string, appName?: string }
 
 export const DonationPage: React.FC<Props> = (props) => {
   const [donations, setDonations] = React.useState<DonationInterface[]>(null);
@@ -16,8 +16,10 @@ export const DonationPage: React.FC<Props> = (props) => {
   const [customerId, setCustomerId] = React.useState(null);
   const [person, setPerson] = React.useState<PersonInterface>(null);
   const [message, setMessage] = React.useState<string>(null);
+  const [appName, setAppName] = React.useState<string>("");
 
   const loadData = () => {
+    if (props?.appName) setAppName(props.appName);
     if (!UniqueIdHelper.isMissing(props.personId)) {
       ApiHelper.get("/donations?personId=" + props.personId, "GivingApi").then(data => setDonations(data));
       ApiHelper.get("/gateways", "GivingApi").then(data => {
@@ -58,7 +60,7 @@ export const DonationPage: React.FC<Props> = (props) => {
       let d = donations[i];
       rows.push(
         <tr key={i}>
-          { process.env.REACT_APP_NAME !== "B1App" && <td><Link to={"/donations/" + d.batchId}>{d.batchId}</Link></td> }
+          { appName !== "B1App" && <td><Link to={"/donations/" + d.batchId}>{d.batchId}</Link></td> }
           <td>{DateHelper.prettyDate(new Date(d.donationDate))}</td>
           <td>{d.method} - {d.methodDetails}</td>
           <td>{d.fund.name}</td>
@@ -75,7 +77,7 @@ export const DonationPage: React.FC<Props> = (props) => {
     if (donations.length > 0) {
       rows.push(
         <tr key="header">
-          { process.env.REACT_APP_NAME !== "B1App" && <th>Batch</th> }
+          { appName !== "B1App" && <th>Batch</th> }
           <th>Date</th>
           <th>Method</th>
           <th>Fund</th>
@@ -105,8 +107,8 @@ export const DonationPage: React.FC<Props> = (props) => {
         <DisplayBox headerIcon="fas fa-file-invoice-dollar" headerText="Donations">
           {getTable()}
         </DisplayBox>
-        <RecurringDonations customerId={customerId} paymentMethods={paymentMethods} dataUpdate={handleDataUpdate} />
-        <PaymentMethods person={person} customerId={customerId} paymentMethods={paymentMethods} stripePromise={stripePromise} dataUpdate={handleDataUpdate} />
+        <RecurringDonations customerId={customerId} paymentMethods={paymentMethods} appName={appName} dataUpdate={handleDataUpdate} />
+        <PaymentMethods person={person} customerId={customerId} paymentMethods={paymentMethods} appName={appName} stripePromise={stripePromise} dataUpdate={handleDataUpdate} />
       </>
     );
   }

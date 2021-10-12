@@ -7,7 +7,7 @@ import { DisplayBox, Loading } from "../../components";
 import { ApiHelper, UserHelper } from "../../helpers";
 import { PersonInterface, StripePaymentMethod, Permissions } from "../../interfaces";
 
-interface Props { person: PersonInterface, customerId: string, paymentMethods: StripePaymentMethod[], stripePromise: Promise<Stripe>, dataUpdate: (message?: string) => void }
+interface Props { person: PersonInterface, customerId: string, paymentMethods: StripePaymentMethod[], stripePromise: Promise<Stripe>, appName: string, dataUpdate: (message?: string) => void }
 
 export const PaymentMethods: React.FC<Props> = (props) => {
   const [editPaymentMethod, setEditPaymentMethod] = React.useState<StripePaymentMethod>(new StripePaymentMethod());
@@ -32,7 +32,7 @@ export const PaymentMethods: React.FC<Props> = (props) => {
   }
 
   const getNewContent = () => {
-    if (!UserHelper.checkAccess(Permissions.givingApi.settings.edit) && process.env.REACT_APP_NAME !== "B1App") return null;
+    if (!UserHelper.checkAccess(Permissions.givingApi.settings.edit) && props.appName !== "B1App") return null;
     return (
       <>
         <a id="addBtnGroup" aria-label="add-button" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="about:blank"><i className="fas fa-plus"></i></a>
@@ -45,7 +45,7 @@ export const PaymentMethods: React.FC<Props> = (props) => {
   }
 
   const getEditOptions = (pm: StripePaymentMethod) => {
-    if (!UserHelper.checkAccess(Permissions.givingApi.settings.edit) && process.env.REACT_APP_NAME !== "B1App") return null;
+    if (!UserHelper.checkAccess(Permissions.givingApi.settings.edit) && props.appName !== "B1App") return null;
     return <a aria-label="edit-button" onClick={handleEdit(pm)} href="about:blank"><i className="fas fa-pencil-alt"></i></a>;
   }
 

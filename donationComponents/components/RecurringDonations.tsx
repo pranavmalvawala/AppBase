@@ -5,7 +5,7 @@ import { ApiHelper, UserHelper, CurrencyHelper, DateHelper } from "../../helpers
 import { Permissions, SubscriptionInterface } from "../../interfaces";
 import { RecurringDonationsEdit } from ".";
 
-interface Props { customerId: string, paymentMethods: any[], dataUpdate: (message?: string) => void, };
+interface Props { customerId: string, paymentMethods: any[], appName: string, dataUpdate: (message?: string) => void, };
 
 export const RecurringDonations: React.FC<Props> = (props) => {
   const [subscriptions, setSubscriptions] = React.useState<SubscriptionInterface[]>([]);
@@ -13,16 +13,18 @@ export const RecurringDonations: React.FC<Props> = (props) => {
   const [editSubscription, setEditSubscription] = React.useState<SubscriptionInterface>();
 
   const loadData = () => {
-    ApiHelper.get("/customers/" + props.customerId + "/subscriptions", "GivingApi").then(subResult => {
-      const subs: SubscriptionInterface[] = [];
-      const requests = subResult.data?.map((s: any) => ApiHelper.get("/subscriptionfunds?subscriptionId=" + s.id, "GivingApi").then(subFunds => {
-        s.funds = subFunds;
-        subs.push(s);
-      }));
-      return requests && Promise.all(requests).then(() => {
-        setSubscriptions(subs);
+    if (props.customerId) {
+      ApiHelper.get("/customers/" + props.customerId + "/subscriptions", "GivingApi").then(subResult => {
+        const subs: SubscriptionInterface[] = [];
+        const requests = subResult.data?.map((s: any) => ApiHelper.get("/subscriptionfunds?subscriptionId=" + s.id, "GivingApi").then(subFunds => {
+          s.funds = subFunds;
+          subs.push(s);
+        }));
+        return requests && Promise.all(requests).then(() => {
+          setSubscriptions(subs);
+        });
       });
-    });
+    }
   }
 
   const handleUpdate = (message: string) => {
@@ -67,7 +69,7 @@ export const RecurringDonations: React.FC<Props> = (props) => {
   }
 
   const getEditOptions = (sub: SubscriptionInterface) => {
-    if ((!UserHelper.checkAccess(Permissions.givingApi.settings.edit) && process.env.REACT_APP_NAME !== "B1App") || props?.paymentMethods?.length === 0) return null;
+    if ((!UserHelper.checkAccess(Permissions.givingApi.settings.edit) && props.appName !== "B1App") || props?.paymentMethods?.length === 0) return null;
     return <a aria-label="edit-button" onClick={handleEdit(sub)} href="about:blank"><i className="fas fa-pencil-alt"></i></a>;
   }
 
