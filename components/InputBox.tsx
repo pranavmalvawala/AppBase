@@ -16,6 +16,7 @@ interface Props {
   isSubmitting?: boolean;
   ariaLabelDelete?: string;
   ariaLabelSave?: string;
+  saveButtonType?: "submit" | "button";
 }
 export function InputBox({
   id,
@@ -31,7 +32,8 @@ export function InputBox({
   className = "",
   isSubmitting = false,
   ariaLabelDelete = "",
-  ariaLabelSave = ""
+  ariaLabelSave = "",
+  saveButtonType = "submit"
 }: Props) {
   let buttons = [];
 
@@ -63,7 +65,7 @@ export function InputBox({
     buttons.push(
       <Col key="save">
         <Button
-          type="submit"
+          type={saveButtonType}
           variant="success"
           block
           aria-label={ariaLabelSave}

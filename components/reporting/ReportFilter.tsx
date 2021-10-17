@@ -57,7 +57,7 @@ export const ReportFilter = (props: Props) => {
 
   if (props.filter === null) return null;
   else return (
-    <InputBox headerIcon="far fa-chart-bar" data-cy="filter-box" headerText="Filter Report" saveFunction={handleUpdate} saveText="Update" id={"filterBox-" + props.filter.keyName}>
+    <InputBox headerIcon="far fa-chart-bar" data-cy="filter-box" headerText="Filter Report" saveFunction={handleUpdate} saveText="Update" id={"filterBox-" + props.filter.keyName} saveButtonType="button">
       {getFields()}
     </InputBox>
   );
