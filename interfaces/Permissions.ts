@@ -13,10 +13,14 @@ export class Permissions {
     }
   };
 
+  private static formAdmin = { api: "MembershipApi", contentType: "Forms", action: "Admin" };
+  private static formCreate = { api: "MembershipApi", contentType: "Forms", action: "Create" };
+
   static membershipApi = {
     forms: {
-      view: { api: "MembershipApi", contentType: "Forms", action: "View" },
-      edit: { api: "MembershipApi", contentType: "Forms", action: "Edit" }
+      admin: Permissions.formAdmin,
+      create: Permissions.formCreate,
+      access: Permissions.formAdmin || Permissions.formCreate
     },
     groups: {
       edit: { api: "MembershipApi", contentType: "Groups", action: "Edit" }

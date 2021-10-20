@@ -30,7 +30,6 @@ export const FormSubmissionEdit: React.FC<Props> = (props) => {
   }
 
   const loadData = () => {
-    console.log(props.formSubmissionId, props.addFormId);
     if (!UniqueIdHelper.isMissing(props.formSubmissionId)) { ApiHelper.get("/formsubmissions/" + props.formSubmissionId + "/?include=questions,answers,form", "MembershipApi").then(data => setFormSubmission(data)); }
     else if (!UniqueIdHelper.isMissing(props.addFormId)) {
       ApiHelper.get("/questions/?formId=" + props.addFormId, "MembershipApi").then(data => {

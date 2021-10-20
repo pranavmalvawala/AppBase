@@ -68,6 +68,12 @@ export class DateHelper {
     return (d.getMonth() + 1).toString() + "/" + (d.getDate() + 1).toString() + "/" + d.getFullYear().toString();
   }
 
+  static convertDatePickerFormat(d: Date): Date {
+    const date = this.formatHtml5Date(d).split("-");
+    if (date.length === 3) return new Date(`${date[1]}-${date[2]}-${date[0]}`);
+    return new Date();
+  }
+
   private static formatDateTime(date: Date, format: string) {
     try {
       return dateFormat(date, format);
