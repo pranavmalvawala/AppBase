@@ -1,5 +1,5 @@
 import React from "react";
-import { InputBox, QuestionEdit } from "./";
+import { ErrorMessages, InputBox, QuestionEdit } from "./";
 import { ApiHelper, UniqueIdHelper } from "../helpers";
 import { AnswerInterface, QuestionInterface, FormSubmissionInterface } from "../interfaces";
 
@@ -8,11 +8,16 @@ interface Props {
     contentType: string,
     contentId: string,
     formSubmissionId: string,
-    updatedFunction: () => void
+    unRestrictedFormId: string,
+    personId?: string,
+    churchId?: string,
+    updatedFunction: () => void,
+    cancelFunction: () => void
 }
 
 export const FormSubmissionEdit: React.FC<Props> = (props) => {
   const [formSubmission, setFormSubmission] = React.useState(null);
+  const [errors, setErrors] = React.useState(null);
 
   const getDeleteFunction = () => (!UniqueIdHelper.isMissing(formSubmission?.id)) ? handleDelete : undefined
   const handleDelete = () => {
@@ -29,23 +34,25 @@ export const FormSubmissionEdit: React.FC<Props> = (props) => {
     return null;
   }
 
+  const setFormSubmissionData = (data: any) => {
+     const formId = props.addFormId || props.unRestrictedFormId;
+    let fs: FormSubmissionInterface = {
+      formId, contentType: props.contentType, contentId: props.contentId, answers: []
+    };
+    fs.questions = data;
+    fs.answers = [];
+    fs.questions.forEach((q) => {
+      let answer: AnswerInterface = { formSubmissionId: fs.id, questionId: q.id, required: q.required };
+      answer.value = getDefaultValue(q);
+      fs.answers.push(answer);
+    });
+    setFormSubmission(fs);
+  }
+
   const loadData = () => {
-    if (!UniqueIdHelper.isMissing(props.formSubmissionId)) { ApiHelper.get("/formsubmissions/" + props.formSubmissionId + "/?include=questions,answers,form", "MembershipApi").then(data => setFormSubmission(data)); }
-    else if (!UniqueIdHelper.isMissing(props.addFormId)) {
-      ApiHelper.get("/questions/?formId=" + props.addFormId, "MembershipApi").then(data => {
-        let fs: FormSubmissionInterface = {
-          formId: props.addFormId, contentType: props.contentType, contentId: props.contentId, answers: []
-        };
-        fs.questions = data;
-        fs.answers = [];
-        fs.questions.forEach((q) => {
-          let answer: AnswerInterface = { formSubmissionId: fs.id, questionId: q.id };
-          answer.value = getDefaultValue(q);
-          fs.answers.push(answer);
-        });
-        setFormSubmission(fs);
-      });
-    }
+    if (!UniqueIdHelper.isMissing(props.formSubmissionId)) ApiHelper.get("/formsubmissions/" + props.formSubmissionId + "/?include=questions,answers,form", "MembershipApi").then(data => setFormSubmission(data));
+    else if (!UniqueIdHelper.isMissing(props.addFormId)) ApiHelper.get("/questions/?formId=" + props.addFormId, "MembershipApi").then(data => setFormSubmissionData(data));
+    else if (!UniqueIdHelper.isMissing(props.unRestrictedFormId)) ApiHelper.get("/questions/unrestricted?formId=" + props.unRestrictedFormId, "MembershipApi").then(data => setFormSubmissionData(data));
   }
 
   const getDefaultValue = (q: QuestionInterface) => {
@@ -59,10 +66,18 @@ export const FormSubmissionEdit: React.FC<Props> = (props) => {
 
   const handleSave = () => {
     const fs = formSubmission;
-    ApiHelper.post("/formsubmissions/", [fs], "MembershipApi")
-      .then(() => {
-        props.updatedFunction();
-      });
+    fs.submittedBy = props.personId || null;
+    fs.submissionDate = new Date();
+    fs.churchId = props.churchId || null;
+    let e: any = [];
+    fs.answers.forEach((a: AnswerInterface) => {
+      if (a.required && a.value === "") {
+        const q = fs.questions.find((q: QuestionInterface) => q.id === a.questionId);
+        e.push(q.title + " is required");
+        setErrors(e);
+      }
+    });
+    if (!e.length) ApiHelper.post("/formsubmissions/", [fs], "MembershipApi").then(() => props.updatedFunction());
   }
 
   const handleChange = (questionId: string, value: string) => {
@@ -85,6 +100,11 @@ export const FormSubmissionEdit: React.FC<Props> = (props) => {
     for (let i = 0; i < questions.length; i++) questionList.push(<QuestionEdit key={questions[i].id} question={questions[i]} answer={getAnswer(questions[i].id)} changeFunction={handleChange} />);
   }
 
-  return <InputBox id="formSubmissionBox" headerText={formSubmission?.form?.name || "Edit Form"} headerIcon="fas fa-user" saveFunction={handleSave} cancelFunction={props.updatedFunction} deleteFunction={getDeleteFunction()}>{questionList}</InputBox>;
+  return (
+    <InputBox id="formSubmissionBox" headerText={formSubmission?.form?.name || "Edit Form"} headerIcon="fas fa-user" saveFunction={handleSave} cancelFunction={props.cancelFunction} deleteFunction={getDeleteFunction()}>
+      <ErrorMessages errors={errors} />
+      {questionList}
+    </InputBox>
+  );
 }
 
