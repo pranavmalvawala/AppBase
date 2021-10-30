@@ -1,10 +1,10 @@
 import React from "react";
 import { Stripe } from "@stripe/stripe-js";
-import { Button, Col, FormControl, FormGroup, FormLabel, Row } from "react-bootstrap";
+import { Button, Col, FormCheck, FormControl, FormGroup, FormLabel, Row } from "react-bootstrap";
 import { InputBox, ErrorMessages } from "../../components";
 import { FundDonations } from ".";
 import { DonationPreviewModal } from "../modals/DonationPreviewModal";
-import { ApiHelper, DateHelper } from "../../helpers";
+import { ApiHelper, CurrencyHelper, DateHelper } from "../../helpers";
 import { PersonInterface, StripePaymentMethod, StripeDonationInterface, FundDonationInterface, FundInterface } from "../../interfaces";
 
 interface Props { person: PersonInterface, customerId: string, paymentMethods: StripePaymentMethod[], stripePromise: Promise<Stripe>, donationSuccess: (message: string) => void }
@@ -13,6 +13,9 @@ export const DonationForm: React.FC<Props> = (props) => {
   const [errorMessage, setErrorMessage] = React.useState<string>();
   const [fundDonations, setFundDonations] = React.useState<FundDonationInterface[]>();
   const [funds, setFunds] = React.useState<FundInterface[]>([]);
+  const [fundsTotal, setFundsTotal] = React.useState<number>(0);
+  const [transactionFee, setTransactionFee] = React.useState<number>(0);
+  const [payFee, setPayFee] = React.useState<number>(0);
   const [total, setTotal] = React.useState<number>(0);
   const [paymentMethodName, setPaymentMethodName] = React.useState<string>(`${props?.paymentMethods[0]?.name} ****${props?.paymentMethods[0]?.last4}`);
   const [donationType, setDonationType] = React.useState<string>();
@@ -59,6 +62,12 @@ export const DonationForm: React.FC<Props> = (props) => {
       case "interval-number": d.interval.interval_count = Number(value); break;
       case "interval-type": d.interval.interval = value; break;
       case "notes": d.notes = value; break;
+      case "transaction-fee":
+        const element = e.currentTarget as HTMLInputElement
+        d.amount = element.checked ? fundsTotal + transactionFee : fundsTotal;
+        let showFee = element.checked ? transactionFee : 0;
+        setTotal(d.amount);
+        setPayFee(showFee);
     }
     setDonation(d);
   }
@@ -103,7 +112,15 @@ export const DonationForm: React.FC<Props> = (props) => {
     d.amount = totalAmount;
     d.funds = selectedFunds;
     setDonation(d);
+    setFundsTotal(totalAmount);
     setTotal(totalAmount);
+    setTransactionFee(getTransactionFee(totalAmount));
+  }
+
+  const getTransactionFee = (amount: number) => {
+    const fixedFee = 0.30;
+    const fixedPercent = 0.029;
+    return Math.round(((amount + fixedFee) / (1 - fixedPercent) - amount) * 100) / 100;
   }
 
   React.useEffect(loadData, [props.person?.id]);
@@ -111,7 +128,7 @@ export const DonationForm: React.FC<Props> = (props) => {
   if (!funds.length || !props?.paymentMethods[0]?.id) return null;
   else return (
     <>
-      <DonationPreviewModal show={showDonationPreviewModal} onHide={() => setShowDonationPreviewModal(false)} handleDonate={makeDonation} donation={donation} donationType={donationType} paymentMethodName={paymentMethodName} funds={funds} />
+      <DonationPreviewModal show={showDonationPreviewModal} onHide={() => setShowDonationPreviewModal(false)} handleDonate={makeDonation} donation={donation} donationType={donationType} payFee={payFee} paymentMethodName={paymentMethodName} funds={funds} />
       <InputBox id="donationBox" aria-label="donation-box" headerIcon="fas fa-hand-holding-usd" headerText="Donate" ariaLabelSave="save-button" cancelFunction={donationType ? handleCancel : undefined} saveFunction={donationType ? handleSave : undefined} saveText="Preview Donation">
         <Row>
           <Col>
@@ -154,14 +171,27 @@ export const DonationForm: React.FC<Props> = (props) => {
                 </Col>
               </Row>
             }
-            { funds && fundDonations
-              && <FormGroup>
-                <FormLabel>Fund</FormLabel>
-                <FundDonations fundDonations={fundDonations} funds={funds} updatedFunction={handleFundDonationsChange} />
-                { fundDonations.length > 1 && <p>Total Donation Amount: ${total}</p> }
-              </FormGroup>
-            }
             <div className="form-group">
+              { funds && fundDonations
+                && <FormGroup>
+                  <FormLabel>Fund</FormLabel>
+                  <FundDonations fundDonations={fundDonations} funds={funds} updatedFunction={handleFundDonationsChange} />
+                </FormGroup>
+              }
+              { fundsTotal > 0 &&
+                <>
+                  <FormGroup controlId="formBasicCheckbox">
+                    <FormCheck
+                      type="checkbox"
+                      className="dark"
+                      name="transaction-fee"
+                      label={`I'll generously add ${CurrencyHelper.formatCurrency(transactionFee)} to cover the transaction fees so you can keep 100% of my donation.`}
+                      onChange={handleChange}>
+                    </FormCheck>
+                  </FormGroup>
+                  <p>Total Donation Amount: ${total}</p>
+                </>
+              }
               <label>Notes</label>
               <textarea className="form-control" aria-label="note" name="notes" value={donation.notes || ""} onChange={handleChange} onKeyDown={handleKeyDown}></textarea>
             </div>

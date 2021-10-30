@@ -11,6 +11,7 @@ interface Props {
   donationType: string;
   paymentMethodName: string;
   funds: any;
+  payFee: number;
 }
 
 export const DonationPreviewModal: React.FC<Props> = (props) => {
@@ -59,6 +60,7 @@ export const DonationPreviewModal: React.FC<Props> = (props) => {
               </>
             }
             <tr><td>Funds:</td><td>{props.donation.funds.map((fund: any, i: number) => <p key={i}>{CurrencyHelper.formatCurrency(fund.amount)} - {fund.name}</p>)}</td></tr>
+            { props.payFee > 0 && <tr><td>Transaction Fee:</td><td>{CurrencyHelper.formatCurrency(props.payFee)}</td></tr> }
             <tr><td>Total:</td><td><h4>{CurrencyHelper.formatCurrency(props.donation.amount)}</h4></td></tr>
           </tbody>
         </Table>
