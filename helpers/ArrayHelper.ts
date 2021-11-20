@@ -23,6 +23,12 @@ export class ArrayHelper {
     return result;
   }
 
+  static getAllArray(array: any[], propertyName: string, values: any[]) {
+    const result: any[] = []
+    for (const item of array) if (values.indexOf(item[propertyName]) > -1) result.push(item);
+    return result;
+  }
+
   private static compare(item: any, propertyName: string, value: any) {
     const propChain = propertyName.split(".");
     if (propChain.length === 1) return item[propertyName] === value;
