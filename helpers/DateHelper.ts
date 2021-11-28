@@ -2,6 +2,10 @@ import { format as dateFormat } from "date-fns"
 
 export class DateHelper {
 
+  static convertToDate(input: any) {
+    return new Date(Date.parse(input.toString()));
+  }
+
   static addDays(date: Date, days: number) {
     date.setDate(date.getDate() + days);
     return date;
