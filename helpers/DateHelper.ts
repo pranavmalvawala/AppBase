@@ -69,7 +69,7 @@ export class DateHelper {
   }
 
   static getShortDate(d: Date): string {
-    return (d.getMonth() + 1).toString() + "/" + (d.getDate() + 1).toString() + "/" + d.getFullYear().toString();
+    return (d.getMonth() + 1).toString() + "/" + (d.getDate()).toString() + "/" + d.getFullYear().toString();
   }
 
   static convertDatePickerFormat(d: Date): Date {
