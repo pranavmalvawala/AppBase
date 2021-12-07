@@ -53,10 +53,16 @@ export const LoginPage: React.FC<Props> = (props) => {
   }, [props.callbackErrors])
 
   const init = () => {
-    if (props.auth) login({ authGuid: props.auth });
-    if (props.jwt) {
-      setWelcomeBackName(cookies.name);
-      login({ jwt: props.jwt });
+    const search = new URLSearchParams(location?.search);
+    const action = search.get("action");
+    if (action === "forgot") setShowForgot(true);
+    else if (action === "register") setShowRegister(true);
+    else {
+      if (props.auth) login({ authGuid: props.auth });
+      if (props.jwt) {
+        setWelcomeBackName(cookies.name);
+        login({ jwt: props.jwt });
+      }
     }
   };
 
