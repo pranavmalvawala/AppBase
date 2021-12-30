@@ -18,10 +18,8 @@ interface Props {
   userRegisteredCallback?: (user: UserInterface) => Promise<void>;
 }
 
-
 export const Register: React.FC<Props> = (props) => {
   const [registered, setRegistered] = React.useState(false);
-
 
   const handleRegisterErrors = (errors: string[]) => {
     props.updateErrors(errors)
@@ -49,17 +47,15 @@ export const Register: React.FC<Props> = (props) => {
 
   const initialValues = { firstName: "", lastName: "", email: "", appName: props.appName, appUrl: props.appUrl }
 
-  const getThankYou = () => {
-    return (
-      <>
-        <p>Thank you for registering.  Please check your email for your temporary password in order to get started.</p>
-        <p><a href="/login">Return to login</a></p>
-      </>
-    );
-  }
+  const getThankYou = () => (
+    <>
+      <p>Thank you for registering.  Please check your email for your temporary password in order to get started.</p>
+      <p><a href="/login">Return to login</a></p>
+    </>
+  )
 
-  const getForm = () => {
-    return (<Formik validationSchema={schema} initialValues={initialValues} onSubmit={register} >
+  const getForm = () => (
+    <Formik validationSchema={schema} initialValues={initialValues} onSubmit={register}>
       {({ handleSubmit, handleChange, values, touched, errors, isSubmitting }) => (
         <Form noValidate onSubmit={handleSubmit}>
           <Form.Group>
@@ -74,16 +70,15 @@ export const Register: React.FC<Props> = (props) => {
             <FormControl type="text" aria-label="email" id="email" name="email" value={values.email} onChange={handleChange} placeholder="Email address" isInvalid={touched.email && !!errors.email} />
             <Form.Control.Feedback type="invalid">{errors.email}</Form.Control.Feedback>
           </Form.Group>
-          <Button type="submit" id="signInButton" size="lg" variant="primary" block disabled={isSubmitting} style={{ width: "100%" }} >
+          <Button type="submit" id="signInButton" size="lg" variant="primary" block disabled={isSubmitting} style={{ width: "100%" }}>
             {isSubmitting ? "Please wait..." : "Register"}
           </Button>
         </Form>
       )}
-    </Formik>);
-  }
+    </Formik>
+  )
 
   if (registered) return getThankYou();
   else return getForm();
-
 
 };

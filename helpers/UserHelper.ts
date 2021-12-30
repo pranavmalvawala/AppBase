@@ -57,5 +57,4 @@ export class UserHelper {
 
     return `${appUrl}/login/?jwt=${jwt}&returnUrl=${returnUrl}`;
   }
-
 }

@@ -4,15 +4,15 @@ import { ApiHelper, UniqueIdHelper } from "../helpers";
 import { AnswerInterface, QuestionInterface, FormSubmissionInterface } from "../interfaces";
 
 interface Props {
-    addFormId: string,
-    contentType: string,
-    contentId: string,
-    formSubmissionId: string,
-    unRestrictedFormId: string,
-    personId?: string,
-    churchId?: string,
-    updatedFunction: () => void,
-    cancelFunction: () => void
+  addFormId: string,
+  contentType: string,
+  contentId: string,
+  formSubmissionId: string,
+  unRestrictedFormId: string,
+  personId?: string,
+  churchId?: string,
+  updatedFunction: () => void,
+  cancelFunction: () => void
 }
 
 export const FormSubmissionEdit: React.FC<Props> = (props) => {
@@ -35,7 +35,7 @@ export const FormSubmissionEdit: React.FC<Props> = (props) => {
   }
 
   const setFormSubmissionData = (data: any) => {
-     const formId = props.addFormId || props.unRestrictedFormId;
+    const formId = props.addFormId || props.unRestrictedFormId;
     let fs: FormSubmissionInterface = {
       formId, contentType: props.contentType, contentId: props.contentId, answers: []
     };
@@ -92,7 +92,7 @@ export const FormSubmissionEdit: React.FC<Props> = (props) => {
     setFormSubmission(fs);
   }
 
-  React.useEffect(loadData, []);
+  React.useEffect(loadData, []); //eslint-disable-line
 
   let questionList = [];
   if (formSubmission != null) {

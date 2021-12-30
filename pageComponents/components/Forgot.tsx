@@ -36,13 +36,12 @@ export const Forgot: React.FC<Props> = props => {
 
   const initialValues = { email: "" }
 
-
   return (
     <>
       <p>Enter your email address to request a password reset.</p>
       <ErrorMessages errors={errors} />
       {successMessage}
-      <Formik validationSchema={schema} initialValues={initialValues} onSubmit={reset} >
+      <Formik validationSchema={schema} initialValues={initialValues} onSubmit={reset}>
         {({ handleSubmit, handleChange, values, touched, errors, isSubmitting }) => (
           <Form noValidate onSubmit={handleSubmit}>
             <Form.Group>

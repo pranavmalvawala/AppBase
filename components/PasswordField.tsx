@@ -37,7 +37,7 @@ export function PasswordField({
     />
   );
   return (
-    <div className={`${containerClass}`.trim()} style={{ position: "relative" }} >
+    <div className={`${containerClass}`.trim()} style={{ position: "relative" }}>
       <Form.Label htmlFor="password" style={{ display: "none" }}>
         Password
       </Form.Label>

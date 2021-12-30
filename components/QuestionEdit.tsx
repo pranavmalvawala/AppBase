@@ -2,9 +2,9 @@ import React from "react";
 import { AnswerInterface, QuestionInterface } from "../interfaces";
 
 interface Props {
-    answer: AnswerInterface
-    question: QuestionInterface,
-    changeFunction: (questionId: string, value: string) => void
+  answer: AnswerInterface
+  question: QuestionInterface,
+  changeFunction: (questionId: string, value: string) => void
 }
 
 export const QuestionEdit: React.FC<Props> = (props) => {
@@ -38,7 +38,7 @@ export const QuestionEdit: React.FC<Props> = (props) => {
       default: return null;
     }
     let desc = (q.description === null || q.description === "") ? "" : <span className="description">({q.description})</span>
-    return <div className="form-group"><label>{q.required ? '*' : ''}{q.title}{desc}</label>{input}</div>;
+    return <div className="form-group"><label>{q.required ? "*" : ""}{q.title}{desc}</label>{input}</div>;
   }
 
 }

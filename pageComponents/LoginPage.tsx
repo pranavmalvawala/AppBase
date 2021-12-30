@@ -189,9 +189,9 @@ export const LoginPage: React.FC<Props> = (props) => {
     setShowRegister(true);
   }
 
-  const getRegisterLink = () => {
-    return (<><a href="about:blank" onClick={handleShowRegister}>Register</a> &nbsp; | &nbsp; </>);
-  }
+  const getRegisterLink = () => (
+    <><a href="about:blank" onClick={handleShowRegister}>Register</a> &nbsp; | &nbsp; </>
+  )
 
   const handleRegisterCallback = () => {
     setShowForgot(false);
@@ -203,43 +203,42 @@ export const LoginPage: React.FC<Props> = (props) => {
     setShowRegister(false);
   }
 
-  const getLoginBox = () => {
-    return (
-      <div id="loginBox" style={{ backgroundColor: "#FFF", border: "1px solid #CCC", borderRadius: 5, padding: 20 }}>
-        <h2>Please sign in</h2>
-        <Formik validationSchema={schema} initialValues={initialValues} onSubmit={login} >
-          {({ handleSubmit, handleChange, values, touched, errors, isSubmitting }) => (
-            <Form noValidate onSubmit={handleSubmit}>
-              <Form.Group>
-                <FormControl type="text" aria-label="email" id="email" name="email" value={values.email} onChange={handleChange} placeholder="Email address" isInvalid={touched.email && !!errors.email} />
-                <Form.Control.Feedback type="invalid">{errors.email}</Form.Control.Feedback>
-              </Form.Group>
-              <Form.Group>
-                <PasswordField value={values.password} onChange={handleChange} onKeyDown={e => e.key === "Enter" && login} isInvalid={touched.password && !!errors.password} errorText={errors.password} />
-              </Form.Group>
-              <Button type="submit" id="signInButton" size="lg" variant="primary" block disabled={isSubmitting} style={{ width: "100%" }}>
-                {isSubmitting ? "Please wait..." : "Sign in"}
-              </Button>
-            </Form>
-          )}
-        </Formik>
-        <br />
-        <div className="text-right">
-          {getRegisterLink()}
-          <a href="about:blank" onClick={(e) => { e.preventDefault(); setShowForgot(true); }}>Forgot Password</a>&nbsp;
-        </div>
-      </div>);
-  }
+  const getLoginBox = () => (
+    <div id="loginBox" style={{ backgroundColor: "#FFF", border: "1px solid #CCC", borderRadius: 5, padding: 20 }}>
+      <h2>Please sign in</h2>
+      <Formik validationSchema={schema} initialValues={initialValues} onSubmit={login}>
+        {({ handleSubmit, handleChange, values, touched, errors, isSubmitting }) => (
+          <Form noValidate onSubmit={handleSubmit}>
+            <Form.Group>
+              <FormControl type="text" aria-label="email" id="email" name="email" value={values.email} onChange={handleChange} placeholder="Email address" isInvalid={touched.email && !!errors.email} />
+              <Form.Control.Feedback type="invalid">{errors.email}</Form.Control.Feedback>
+            </Form.Group>
+            <Form.Group>
+              <PasswordField value={values.password} onChange={handleChange} onKeyDown={e => e.key === "Enter" && login} isInvalid={touched.password && !!errors.password} errorText={errors.password} />
+            </Form.Group>
+            <Button type="submit" id="signInButton" size="lg" variant="primary" block disabled={isSubmitting} style={{ width: "100%" }}>
+              {isSubmitting ? "Please wait..." : "Sign in"}
+            </Button>
+          </Form>
+        )}
+      </Formik>
+      <br />
+      <div className="text-right">
+        {getRegisterLink()}
+        <a href="about:blank" onClick={(e) => { e.preventDefault(); setShowForgot(true); }}>Forgot Password</a>&nbsp;
+      </div>
+    </div>
+  )
 
   const getLoginRegister = () => {
     if (showRegister) return (
-      <div id="loginBox" style={{ backgroundColor: "#FFF", border: "1px solid #CCC", borderRadius: 5, padding: 20 }} >
+      <div id="loginBox" style={{ backgroundColor: "#FFF", border: "1px solid #CCC", borderRadius: 5, padding: 20 }}>
         <h2>Create an Account</h2>
         <Register updateErrors={setErrors} appName={props.appName} appUrl={props.appUrl} userRegisteredCallback={props.userRegisteredCallback} />
       </div>
     );
     if (showForgot) return (
-      <div id="loginBox" style={{ backgroundColor: "#FFF", border: "1px solid #CCC", borderRadius: 5, padding: 20 }} >
+      <div id="loginBox" style={{ backgroundColor: "#FFF", border: "1px solid #CCC", borderRadius: 5, padding: 20 }}>
         <h2>Reset Password</h2>
         <Forgot registerCallback={handleRegisterCallback} loginCallback={handleLoginCallback} />
       </div>
@@ -251,13 +250,13 @@ export const LoginPage: React.FC<Props> = (props) => {
     registeredChurch = church;
   }
 
-  React.useEffect(init, []);
+  React.useEffect(init, []); //eslint-disable-line
 
   const initialValues = { email: "", password: "" }
 
   if (redirectTo) return <Redirect to={redirectTo} />;
   else return (
-    <div style={{ maxWidth: 350, marginLeft: "auto", marginRight: "auto" }} >
+    <div style={{ maxWidth: 350, marginLeft: "auto", marginRight: "auto" }}>
       <img src={props.logo || "/images/logo.png"} alt="logo" className="img-fluid" style={{ width: "100%", marginTop: 100, marginBottom: 60 }} />
       <ErrorMessages errors={errors} />
       {getWelcomeBack()}

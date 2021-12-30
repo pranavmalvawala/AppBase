@@ -32,13 +32,13 @@ export const SelectChurchSearch: React.FC<Props> = (props) => {
     }
   }
 
-  const getRegisterLink = () => {
-    return <div>
+  const getRegisterLink = () => (
+    <div>
       <a style={{ color: "#999", display: "block", textAlign: "center" }} href="about:blank" onClick={handleRegisterClick}>
         Register a New Church
       </a>
     </div>
-  }
+  )
 
   const getChurches = () => {
     const result: JSX.Element[] = [];

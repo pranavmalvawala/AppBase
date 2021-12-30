@@ -17,8 +17,8 @@ export const LogoutPage: React.FC<Props> = (props) => {
   setTimeout(() => {
     // a must check for Nextjs
     if (typeof window !== "undefined") {
-      window.location.href = "/"; 
-    } 
+      window.location.href = "/";
+    }
   }, 300);
   return null;
 }
