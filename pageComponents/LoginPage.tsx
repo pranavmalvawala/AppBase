@@ -42,9 +42,9 @@ export const LoginPage: React.FC<Props> = (props) => {
   const [loginResponse, setLoginResponse] = React.useState<LoginResponseInterface>(null)
   const [userJwt, setUserJwt] = React.useState("");
   const location = typeof window !== "undefined" && window.location;
-  var selectedChurchId = "";
-  var registeredChurch: ChurchInterface = null;
-  var userJwtBackup = ""; //use state copy for storing between page updates.  This copy for instant availability.
+  let selectedChurchId = "";
+  let registeredChurch: ChurchInterface = null;
+  let userJwtBackup = ""; //use state copy for storing between page updates.  This copy for instant availability.
 
   React.useEffect(() => {
     if (props.callbackErrors?.length > 0) {
@@ -205,7 +205,7 @@ export const LoginPage: React.FC<Props> = (props) => {
 
   const getLoginBox = () => {
     return (
-      <div id="loginBox" style={{ backgroundColor: "#FFF", border: "1px solid #CCC", borderRadius: 5, padding: 20 }} >
+      <div id="loginBox" style={{ backgroundColor: "#FFF", border: "1px solid #CCC", borderRadius: 5, padding: 20 }}>
         <h2>Please sign in</h2>
         <Formik validationSchema={schema} initialValues={initialValues} onSubmit={login} >
           {({ handleSubmit, handleChange, values, touched, errors, isSubmitting }) => (

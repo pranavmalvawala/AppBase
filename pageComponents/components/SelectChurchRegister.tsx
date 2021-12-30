@@ -11,7 +11,6 @@ interface Props {
   selectChurch: (churchId: string) => void
 }
 
-
 const schema = yup.object().shape({
   name: yup.string().required("Name is required"),
   subDomain: yup.string().required("Subdomain is required"),
@@ -28,7 +27,6 @@ export const SelectChurchRegister: React.FC<Props> = (props) => {
 
   const initialValues: ChurchInterface = { name: "", address1: "", address2: "", city: "", state: "", zip: "", country: "", subDomain: "" }
 
-
   const handleSave = (church: ChurchInterface, { setSubmitting }: FormikHelpers<ChurchInterface>) => {
     setSubmitting(true);
     ApiHelper.post("/churches/add", church, "AccessApi").then(async resp => {
@@ -42,17 +40,13 @@ export const SelectChurchRegister: React.FC<Props> = (props) => {
         props.selectChurch(resp.id);
       }
     });
-
   }
 
   return (
     <>
-
-
       <Formik validationSchema={schema} onSubmit={handleSave} initialValues={initialValues} enableReinitialize={true} innerRef={formikRef}>
         {({ handleSubmit, handleChange, values, touched, errors, isSubmitting }) => (
           <Form noValidate>
-
             <InputBox id="churchBox" saveFunction={handleSubmit} headerText="Register a New Church" headerIcon="fas fa-church" isSubmitting={isSubmitting}>
               <Row>
                 <Col>
@@ -76,7 +70,6 @@ export const SelectChurchRegister: React.FC<Props> = (props) => {
                   </Form.Group>
                 </Col>
               </Row>
-
               <Row>
                 <Col>
                   <FormGroup>
@@ -126,9 +119,6 @@ export const SelectChurchRegister: React.FC<Props> = (props) => {
           </Form>
         )}
       </Formik>
-
     </>
   );
-
-
 };
