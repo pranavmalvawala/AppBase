@@ -6,8 +6,9 @@ import { SelectableChurch } from "./SelectableChurch";
 import { SelectChurchRegister } from "./SelectChurchRegister";
 
 interface Props {
-  selectChurch: (churchId: string) => void
-  registeredChurchCallback?: (church: ChurchInterface) => void
+  selectChurch: (churchId: string) => void,
+  registeredChurchCallback?: (church: ChurchInterface) => void,
+  appName: string
 }
 
 export const SelectChurchSearch: React.FC<Props> = (props) => {
@@ -55,12 +56,12 @@ export const SelectChurchSearch: React.FC<Props> = (props) => {
     else return getChurches();
   }
 
-  if (showRegister) return (<SelectChurchRegister selectChurch={props.selectChurch} registeredChurchCallback={props.registeredChurchCallback} />)
+  if (showRegister) return (<SelectChurchRegister selectChurch={props.selectChurch} registeredChurchCallback={props.registeredChurchCallback} appName={props.appName} initialChurchName={searchText} />)
   else return (
     <>
       <InputGroup>
         <FormControl id="searchText" aria-label="searchBox" name="searchText" type="text" placeholder="Name" value={searchText} onChange={handleChange} onKeyDown={handleKeyDown} />
-        <InputGroup.Append><Button id="searchButton" variant="primary" onClick={handleSubmit}>Search</Button></InputGroup.Append>
+        <Button id="searchButton" variant="primary" onClick={handleSubmit}>Search</Button>
       </InputGroup>
       {getResults()}
     </>

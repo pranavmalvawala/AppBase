@@ -3,7 +3,7 @@ import { ErrorMessages, PasswordField } from "../components";
 import { LoginResponseInterface, UserContextInterface, ChurchInterface, UserInterface } from "../interfaces";
 import { ApiHelper, ArrayHelper, UserHelper } from "../helpers";
 import { Button, FormControl, Alert, Form } from "react-bootstrap";
-import { Redirect } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { useCookies } from "react-cookie"
 import * as yup from "yup"
 import { Formik, FormikHelpers } from "formik"
@@ -125,8 +125,6 @@ export const LoginPage: React.FC<Props> = (props) => {
     if (returnUrl) {
       setRedirectTo(returnUrl);
     }
-    console.log("Loginsuccess")
-    console.log(props.loginSuccessOverride);
 
     if (props.loginSuccessOverride !== undefined) props.loginSuccessOverride();
     else props.context.setUserName(UserHelper.currentChurch.id.toString());
@@ -254,7 +252,7 @@ export const LoginPage: React.FC<Props> = (props) => {
 
   const initialValues = { email: "", password: "" }
 
-  if (redirectTo) return <Redirect to={redirectTo} />;
+  if (redirectTo) return <Navigate to={redirectTo} />;
   else return (
     <div style={{ maxWidth: 350, marginLeft: "auto", marginRight: "auto" }}>
       <img src={props.logo || "/images/logo.png"} alt="logo" className="img-fluid" style={{ width: "100%", marginTop: 100, marginBottom: 60 }} />
@@ -262,7 +260,7 @@ export const LoginPage: React.FC<Props> = (props) => {
       {getWelcomeBack()}
       {getCheckEmail()}
       {getLoginRegister()}
-      <SelectChurchModal show={showSelectModal} churches={loginResponse?.churches} selectChurch={selectChurch} registeredChurchCallback={handleChurchRegistered} errors={errors} />
+      <SelectChurchModal show={showSelectModal} churches={loginResponse?.churches} selectChurch={selectChurch} registeredChurchCallback={handleChurchRegistered} errors={errors} appName={props.appName} />
     </div>
   );
 
