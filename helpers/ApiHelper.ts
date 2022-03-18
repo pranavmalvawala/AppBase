@@ -68,6 +68,7 @@ export class ApiHelper {
 
   static async post(path: string, data: any[] | {}, apiName: ApiListType) {
     const config = this.getConfig(apiName);
+
     const requestOptions = {
       method: "POST",
       headers: { Authorization: "Bearer " + config.jwt, "Content-Type": "application/json" },
