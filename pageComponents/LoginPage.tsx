@@ -83,6 +83,8 @@ export const LoginPage: React.FC<Props> = (props) => {
       selectedChurchId = decoded.churchId
     }
 
+    ApiHelper.patch(`/userChurch/${UserHelper.user.id}`, { churchId: selectedChurchId, lastAccessed: Date.now().toString() }, "AccessApi")
+
     if (props.keyName) selectChurchByKeyName();
     else if (selectedChurchId) selectChurchById();
     else setShowSelectModal(true);
@@ -118,6 +120,12 @@ export const LoginPage: React.FC<Props> = (props) => {
       UserHelper.currentChurch.apis.forEach(api => {
         if (api.keyName === "AccessApi") setCookie("jwt", api.jwt, { path: "/" });
       })
+
+      try{
+        if (UserHelper.currentChurch.id) ApiHelper.patch(`/userChurch/${UserHelper.user.id}`, { churchId: UserHelper.currentChurch.id, lastAccessed: new Date() }, "AccessApi")
+      }catch(e){
+        console.log("Could not update user church accessed date")
+      }
     }
 
     const search = new URLSearchParams(location?.search);
@@ -159,6 +167,7 @@ export const LoginPage: React.FC<Props> = (props) => {
     setErrors([])
     ApiHelper.postAnonymous("/users/login", data, "AccessApi")
       .then((resp: LoginResponseInterface) => {
+        console.log(resp)
         if (resp.errors) {
           handleLoginErrors(resp.errors);
           helpers?.setSubmitting(false);

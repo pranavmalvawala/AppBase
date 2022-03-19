@@ -68,15 +68,37 @@ export class ApiHelper {
 
   static async post(path: string, data: any[] | {}, apiName: ApiListType) {
     const config = this.getConfig(apiName);
-
     const requestOptions = {
       method: "POST",
       headers: { Authorization: "Bearer " + config.jwt, "Content-Type": "application/json" },
       body: JSON.stringify(data)
     };
     try {
+      console.log(path)
       const response = await fetch(config.url + path, requestOptions);
       if (!response.ok) {
+        console.log(response)
+        throw new Error(response.statusText);
+      }
+      return response.json();
+    } catch (e) {
+      console.log(e)
+      throw (e);
+    }
+  }
+
+  static async patch(path: string, data: any[] | {}, apiName: ApiListType) {
+    const config = this.getConfig(apiName);
+    const requestOptions = {
+      method: "PATCH",
+      headers: { Authorization: "Bearer " + config.jwt, "Content-Type": "application/json" },
+      body: JSON.stringify(data)
+    };
+    try {
+      const response = await fetch(config.url + path, requestOptions);
+      console.log("patch resp", response)
+      if (!response.ok) {
+        console.log(response)
         throw new Error(response.statusText);
       }
       return response.json();
