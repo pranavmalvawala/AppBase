@@ -83,7 +83,7 @@ export const LoginPage: React.FC<Props> = (props) => {
       selectedChurchId = decoded.churchId
     }
 
-    ApiHelper.patch(`/userChurch/${UserHelper.user.id}`, { churchId: selectedChurchId, lastAccessed: Date.now().toString() }, "AccessApi")
+    ApiHelper.patch(`/userChurch/${UserHelper.user.id}`, { churchId: selectedChurchId }, "AccessApi")
 
     if (props.keyName) selectChurchByKeyName();
     else if (selectedChurchId) selectChurchById();
