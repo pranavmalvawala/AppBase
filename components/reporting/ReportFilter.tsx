@@ -1,65 +1,62 @@
 import React from "react";
-import { ReportFilterFieldInterface, ReportFilterInterface, ReportFilterOptionInterface } from "../../interfaces/ReportInterfaces";
-import { InputBox } from "../InputBox";
-import { DateHelper } from "../../helpers";
-import { FormControl, FormGroup, FormLabel } from "react-bootstrap";
+import { ReportInterface, ParameterInterface } from "../../interfaces";
+import { ArrayHelper } from "../../helpers"
+import { InputBox } from "../"
+import { FormGroup, FormLabel } from "react-bootstrap";
+import { ReportFilterField } from "./ReportFilterField";
 
-interface Props { filter: ReportFilterInterface, updateFunction: (filter: ReportFilterInterface) => void }
+interface Props { report: ReportInterface, onChange: (report: ReportInterface) => void, onRun: () => void }
 
 export const ReportFilter = (props: Props) => {
-  const [filter, setFilter] = React.useState<ReportFilterInterface>(null);
-  const handleUpdate = () => { props.updateFunction(filter); }
-  const handleKeyDown = (e: React.KeyboardEvent<any>) => { if (e.key === "Enter") { e.preventDefault(); handleUpdate(); } }
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    setValue(e.currentTarget.name, e.currentTarget.value);
+  const handleChange = (parameter: ParameterInterface, permittedChildIds: string[]) => {
+    const r = { ...props.report };
+    const p: ParameterInterface = ArrayHelper.getOne(r.parameters, "keyName", parameter.keyName);
+    p.value = parameter.value;
+    updateChildIds(r, p, permittedChildIds)
+    props.onChange(r);
   }
 
-  const setValue = (key: string, value: any) => {
-    const _filter = { ...filter };
-    _filter.fields.forEach(f => { if (f.keyName === key) f.value = value });
-    setFilter(_filter);
-  }
-
-  const getOptions = (data: ReportFilterOptionInterface[]) => {
-    let result: JSX.Element[] = [];
-    data?.forEach((d, index) => { result.push(<option key={index} value={d.value}>{d.label}</option>) });
-    return result;
-  }
-
-  const getControl = (field: ReportFilterFieldInterface) => {
-    let result = null;
-    switch (field.dataType) {
-      case "date":
-        result = <FormControl type="date" data-cy="select-date" name={field.keyName} value={DateHelper.formatHtml5Date(field.value)} onChange={handleChange} onKeyDown={handleKeyDown} />;
+  const updateChildIds = (report: ReportInterface, parameter: ParameterInterface, permittedChildIds: string[]) => {
+    switch (parameter.sourceKey) {
+      case "campus":
+        setRequiredParentIds(report, "service", permittedChildIds);
         break;
-      case "list":
-        result = (<FormControl as="select" data-cy={`select-${field.keyName}`} name={field.keyName} onChange={handleChange} onKeyDown={handleKeyDown}>{getOptions(field.options())}</FormControl>);
+      case "service":
+        setRequiredParentIds(report, "serviceTime", permittedChildIds);
         break;
-
+      case "serviceTime":
+        setRequiredParentIds(report, "group", permittedChildIds);
+        break;
     }
-    return result;
+
   }
 
-  const getFields = () => {
+  const setRequiredParentIds = (report: ReportInterface, childSourceKey: string, requiredParentIds: string[]) => {
+    console.log("SET REQUIRED")
+    console.log(childSourceKey)
+    console.log(requiredParentIds)
+    const child: ParameterInterface = ArrayHelper.getOne(report.parameters, "sourceKey", childSourceKey);
+    if (child) child.requiredParentIds = requiredParentIds;
+  }
+
+  const getInputs = () => {
     const result: JSX.Element[] = [];
-    props.filter.fields.forEach(f => {
-      result.push(<FormGroup key={f.keyName}>
-        <FormLabel>{f.displayName}</FormLabel>
-        {getControl(f)}
-      </FormGroup>);
+    props.report.parameters.forEach(p => {
+      if (p.source === "dropdown" || p.source === "date") {
+        result.push(<FormGroup>
+          <FormLabel>{p.displayName}</FormLabel>
+          <ReportFilterField parameter={p} report={props.report} onChange={handleChange} />
+        </FormGroup>)
+      }
     });
     return result;
   }
 
-  React.useEffect(() => { setFilter(props.filter) }, [props.filter]);
-
-  if (props.filter === null) return null;
-  else return (
-    <InputBox headerIcon="far fa-chart-bar" data-cy="filter-box" headerText="Filter Report" saveFunction={handleUpdate} saveText="Update" id={"filterBox-" + props.filter.keyName} saveButtonType="button">
-      {getFields()}
+  const inputs = getInputs();
+  if (inputs.length > 0) {
+    return <InputBox id="formSubmissionBox" headerText="Filter Report" headerIcon="fas fa-report" saveFunction={props.onRun} saveText="Run Report">
+      {inputs}
     </InputBox>
-  );
-
+  } else return <></>
 }
