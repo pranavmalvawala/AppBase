@@ -41,6 +41,7 @@ export const LoginPage: React.FC<Props> = (props) => {
   const [showSelectModal, setShowSelectModal] = React.useState(false);
   const [loginResponse, setLoginResponse] = React.useState<LoginResponseInterface>(null)
   const [userJwt, setUserJwt] = React.useState("");
+  const loginFormRef = React.useRef(null);
   const location = typeof window !== "undefined" && window.location;
   let selectedChurchId = "";
   let registeredChurch: ChurchInterface = null;
@@ -85,9 +86,16 @@ export const LoginPage: React.FC<Props> = (props) => {
 
     ApiHelper.patch(`/userChurch/${UserHelper.user.id}`, { churchId: selectedChurchId }, "AccessApi")
 
+    const search = new URLSearchParams(location?.search);
+    const churchIdInParams = search.get("churchId");
+
     if (props.keyName) selectChurchByKeyName();
     else if (selectedChurchId) selectChurchById();
-    else setShowSelectModal(true);
+    else if (churchIdInParams){
+      selectChurch(churchIdInParams);
+    } else {
+      setShowSelectModal(true);
+    }
   }
 
   const selectChurchById = async () => {
@@ -139,22 +147,29 @@ export const LoginPage: React.FC<Props> = (props) => {
   }
 
   async function selectChurch(churchId: string) {
-    setErrors([])
-    selectedChurchId = churchId;
-    if (!ArrayHelper.getOne(UserHelper.churches, "id", churchId)) {
-      const church: ChurchInterface = await ApiHelper.post("/churches/select", { churchId: churchId }, "AccessApi");
-      UserHelper.setupApiHelper(church);
-
-      //create/claim the person record and relogin
-      const personClaim = await ApiHelper.get("/people/claim/" + churchId, "MembershipApi");
-      await ApiHelper.post("/userChurch/claim", { encodedPerson: personClaim.encodedPerson }, "AccessApi");
-      login({ jwt: userJwt || userJwtBackup }, undefined);
-      return;
+    try {
+      setErrors([])
+      selectedChurchId = churchId;
+      if (!ArrayHelper.getOne(UserHelper.churches, "id", churchId)) {
+        const church: ChurchInterface = await ApiHelper.post("/churches/select", { churchId: churchId }, "AccessApi");
+        UserHelper.setupApiHelper(church);
+  
+        //create/claim the person record and relogin
+        const personClaim = await ApiHelper.get("/people/claim/" + churchId, "MembershipApi");
+        await ApiHelper.post("/userChurch/claim", { encodedPerson: personClaim.encodedPerson }, "AccessApi");
+        login({ jwt: userJwt || userJwtBackup }, undefined);
+        return;
+      }
+  
+      UserHelper.selectChurch(props.context, churchId, null).then(() => {
+        continuedLoginProcess()
+      });
+    } catch (err) {
+      console.log("Error in selecting church: ", err)
+      setErrors(["Error in selecting church. Please verify and try again"])
+      loginFormRef?.current?.setSubmitting(false);
     }
 
-    UserHelper.selectChurch(props.context, churchId, null).then(() => {
-      continuedLoginProcess()
-    });
   }
 
   const handleLoginErrors = (errors: string[]) => {
@@ -213,7 +228,7 @@ export const LoginPage: React.FC<Props> = (props) => {
   const getLoginBox = () => (
     <div id="loginBox" style={{ backgroundColor: "#FFF", border: "1px solid #CCC", borderRadius: 5, padding: 20 }}>
       <h2>Please sign in</h2>
-      <Formik validationSchema={schema} initialValues={initialValues} onSubmit={login}>
+      <Formik validationSchema={schema} initialValues={initialValues} onSubmit={login} innerRef={loginFormRef}>
         {({ handleSubmit, handleChange, values, touched, errors, isSubmitting }) => (
           <Form noValidate onSubmit={handleSubmit}>
             <Form.Group>
