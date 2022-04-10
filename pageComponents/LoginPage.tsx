@@ -84,14 +84,14 @@ export const LoginPage: React.FC<Props> = (props) => {
       selectedChurchId = decoded.churchId
     }
 
-    ApiHelper.patch(`/userChurch/${UserHelper.user.id}`, { churchId: selectedChurchId }, "AccessApi")
+    ApiHelper.patch(`/userChurch/${UserHelper.user.id}`, { churchId: selectedChurchId, appName: props.appName }, "AccessApi")
 
     const search = new URLSearchParams(location?.search);
     const churchIdInParams = search.get("churchId");
 
     if (props.keyName) selectChurchByKeyName();
     else if (selectedChurchId) selectChurchById();
-    else if (churchIdInParams){
+    else if (churchIdInParams) {
       selectChurch(churchIdInParams);
     } else {
       setShowSelectModal(true);
@@ -129,9 +129,9 @@ export const LoginPage: React.FC<Props> = (props) => {
         if (api.keyName === "AccessApi") setCookie("jwt", api.jwt, { path: "/" });
       })
 
-      try{
-        if (UserHelper.currentChurch.id) ApiHelper.patch(`/userChurch/${UserHelper.user.id}`, { churchId: UserHelper.currentChurch.id, lastAccessed: new Date() }, "AccessApi")
-      }catch(e){
+      try {
+        if (UserHelper.currentChurch.id) ApiHelper.patch(`/userChurch/${UserHelper.user.id}`, { churchId: UserHelper.currentChurch.id, appName: props.appName, lastAccessed: new Date() }, "AccessApi")
+      } catch (e) {
         console.log("Could not update user church accessed date")
       }
     }
@@ -153,14 +153,14 @@ export const LoginPage: React.FC<Props> = (props) => {
       if (!ArrayHelper.getOne(UserHelper.churches, "id", churchId)) {
         const church: ChurchInterface = await ApiHelper.post("/churches/select", { churchId: churchId }, "AccessApi");
         UserHelper.setupApiHelper(church);
-  
+
         //create/claim the person record and relogin
         const personClaim = await ApiHelper.get("/people/claim/" + churchId, "MembershipApi");
         await ApiHelper.post("/userChurch/claim", { encodedPerson: personClaim.encodedPerson }, "AccessApi");
         login({ jwt: userJwt || userJwtBackup }, undefined);
         return;
       }
-  
+
       UserHelper.selectChurch(props.context, churchId, null).then(() => {
         continuedLoginProcess()
       });
