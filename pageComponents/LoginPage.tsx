@@ -84,7 +84,8 @@ export const LoginPage: React.FC<Props> = (props) => {
       selectedChurchId = decoded.churchId
     }
 
-    ApiHelper.patch(`/userChurch/${UserHelper.user.id}`, { churchId: selectedChurchId, appName: props.appName }, "AccessApi")
+    //Not needed - handled in continuedLoginProcess
+    //ApiHelper.patch(`/userChurch/${UserHelper.user.id}`, { churchId: selectedChurchId, appName: props.appName }, "AccessApi")
 
     const search = new URLSearchParams(location?.search);
     const churchIdInParams = search.get("churchId");
