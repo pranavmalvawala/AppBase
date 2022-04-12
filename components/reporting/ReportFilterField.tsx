@@ -16,6 +16,9 @@ export const ReportFilterField = (props: Props) => {
 
   const init = async () => {
     switch (props.parameter.sourceKey) {
+      case "provided":
+        setRawData(props.parameter.options);
+        break;
       case "month":
         setRawData(getMonths());
         break;
@@ -98,6 +101,7 @@ export const ReportFilterField = (props: Props) => {
           options = getIdName();
           break;
         case "month":
+        case "provided":
           options = rawData;
           break;
       }

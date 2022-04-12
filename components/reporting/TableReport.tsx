@@ -27,7 +27,10 @@ export const TableReport = (props: Props) => {
   }
 
   const getField = (column: ColumnInterface, dataRow: any) => {
-    let result = dataRow[column.value].toString() || "";
+    let result = ""
+    try {
+      result = dataRow[column.value]?.toString() || "";
+    } catch { }
 
     switch (column.formatter) {
       case "date":
