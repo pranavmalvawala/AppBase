@@ -1,5 +1,5 @@
 export interface ApiInterface { name: string, keyName?: string, permissions: RolePermissionInterface[], jwt: string }
-export interface ChurchInterface { id?: string, name?: string, registrationDate?: Date, apis?: ApiInterface[], address1?: string, address2?: string, city?: string, state?: string, zip?: string, country?: string, subDomain?: string, personId?: string, jwt?: string, settings?: GenericSettingInterface[] }
+export interface ChurchInterface { id?: string, name?: string, registrationDate?: Date, apis?: ApiInterface[], address1?: string, address2?: string, city?: string, state?: string, zip?: string, country?: string, subDomain?: string, personId?: string, jwt?: string, settings?: GenericSettingInterface[], archivedDate?: Date }
 export interface RegisterChurchRequestInterface extends ChurchInterface { appName?: string }
 export interface LoadCreateUserRequestInterface { userEmail: string, fromEmail?: string, subject?: string, body?: string, firstName: string, lastName: string }
 export interface LoginResponseInterface { user: UserInterface, churches: ChurchInterface[], errors: string[] }
