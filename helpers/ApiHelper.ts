@@ -119,7 +119,6 @@ export class ApiHelper {
       if (!response.ok) {
         throw new Error(response.statusText);
       }
-      return response.json();
     } catch (e) {
       console.log(e)
       throw (e);
