@@ -13,11 +13,11 @@ export const CardForm: React.FC<Props> = (props) => {
   const formStyling = { style: { base: { fontSize: "18px" } } };
   const [showSave, setShowSave] = React.useState(true);
   const [paymentMethod] = React.useState<PaymentMethodInterface>({ id: props.card.id, customerId: props.customerId, personId: props.person.id, email: props.person.contactInfo.email, name: props.person.name.display });
-  const [cardUpdate, setCardUpdate] = React.useState<StripeCardUpdateInterface>({ personId: props.person.id, paymentMethodId: props.card.id, cardData: { card: {}} } as StripeCardUpdateInterface);
+  const [cardUpdate, setCardUpdate] = React.useState<StripeCardUpdateInterface>({ personId: props.person.id, paymentMethodId: props.card.id, cardData: { card: {} } } as StripeCardUpdateInterface);
   const [errorMessage, setErrorMessage] = React.useState<string>(null);
   const handleCancel = () => { props.setMode("display"); }
   const handleSave = () => { setShowSave(false); props.card.id ? updateCard() : createCard(); }
-  const saveDisabled = () => {}
+  const saveDisabled = () => { }
   const handleDelete = () => { props.deletePayment(); }
 
   const handleKeyPress = (e: React.KeyboardEvent<any>) => {
@@ -80,9 +80,9 @@ export const CardForm: React.FC<Props> = (props) => {
 
   return (
     <InputBox headerIcon="fas fa-hand-holding-usd" headerText={getHeaderText()} ariaLabelSave="save-button" ariaLabelDelete="delete-button" cancelFunction={handleCancel} saveFunction={showSave ? handleSave : saveDisabled} deleteFunction={props.card.id ? handleDelete : undefined}>
-      { errorMessage && <ErrorMessages errors={[errorMessage]}></ErrorMessages> }
-      <form style={{margin: "10px"}}>
-        { !props.card.id
+      {errorMessage && <ErrorMessages errors={[errorMessage]}></ErrorMessages>}
+      <form style={{ margin: "10px" }}>
+        {!props.card.id
           ? <CardElement options={formStyling} />
           : <Row>
             <Col>

@@ -3,10 +3,10 @@ import { FundDonationInterface, FundInterface } from "../../interfaces";
 import { Row, Col, FormGroup, FormControl, FormLabel } from "react-bootstrap";
 
 interface Props {
-    fundDonation: FundDonationInterface,
-    funds: FundInterface[],
-    index: number,
-    updatedFunction: (fundDonation: FundDonationInterface, index: number) => void
+  fundDonation: FundDonationInterface,
+  funds: FundInterface[],
+  index: number,
+  updatedFunction: (fundDonation: FundDonationInterface, index: number) => void
 }
 
 export const FundDonation: React.FC<Props> = (props) => {
