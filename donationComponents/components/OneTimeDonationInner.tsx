@@ -81,7 +81,8 @@ export const OneTimeDonationInner: React.FC<Props> = (props) => {
       setDonationComplete(true)
     }
     if (results?.raw?.message) {
-      setErrors([results?.raw?.message])
+      setErrors([results?.raw?.message]);
+      setProcessing(false);
     }
     setProcessing(false);
   }
