@@ -4,11 +4,11 @@ import { PersonInterface } from "../interfaces"
 import { Table, Button, FormControl, InputGroup } from "react-bootstrap";
 
 interface Props {
-    addFunction: (person: PersonInterface) => void,
-    person?: PersonInterface,
-    getPhotoUrl: (person: PersonInterface) => string,
-    searchClicked?: () => void,
-    filterList?: string[]
+  addFunction: (person: PersonInterface) => void,
+  person?: PersonInterface,
+  getPhotoUrl: (person: PersonInterface) => string,
+  searchClicked?: () => void,
+  filterList?: string[]
 }
 
 export const PersonAdd: React.FC<Props> = ({ addFunction, getPhotoUrl, searchClicked, filterList = [] }) => {
@@ -20,8 +20,8 @@ export const PersonAdd: React.FC<Props> = ({ addFunction, getPhotoUrl, searchCli
 
   const handleSearch = (e: React.MouseEvent) => {
     if (e !== null) e.preventDefault();
-    let term = escape(searchText.trim());
-    ApiHelper.get("/people/search?term=" + term, "MembershipApi")
+    let term = searchText.trim();
+    ApiHelper.post("/people/search", { term: term }, "MembershipApi")
       .then((data: PersonInterface[]) => {
         const filteredResult = data.filter(s => !filterList.includes(s.id))
         setSearchResults(filteredResult);
