@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Row, Col } from "react-bootstrap";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { InputBox, ErrorMessages } from "../../components";
@@ -24,6 +24,10 @@ export const CardForm: React.FC<Props> = (props) => {
     const pattern = /^\d+$/;
     if (!pattern.test(e.key)) e.preventDefault();
   }
+
+  useEffect(() => {
+    setCardUpdate({...cardUpdate, cardData: { card: { exp_year: props.card.exp_year.toString().slice(2), exp_month: props.card.exp_month } }});
+  }, [])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const card = { ...cardUpdate };
@@ -87,11 +91,11 @@ export const CardForm: React.FC<Props> = (props) => {
           : <Row>
             <Col>
               <label>Card Expiration Month:</label>
-              <input type="text" name="exp_month" aria-label="card-exp-month" onKeyPress={handleKeyPress} onChange={handleChange} placeholder="MM" className="form-control" maxLength={2} />
+              <input type="text" name="exp_month" aria-label="card-exp-month" value={cardUpdate.cardData.card.exp_month} onKeyPress={handleKeyPress} onChange={handleChange} placeholder="MM" className="form-control" maxLength={2} />
             </Col>
             <Col>
               <label>Card Expiration Year:</label>
-              <input type="text" name="exp_year" aria-label="card-exp-year" onKeyPress={handleKeyPress} onChange={handleChange} placeholder="YY" className="form-control" maxLength={2} />
+              <input type="text" name="exp_year" aria-label="card-exp-year" value={cardUpdate.cardData.card.exp_year} onKeyPress={handleKeyPress} onChange={handleChange} placeholder="YY" className="form-control" maxLength={2} />
             </Col>
           </Row>
         }
