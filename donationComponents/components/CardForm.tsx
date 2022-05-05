@@ -26,8 +26,8 @@ export const CardForm: React.FC<Props> = (props) => {
   }
 
   useEffect(() => {
-    setCardUpdate({...cardUpdate, cardData: { card: { exp_year: props.card.exp_year.toString().slice(2), exp_month: props.card.exp_month } }});
-  }, [])
+    setCardUpdate({ ...cardUpdate, cardData: { card: { exp_year: props.card.exp_year.toString().slice(2), exp_month: props.card.exp_month } } });
+  }, []) //eslint-disable-line
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const card = { ...cardUpdate };
