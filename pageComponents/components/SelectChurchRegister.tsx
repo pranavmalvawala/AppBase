@@ -78,16 +78,15 @@ export const SelectChurchRegister: React.FC<Props> = (props) => {
                     <Form.Control.Feedback type="invalid">{errors.address1}</Form.Control.Feedback>
                   </FormGroup>
                 </Col>
-                <Col>
+              </Row>
+              <Row>
+                <Col sm={6}>
                   <FormGroup>
                     <Form.Label htmlFor="address2">Address Line 2</Form.Label>
                     <Form.Control name="address2" id="address2" value={values.address2 || ""} onChange={handleChange} isInvalid={touched.address2 && !!errors.address2} />
                     <Form.Control.Feedback type="invalid">{errors.address2}</Form.Control.Feedback>
                   </FormGroup>
                 </Col>
-              </Row>
-
-              <Row>
                 <Col sm={6}>
                   <FormGroup>
                     <Form.Label htmlFor="city">City</Form.Label>
@@ -95,16 +94,18 @@ export const SelectChurchRegister: React.FC<Props> = (props) => {
                     <Form.Control.Feedback type="invalid">{errors.city}</Form.Control.Feedback>
                   </FormGroup>
                 </Col>
-                <Col sm={3}>
+              </Row>
+              <Row>
+                <Col sm={6}>
                   <FormGroup>
-                    <Form.Label htmlFor="state">State</Form.Label>
+                    <Form.Label htmlFor="state">State / Province</Form.Label>
                     <Form.Control name="state" id="state" value={values.state || ""} onChange={handleChange} isInvalid={touched.state && !!errors.state} />
                     <Form.Control.Feedback type="invalid">{errors.state}</Form.Control.Feedback>
                   </FormGroup>
                 </Col>
-                <Col sm={3}>
+                <Col sm={6}>
                   <FormGroup>
-                    <Form.Label htmlFor="zip">Zip</Form.Label>
+                    <Form.Label htmlFor="zip">Zip / Postal Code</Form.Label>
                     <Form.Control name="zip" id="zip" value={values.zip || ""} onChange={handleChange} isInvalid={touched.zip && !!errors.zip} />
                     <Form.Control.Feedback type="invalid">{errors.zip}</Form.Control.Feedback>
                   </FormGroup>
