@@ -280,7 +280,7 @@ export const LoginPage: React.FC<Props> = (props) => {
   if (redirectTo) return <Navigate to={redirectTo} />;
   else return (
     <div style={{ maxWidth: 350, marginLeft: "auto", marginRight: "auto" }}>
-      <img src={props.logo || "/images/logo.png"} alt="logo" className="img-fluid" style={{ width: "100%", marginTop: 100, marginBottom: 60 }} />
+      <img src={props.logo || "/images/logo-login.png"} alt="logo" className="img-fluid" style={{ width: "100%", marginTop: 100, marginBottom: 60 }} />
       <ErrorMessages errors={errors} />
       {getWelcomeBack()}
       {getCheckEmail()}
