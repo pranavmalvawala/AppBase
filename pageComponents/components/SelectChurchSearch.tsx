@@ -19,7 +19,8 @@ export const SelectChurchSearch: React.FC<Props> = (props) => {
   const handleSubmit = (e: React.MouseEvent) => {
     if (e !== null) e.preventDefault();
     let term = escape(searchText.trim());
-    ApiHelper.getAnonymous("/churches/search?name=" + escape(term), "AccessApi").then(data => setChurches(data));
+    // ApiHelper.getAnonymous("/churches/search?name=" + escape(term), "AccessApi").then(data => setChurches(data));
+    ApiHelper.post("/churches/search", { name: term }, "AccessApi").then(data => setChurches(data));
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => setSearchText(e.currentTarget.value);
