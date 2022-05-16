@@ -10,6 +10,7 @@ export interface HouseholdInterface { id?: string, name?: string }
 export interface HouseholdMemberInterface { id?: string, householdId?: string, household?: HouseholdInterface, personId?: string, person?: PersonInterface, role?: string }
 export interface NameInterface { first?: string, middle?: string, last?: string, nick?: string, display?: string, title?: string, suffix?: string }
 export interface NoteInterface { id?: string, churchId?: string, contentType?: string, contentId?: string, noteType?: string, addedBy?: string, contents?: string, createdAt?: string, updatedAt?: string, person?: PersonInterface }
+export interface SearchCondition { field: string, operator: string, value: string }
 
 export interface PersonInterface {
   id?: string,
