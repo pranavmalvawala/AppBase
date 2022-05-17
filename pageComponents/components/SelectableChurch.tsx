@@ -24,22 +24,24 @@ export const SelectableChurch: React.FC<Props> = (props) => {
       </Col>
       <Col md={6} className="m-auto">
         <Row>
+          <div>
           <a href="about:blank" style={{ fontSize: "1.125rem", display: "block" }} onClick={(e) => { e.preventDefault(); props.selectChurch(props.church.id) }}>{props.church.name}</a>
           { (props.church.address1 || props.church.city) && 
-            <span>
+            <div>
               { props.church.address1 ? (props.church.address1 + ', ') : '' }
               { props.church.city && props.church.city }
-            </span>
+            </div>
           }
           { (props.church.address1 || props.church.city) && 
-            <span>
+            <div>
               { props.church.state ? (props.church.state + ' ') : '' }
               { props.church.zip && props.church.zip }
-            </span>
+            </div>
           }
+          </div>
         </Row>
       </Col>
+      <span style={{ display: "block", width: "100%", borderTop: "1px solid #ccc", margin: "1rem" }}></span>
     </Row>
-
   );
 };
