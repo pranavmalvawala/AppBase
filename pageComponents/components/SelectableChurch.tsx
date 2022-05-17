@@ -16,12 +16,30 @@ export const SelectableChurch: React.FC<Props> = (props) => {
     if (l?.value) logo = l.value;
   }
   return (
-    <a href="about:blank" style={{ fontSize: "1.125rem", display: "block", marginTop: 20, marginBottom: 20 }} onClick={(e) => { e.preventDefault(); props.selectChurch(props.church.id) }}>
-      <Row>
-        <Col md={6}><img src={logo} alt="church logo" className="w-100 h-auto" /></Col>
-        <Col md={6} className="m-auto">{props.church.name}</Col>
-      </Row>
-    </a>
+    <Row>
+      <Col md={6}>
+        <a href="about:blank" style={{ fontSize: "1.125rem", display: "block", marginTop: 20, marginBottom: 20 }} onClick={(e) => { e.preventDefault(); props.selectChurch(props.church.id) }}>
+          <img src={logo} alt="church logo" className="w-100 h-auto" />
+        </a>
+      </Col>
+      <Col md={6} className="m-auto">
+        <Row>
+          <a href="about:blank" style={{ fontSize: "1.125rem", display: "block" }} onClick={(e) => { e.preventDefault(); props.selectChurch(props.church.id) }}>{props.church.name}</a>
+          { (props.church.address1 || props.church.city) && 
+            <span>
+              { props.church.address1 ? (props.church.address1 + ', ') : '' }
+              { props.church.city && props.church.city }
+            </span>
+          }
+          { (props.church.address1 || props.church.city) && 
+            <span>
+              { props.church.state ? (props.church.state + ' ') : '' }
+              { props.church.zip && props.church.zip }
+            </span>
+          }
+        </Row>
+      </Col>
+    </Row>
 
   );
 };
