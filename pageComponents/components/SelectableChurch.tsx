@@ -25,19 +25,15 @@ export const SelectableChurch: React.FC<Props> = (props) => {
       <Col md={6} className="m-auto">
         <Row>
           <div>
-          <a href="about:blank" style={{ fontSize: "1.125rem", display: "block" }} onClick={(e) => { e.preventDefault(); props.selectChurch(props.church.id) }}>{props.church.name}</a>
-          { (props.church.address1 || props.church.city) && 
-            <div>
-              { props.church.address1 ? (props.church.address1 + ', ') : '' }
-              { props.church.city && props.church.city }
-            </div>
-          }
-          { (props.church.address1 || props.church.city) && 
-            <div>
-              { props.church.state ? (props.church.state + ' ') : '' }
-              { props.church.zip && props.church.zip }
-            </div>
-          }
+            <a href="about:blank" style={{ fontSize: "1.125rem", display: "block" }} onClick={(e) => { e.preventDefault(); props.selectChurch(props.church.id) }}>{props.church.name}</a>
+            {(props.church.address1 || props.church.city) && <div>
+              {props.church.address1 ? (props.church.address1 + ", ") : ""}
+              {props.church.city && props.church.city}
+            </div>}
+            {(props.church.address1 || props.church.city) && <div>
+              {props.church.state ? (props.church.state + " ") : ""}
+              {props.church.zip && props.church.zip}
+            </div>}
           </div>
         </Row>
       </Col>
