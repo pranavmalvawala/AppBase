@@ -25,7 +25,7 @@ const schema = yup.object().shape({
 
 export const SelectChurchRegister: React.FC<Props> = (props) => {
   const formikRef: any = useRef(null);
-  const initialValues: RegisterChurchRequestInterface = { name: props.initialChurchName, address1: "", address2: "", city: "", state: "", zip: "", country: "", subDomain: props.initialChurchName.toLowerCase().replace(/ /g, ''), appName: props.appName }
+  const initialValues: RegisterChurchRequestInterface = { name: props.initialChurchName, address1: "", address2: "", city: "", state: "", zip: "", country: "", subDomain: props.initialChurchName.toLowerCase().replace(/ /g, ""), appName: props.appName }
 
   const handleSave = (church: RegisterChurchRequestInterface, { setSubmitting }: FormikHelpers<RegisterChurchRequestInterface>) => {
     setSubmitting(true);
