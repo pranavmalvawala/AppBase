@@ -21,7 +21,7 @@ jobs:
     steps:
     - name: Notify ChumsWeb
       env:
-        CI_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        CI_TOKEN: ${{ secrets.CI_TOKEN }}
         PARENT_REPO: LiveChurchSolutions/ChumsWeb
         PARENT_BRANCH: main
         WORKFLOW_ID: 26428679
