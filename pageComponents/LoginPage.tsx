@@ -183,15 +183,12 @@ export const LoginPage: React.FC<Props> = (props) => {
     setErrors([])
     ApiHelper.postAnonymous("/users/login", data, "AccessApi")
       .then((resp: LoginResponseInterface) => {
-        console.log(resp)
-        if (resp.errors) {
-          handleLoginErrors(resp.errors);
-          helpers?.setSubmitting(false);
-        } else {
-          handleLoginSuccess(resp);
-        }
+        handleLoginSuccess(resp);
       })
-      .catch((e) => { setErrors([e.toString()]); helpers?.setSubmitting(false); throw e; });
+      .catch((e) => {
+        handleLoginErrors(e.toString());
+        helpers?.setSubmitting(false);
+      });
 
   };
 

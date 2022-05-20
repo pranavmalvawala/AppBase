@@ -40,10 +40,8 @@ export class ApiHelper {
     const requestOptions = { method: "GET", headers: { Authorization: "Bearer " + config.jwt } };
     try {
       const response = await fetch(config.url + path, requestOptions);
-      if (!response.ok) {
-        throw new Error(response.statusText);
-      }
-      return response.json();
+      if (!response.ok) this.throwApiError(response);
+      else return response.json();
     } catch (e) {
       console.log(e)
       throw (e);
@@ -56,10 +54,8 @@ export class ApiHelper {
 
     try {
       const response = await fetch(config.url + path, requestOptions);
-      if (!response.ok) {
-        throw new Error(response.statusText);
-      }
-      return response.json();
+      if (!response.ok) this.throwApiError(response);
+      else return response.json();
     } catch (e) {
       console.log(e)
       throw (e);
@@ -74,13 +70,9 @@ export class ApiHelper {
       body: JSON.stringify(data)
     };
     try {
-      console.log(path)
       const response = await fetch(config.url + path, requestOptions);
-      if (!response.ok) {
-        console.log(response)
-        throw new Error(response.statusText);
-      }
-      return response.json();
+      if (!response.ok) this.throwApiError(response);
+      else return response.json();
     } catch (e) {
       console.log(e)
       throw (e);
@@ -97,10 +89,7 @@ export class ApiHelper {
     try {
       const response = await fetch(config.url + path, requestOptions);
       console.log("patch resp", response)
-      if (!response.ok) {
-        console.log(response)
-        throw new Error(response.statusText);
-      }
+      if (!response.ok) this.throwApiError(response);
       return response.json();
     } catch (e) {
       console.log(e)
@@ -116,9 +105,7 @@ export class ApiHelper {
     };
     try {
       const response = await fetch(config.url + path, requestOptions);
-      if (!response.ok) {
-        throw new Error(response.statusText);
-      }
+      if (!response.ok) this.throwApiError(response);
     } catch (e) {
       console.log(e)
       throw (e);
@@ -134,14 +121,18 @@ export class ApiHelper {
     };
     try {
       const response = await fetch(config.url + path, requestOptions);
-      if (!response.ok) {
-        throw new Error(response.statusText);
-      }
-      return response.json();
+      if (!response.ok) this.throwApiError(response);
+      else return response.json();
     } catch (e) {
       console.log(e)
       throw (e);
     }
+  }
+
+  private static async throwApiError(response: Response) {
+    let msg = response.statusText;
+    try { msg = (await response.json()).errors[0]; } catch { }
+    throw new Error(msg);
   }
 
 }
