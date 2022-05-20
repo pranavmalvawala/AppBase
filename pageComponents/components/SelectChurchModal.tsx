@@ -17,6 +17,10 @@ interface Props {
 export const SelectChurchModal: React.FC<Props> = (props) => {
   const [showSearch, setShowSearch] = React.useState(false);
 
+  const handleClose = () => {
+    window.location.reload();
+  }
+
   const getContents = () => {
     if (showSearch || props.churches?.length === 0) return <SelectChurchSearch selectChurch={props.selectChurch} registeredChurchCallback={props.registeredChurchCallback} appName={props.appName} />
     else return (<>
@@ -26,8 +30,8 @@ export const SelectChurchModal: React.FC<Props> = (props) => {
   }
 
   return (
-    <Modal show={props.show} backdrop="static" keyboard={false}>
-      <Modal.Header>
+    <Modal show={props.show} onHide={handleClose} backdrop="static">
+      <Modal.Header closeButton>
         <Modal.Title>Select Church</Modal.Title>
       </Modal.Header>
       <Modal.Body>
