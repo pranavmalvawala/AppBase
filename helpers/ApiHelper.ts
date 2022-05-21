@@ -40,7 +40,7 @@ export class ApiHelper {
     const requestOptions = { method: "GET", headers: { Authorization: "Bearer " + config.jwt } };
     try {
       const response = await fetch(config.url + path, requestOptions);
-      if (!response.ok) this.throwApiError(response);
+      if (!response.ok) await this.throwApiError(response);
       else return response.json();
     } catch (e) {
       console.log(e)
@@ -54,7 +54,7 @@ export class ApiHelper {
 
     try {
       const response = await fetch(config.url + path, requestOptions);
-      if (!response.ok) this.throwApiError(response);
+      if (!response.ok) await this.throwApiError(response);
       else return response.json();
     } catch (e) {
       console.log(e)
@@ -71,7 +71,7 @@ export class ApiHelper {
     };
     try {
       const response = await fetch(config.url + path, requestOptions);
-      if (!response.ok) this.throwApiError(response);
+      if (!response.ok) await this.throwApiError(response);
       else return response.json();
     } catch (e) {
       console.log(e)
@@ -89,7 +89,7 @@ export class ApiHelper {
     try {
       const response = await fetch(config.url + path, requestOptions);
       console.log("patch resp", response)
-      if (!response.ok) this.throwApiError(response);
+      if (!response.ok) await this.throwApiError(response);
       return response.json();
     } catch (e) {
       console.log(e)
@@ -105,7 +105,7 @@ export class ApiHelper {
     };
     try {
       const response = await fetch(config.url + path, requestOptions);
-      if (!response.ok) this.throwApiError(response);
+      if (!response.ok) await this.throwApiError(response);
     } catch (e) {
       console.log(e)
       throw (e);
@@ -121,7 +121,7 @@ export class ApiHelper {
     };
     try {
       const response = await fetch(config.url + path, requestOptions);
-      if (!response.ok) this.throwApiError(response);
+      if (!response.ok) await this.throwApiError(response);
       else return response.json();
     } catch (e) {
       console.log(e)
@@ -131,8 +131,11 @@ export class ApiHelper {
 
   private static async throwApiError(response: Response) {
     let msg = response.statusText;
-    try { msg = (await response.json()).errors[0]; } catch { }
-    throw new Error(msg);
+    try {
+      const json = await response.json();
+      msg = json.errors[0];
+    } catch { }
+    throw new Error(msg || "Error");
   }
 
 }
