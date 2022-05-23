@@ -33,6 +33,7 @@ interface Props {
 
 export const LoginPage: React.FC<Props> = (props) => {
   const [welcomeBackName, setWelcomeBackName] = React.useState("");
+  const [pendingAutoLogin, setPendingAutoLogin] = React.useState(false);
   const [errors, setErrors] = React.useState([]);
   const [redirectTo, setRedirectTo] = React.useState<string>("");
   const [cookies, setCookie] = useCookies(["jwt", "name", "email"]);
@@ -59,10 +60,13 @@ export const LoginPage: React.FC<Props> = (props) => {
     if (action === "forgot") setShowForgot(true);
     else if (action === "register") setShowRegister(true);
     else {
-      if (props.auth) login({ authGuid: props.auth });
-      if (props.jwt) {
+      if (props.auth) {
+        login({ authGuid: props.auth });
+      } else if (props.jwt) {
         setWelcomeBackName(cookies.name);
         login({ jwt: props.jwt });
+      } else {
+        setPendingAutoLogin(true);
       }
     }
   };
@@ -80,7 +84,7 @@ export const LoginPage: React.FC<Props> = (props) => {
     UserHelper.user = resp.user;
 
     if (props.jwt) {
-      const decoded: any = jwt_decode(props.jwt)
+      const decoded: any = jwt_decode(userJwtBackup)
       selectedChurchId = decoded.churchId
     }
 
@@ -186,6 +190,7 @@ export const LoginPage: React.FC<Props> = (props) => {
         handleLoginSuccess(resp);
       })
       .catch((e) => {
+        setPendingAutoLogin(true);
         handleLoginErrors(e.toString());
         helpers?.setSubmitting(false);
       });
@@ -281,7 +286,7 @@ export const LoginPage: React.FC<Props> = (props) => {
       <ErrorMessages errors={errors} />
       {getWelcomeBack()}
       {getCheckEmail()}
-      {getLoginRegister()}
+      {pendingAutoLogin && getLoginRegister()}
       <SelectChurchModal show={showSelectModal} churches={loginResponse?.churches} selectChurch={selectChurch} registeredChurchCallback={handleChurchRegistered} errors={errors} appName={props.appName} />
     </div>
   );
