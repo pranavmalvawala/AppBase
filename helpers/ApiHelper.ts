@@ -38,28 +38,13 @@ export class ApiHelper {
   static async get(path: string, apiName: ApiListType) {
     const config = this.getConfig(apiName);
     const requestOptions = { method: "GET", headers: { Authorization: "Bearer " + config.jwt } };
-    try {
-      const response = await fetch(config.url + path, requestOptions);
-      if (!response.ok) await this.throwApiError(response);
-      else return response.json();
-    } catch (e) {
-      console.log(e)
-      throw (e);
-    }
+    return await this.fetchWithErrorHandling(config.url + path, requestOptions);
   }
 
   static async getAnonymous(path: string, apiName: ApiListType) {
     const config = this.getConfig(apiName);
     const requestOptions = { method: "GET" };
-
-    try {
-      const response = await fetch(config.url + path, requestOptions);
-      if (!response.ok) await this.throwApiError(response);
-      else return response.json();
-    } catch (e) {
-      console.log(e)
-      throw (e);
-    }
+    return await this.fetchWithErrorHandling(config.url + path, requestOptions);
   }
 
   static async post(path: string, data: any[] | {}, apiName: ApiListType) {
@@ -69,14 +54,7 @@ export class ApiHelper {
       headers: { Authorization: "Bearer " + config.jwt, "Content-Type": "application/json" },
       body: JSON.stringify(data)
     };
-    try {
-      const response = await fetch(config.url + path, requestOptions);
-      if (!response.ok) await this.throwApiError(response);
-      else return response.json();
-    } catch (e) {
-      console.log(e)
-      throw (e);
-    }
+    return await this.fetchWithErrorHandling(config.url + path, requestOptions);
   }
 
   static async patch(path: string, data: any[] | {}, apiName: ApiListType) {
@@ -86,15 +64,7 @@ export class ApiHelper {
       headers: { Authorization: "Bearer " + config.jwt, "Content-Type": "application/json" },
       body: JSON.stringify(data)
     };
-    try {
-      const response = await fetch(config.url + path, requestOptions);
-      console.log("patch resp", response)
-      if (!response.ok) await this.throwApiError(response);
-      return response.json();
-    } catch (e) {
-      console.log(e)
-      throw (e);
-    }
+    return await this.fetchWithErrorHandling(config.url + path, requestOptions);
   }
 
   static async delete(path: string, apiName: ApiListType) {
@@ -119,11 +89,17 @@ export class ApiHelper {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data)
     };
+    return await this.fetchWithErrorHandling(config.url + path, requestOptions);
+  }
+
+
+  static async fetchWithErrorHandling(url: string, requestOptions: any) {
     try {
-      const response = await fetch(config.url + path, requestOptions);
+      const response = await fetch(url, requestOptions);
       if (!response.ok) await this.throwApiError(response);
       else return response.json();
     } catch (e) {
+      console.log("Error loading url: " + url);
       console.log(e)
       throw (e);
     }
