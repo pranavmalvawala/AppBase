@@ -92,7 +92,6 @@ export class ApiHelper {
     return await this.fetchWithErrorHandling(config.url + path, requestOptions);
   }
 
-
   static async fetchWithErrorHandling(url: string, requestOptions: any) {
     try {
       const response = await fetch(url, requestOptions);
