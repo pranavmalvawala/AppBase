@@ -44,6 +44,13 @@ export class DateHelper {
     return result;
   }
 
+  static formatHtml5Time(time: Date): string {
+    let h = time.getHours();
+    let m = time.getMinutes();
+    let s = time.getSeconds();
+    return `${h < 10 ? ("0" + h) : h}:${m < 10 ? ("0" + m) : m}:${s < 10 ? ("0" + s) : s}`;
+  }
+
   static formatHtml5DateTime(date: Date): string {
     if (date === undefined || date === null) return "";
     else {
