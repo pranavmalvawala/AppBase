@@ -1,10 +1,10 @@
 import React from "react";
-import { Row, Col, Button } from "react-bootstrap";
+import { Paper, Box, Typography, Stack, styled, Button } from "@mui/material";
 
 interface Props {
   id?: string;
   children?: React.ReactNode;
-  headerIcon: string;
+  headerIcon?: string;
   headerText: string;
   saveText?: string;
   headerActionContent?: React.ReactNode;
@@ -35,28 +35,59 @@ export function InputBox({
   ariaLabelSave = "",
   saveButtonType = "submit"
 }: Props) {
+
+  const CustomContextBox = styled(Box)({
+    marginTop: 10,
+    overflowX: "hidden",
+    "& p": {
+      color: "#666"
+    },
+    "& label": {
+      color: "#999"
+    },
+    "& ul": {
+      paddingLeft: 0
+    },
+    "& li": {
+      listStyleType: "none",
+      marginBottom: 10,
+      "& i": {
+        marginRight: 5
+      }
+    },
+    "& td": {
+      "& i": {
+        marginRight: 5
+      }
+    }
+  })
+
   let buttons = [];
+  
+  if (saveFunction)
+    buttons.push(
+      <Button
+        type={saveButtonType}
+        variant="contained"
+        disableElevation
+        aria-label={ariaLabelSave}
+        onClick={saveFunction}
+        disabled={isSubmitting}
+      >
+        {saveText}
+      </Button>
+    );
 
   if (cancelFunction)
     buttons.push(
-      <Col key="cancel">
-        <Button variant="warning" block onClick={cancelFunction}>Cancel</Button>
-      </Col>
+      <Button variant="outlined" onClick={cancelFunction} color="warning">Cancel</Button>
     );
 
   if (deleteFunction)
     buttons.push(
-      <Col key="delete">
-        <Button id="delete" variant="danger" block aria-label={ariaLabelDelete} onClick={deleteFunction}>Delete</Button>
-      </Col>
+      <Button id="delete" aria-label={ariaLabelDelete} onClick={deleteFunction} color="error">Delete</Button>
     );
 
-  if (saveFunction)
-    buttons.push(
-      <Col key="save">
-        <Button type={saveButtonType} variant="success" block aria-label={ariaLabelSave} onClick={saveFunction} disabled={isSubmitting}>{saveText}</Button>
-      </Col>
-    );
 
   let classNames = ["inputBox"];
   if (className) {
@@ -64,21 +95,22 @@ export function InputBox({
   }
 
   return (
-    <div id={id} className={classNames.join(" ").trim()} data-cy={dataCy}>
-      <div className="header" data-cy="header">
-        <Row>
-          <Col xs={8}>
-            <i className={headerIcon}></i> {headerText}
-          </Col>
-          <Col xs={4} style={{ textAlign: "right" }}>
-            {headerActionContent}
-          </Col>
-        </Row>
-      </div>
-      <div className="content">{children}</div>
-      <div className="footer">
-        <Row>{buttons}</Row>
-      </div>
-    </div>
+    <Paper id={id} sx={{ padding: 2 }} data-cy={dataCy}>
+      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }} data-cy="header">
+        <Box>
+          {headerIcon && <i className={headerIcon} style={{ color: "#1976d2" }} />}
+          <Typography component="h2" sx={{ display: "inline-block", marginLeft: headerIcon ? 1: 0 }} variant="h6" color="primary">
+            {headerText}
+          </Typography>
+        </Box>
+        <Box>
+          {headerActionContent}
+        </Box>
+      </Box>
+      <CustomContextBox>{children}</CustomContextBox>
+      <Stack direction="row" sx={{ marginTop: 1 }} spacing={1}>
+        {buttons}
+      </Stack>
+    </Paper>
   );
 }
