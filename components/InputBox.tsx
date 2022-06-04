@@ -73,21 +73,48 @@ export function InputBox({
         aria-label={ariaLabelSave}
         onClick={saveFunction}
         disabled={isSubmitting}
+        sx={{ 
+          "&:focus": {
+            outline: "none"
+          }
+        }}
       >
         {saveText}
       </Button>
     );
 
-  if (cancelFunction)
-    buttons.push(
-      <Button variant="outlined" onClick={cancelFunction} color="warning">Cancel</Button>
+    if (deleteFunction)
+      buttons.push(
+        <Button
+          id="delete"
+          variant="outlined"
+          aria-label={ariaLabelDelete}
+          onClick={deleteFunction}
+          color="error"
+          sx={{ 
+            "&:focus": {
+              outline: "none"
+            }
+          }}
+        >
+          Delete
+        </Button>
     );
-
-  if (deleteFunction)
-    buttons.push(
-      <Button id="delete" aria-label={ariaLabelDelete} onClick={deleteFunction} color="error">Delete</Button>
+      
+    if (cancelFunction)
+      buttons.push(
+        <Button
+          onClick={cancelFunction}
+          color="warning"
+          sx={{ 
+            "&:focus": {
+              outline: "none"
+            }
+          }}
+        >
+           Cancel
+        </Button>
     );
-
 
   let classNames = ["inputBox"];
   if (className) {
@@ -97,7 +124,7 @@ export function InputBox({
   return (
     <Paper id={id} sx={{ padding: 2 }} data-cy={dataCy}>
       <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }} data-cy="header">
-        <Box>
+        <Box sx={{ display: "flex", alignItems: "center" }}>
           {headerIcon && <i className={headerIcon} style={{ color: "#1976d2" }} />}
           <Typography component="h2" sx={{ display: "inline-block", marginLeft: headerIcon ? 1: 0 }} variant="h6" color="primary">
             {headerText}

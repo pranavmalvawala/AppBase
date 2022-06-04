@@ -1,10 +1,10 @@
 import React from "react";
-import { Row, Col } from "react-bootstrap";
+import { Paper, Box, Typography, styled, Button } from "@mui/material";
 
 interface Props {
     id?: string,
     children: React.ReactNode,
-    headerIcon: string,
+    headerIcon?: string,
     headerText: string,
     editFunction?: () => void
     editContent?: React.ReactNode;
@@ -13,20 +13,50 @@ interface Props {
 }
 
 export const DisplayBox = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
-  let editContent: JSX.Element;
-  if (props.editFunction !== undefined) editContent = <button className="no-default-style" aria-label={props.ariaLabel || "editButton"} onClick={props.editFunction}><i className="fas fa-pencil-alt"></i></button>;
-  else if (props.editContent !== undefined) editContent = <div>{props.editContent}</div>;
+
+  const CustomContextBox = styled(Box)({
+    marginTop: 10,
+    overflowX: "hidden",
+    "& p": {
+      color: "#666"
+    },
+    "& label": {
+      color: "#999"
+    },
+    "& ul": {
+      paddingLeft: 0
+    },
+    "& li": {
+      listStyleType: "none",
+      marginBottom: 10,
+      "& i": {
+        marginRight: 5
+      }
+    },
+    "& td": {
+      "& i": {
+        marginRight: 5
+      }
+    }
+  })
+
+  let editContent: React.ReactNode;
+  if (props.editFunction !== undefined) editContent = <Button sx={{ px: 0, minWidth: "auto" }} aria-label={props.ariaLabel || "editButton"} onClick={props.editFunction}><i className="fas fa-pencil-alt" style={{ color: "#1976d2" }} /></Button>;
+  else if (props.editContent !== undefined) editContent = props.editContent;
   return (
-    <div className="inputBox" id={props.id} data-cy={props["data-cy"] || ""}>
-      <div className="header">
-        <Row>
-          <Col xs={!editContent ? 12 : 8}><i className={props.headerIcon}></i> {props.headerText}</Col>
-          <Col xs={4} style={{ textAlign: "right" }}>{editContent}</Col>
-        </Row>
-      </div>
-      <div className="content" ref={ref} data-cy="content">
-        {props.children}
-      </div>
-    </div>
+    <Paper sx={{ padding: 2 }} id={props.id} data-cy={props["data-cy"] || ""}>
+      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <Box sx={{ display: "flex", alignItems: "center" }}>
+          {props.headerIcon && <i className={props.headerIcon} style={{ color: "#1976d2" }} />}
+          <Typography component="h2" sx={{ display: "inline-block", marginLeft: props.headerIcon ? 1: 0 }} variant="h6" color="primary">
+            {props.headerText}
+          </Typography>
+        </Box>
+        <Box>
+          {editContent}
+        </Box>
+      </Box>
+      <CustomContextBox ref={ref} data-cy="content">{props.children}</CustomContextBox>
+    </Paper>
   );
 })
