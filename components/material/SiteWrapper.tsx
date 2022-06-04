@@ -1,6 +1,6 @@
 import React from "react";
-import { Person as PersonIcon, Church as ChurchIcon, Apps as AppsIcon, AdminPanelSettings, ChevronLeft, Menu as MenuIcon, Logout as LogoutIcon } from '@mui/icons-material';
-import { AppBar, AppBarProps, Badge, Divider, Drawer, IconButton, List, ListItemButton, ListItemIcon, ListItemText, styled, Toolbar, Typography } from "@mui/material";
+import { ChevronLeft, Menu as MenuIcon } from '@mui/icons-material';
+import { AppBar, AppBarProps, Drawer, IconButton, styled, Toolbar, Typography } from "@mui/material";
 
 interface Props {
   navContent: JSX.Element,
