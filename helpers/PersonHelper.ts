@@ -1,6 +1,13 @@
+import { EnvironmentHelperBase } from "./EnvironmentHelperBase";
 import { PersonInterface, ContactInfoInterface } from "../interfaces";
 
 export class PersonHelper {
+
+  static getPhotoUrl(person: PersonInterface) {
+    if (!person?.photo) return "/images/sample-profile.png"
+    else return person?.photo?.startsWith("data:image/png;base64,") ? person.photo : EnvironmentHelperBase.ContentRoot + person.photo;
+  }
+
   static getAge(birthdate: Date): string {
     if (birthdate !== undefined && birthdate !== null) {
       let ageDifMs = Date.now() - new Date(birthdate).getTime();

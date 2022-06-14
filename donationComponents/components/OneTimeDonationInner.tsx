@@ -1,10 +1,10 @@
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import React from "react";
-import { Alert, Col, FormGroup, FormLabel, Row } from "react-bootstrap";
 import { ErrorMessages, InputBox } from "../../components";
 import { ApiHelper } from "../../helpers";
 import { FundDonationInterface, FundInterface, PersonInterface, StripeDonationInterface, StripePaymentMethod, UserInterface } from "../../interfaces";
 import { FundDonations } from "./FundDonations";
+import { Grid, Alert, TextField } from "@mui/material"
 
 interface Props { churchId: string }
 
@@ -101,7 +101,7 @@ export const OneTimeDonationInner: React.FC<Props> = (props) => {
     return result.length === 0;
   }
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const val = e.currentTarget.value;
     switch (e.currentTarget.name) {
       case "firstName": setFirstName(val); break;
@@ -123,46 +123,36 @@ export const OneTimeDonationInner: React.FC<Props> = (props) => {
   }
 
   const getFundList = () => {
-    if (funds) return (<FormGroup>
+    if (funds) return (<>
       <hr />
-      <FormLabel>Funds</FormLabel>
+      <h4>Funds</h4>
       <FundDonations fundDonations={fundDonations} funds={funds} updatedFunction={handleFundDonationsChange} />
-    </FormGroup>);
+    </>);
   }
 
   React.useEffect(init, []); //eslint-disable-line
 
-  if (donationComplete) return <Alert variant="success">Thank you for your donation.</Alert>
+  if (donationComplete) return <Alert severity="success">Thank you for your donation.</Alert>
   else return (
-    <InputBox headerIcon="fas fa-hand-holding-usd" headerText="One Time Donation" saveFunction={handleSave} saveText="Donate" isSubmitting={processing}>
+    <InputBox headerIcon="volunteer_activism" headerText="One Time Donation" saveFunction={handleSave} saveText="Donate" isSubmitting={processing}>
       <ErrorMessages errors={errors} />
-      <Row>
-        <Col>
-          <FormGroup>
-            <FormLabel>First Name</FormLabel>
-            <input type="text" className="form-control" name="firstName" value={firstName} onChange={handleChange} />
-          </FormGroup>
-        </Col>
-        <Col>
-          <FormGroup>
-            <FormLabel>Last Name</FormLabel>
-            <input type="text" className="form-control" name="lastName" value={lastName} onChange={handleChange} />
-          </FormGroup>
-        </Col>
-        <Col>
-          <FormGroup>
-            <FormLabel>Email</FormLabel>
-            <input type="text" className="form-control" name="email" value={email} onChange={handleChange} />
-          </FormGroup>
-        </Col>
-      </Row>
+      <Grid container spacing={3}>
+        <Grid item md={6} xs={12}>
+          <TextField fullWidth label="First Name" name="firstName" value={firstName} onChange={handleChange} />
+        </Grid>
+        <Grid item md={6} xs={12}>
+          <TextField fullWidth label="Last Name" name="lastName" value={lastName} onChange={handleChange} />
+        </Grid>
+      </Grid>
+      <Grid container spacing={3}>
+        <Grid item md={6} xs={12}>
+          <TextField fullWidth label="Email" name="email" value={email} onChange={handleChange} />
+        </Grid>
+      </Grid>
+      <div style={{ padding: 10, border: "1px solid #CCC", borderRadius: 5, marginTop: 10 }}>
+        <CardElement options={formStyling} />
+      </div>
 
-      <FormGroup>
-        <FormLabel>Card Info</FormLabel>
-        <div style={{ padding: 10, border: "1px solid #CCC", borderRadius: 5 }}>
-          <CardElement options={formStyling} />
-        </div>
-      </FormGroup>
       {getFundList()}
     </InputBox>
   );

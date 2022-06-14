@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Row, Col } from "react-bootstrap";
+import { Grid } from "@mui/material"
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { InputBox, ErrorMessages } from "../../components";
 import { ApiHelper } from "../../helpers";
@@ -26,7 +26,7 @@ export const CardForm: React.FC<Props> = (props) => {
   }
 
   useEffect(() => {
-    setCardUpdate({ ...cardUpdate, cardData: { card: { exp_year: props.card.exp_year.toString().slice(2), exp_month: props.card.exp_month } } });
+    setCardUpdate({ ...cardUpdate, cardData: { card: { exp_year: props.card?.exp_year?.toString().slice(2) || "", exp_month: props.card?.exp_month || "" } } });
   }, []) //eslint-disable-line
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -83,21 +83,21 @@ export const CardForm: React.FC<Props> = (props) => {
     : "Add New Card"
 
   return (
-    <InputBox headerIcon="fas fa-hand-holding-usd" headerText={getHeaderText()} ariaLabelSave="save-button" ariaLabelDelete="delete-button" cancelFunction={handleCancel} saveFunction={showSave ? handleSave : saveDisabled} deleteFunction={props.card.id ? handleDelete : undefined}>
+    <InputBox headerIcon="volunteer_activism" headerText={getHeaderText()} ariaLabelSave="save-button" ariaLabelDelete="delete-button" cancelFunction={handleCancel} saveFunction={showSave ? handleSave : saveDisabled} deleteFunction={props.card.id ? handleDelete : undefined}>
       {errorMessage && <ErrorMessages errors={[errorMessage]}></ErrorMessages>}
       <form style={{ margin: "10px" }}>
         {!props.card.id
           ? <CardElement options={formStyling} />
-          : <Row>
-            <Col>
+          : <Grid container spacing={3}>
+            <Grid item md={6} xs={12}>
               <label>Card Expiration Month:</label>
               <input type="text" name="exp_month" aria-label="card-exp-month" value={cardUpdate.cardData.card.exp_month} onKeyPress={handleKeyPress} onChange={handleChange} placeholder="MM" className="form-control" maxLength={2} />
-            </Col>
-            <Col>
+            </Grid>
+            <Grid item md={6} xs={12}>
               <label>Card Expiration Year:</label>
               <input type="text" name="exp_year" aria-label="card-exp-year" value={cardUpdate.cardData.card.exp_year} onKeyPress={handleKeyPress} onChange={handleChange} placeholder="YY" className="form-control" maxLength={2} />
-            </Col>
-          </Row>
+            </Grid>
+          </Grid>
         }
       </form>
     </InputBox>

@@ -1,10 +1,10 @@
 import React from "react";
-import { Row, Col, Button } from "react-bootstrap";
+import { Paper, Box, Typography, Stack, styled, Button, Icon } from "@mui/material";
 
 interface Props {
   id?: string;
   children?: React.ReactNode;
-  headerIcon: string;
+  headerIcon?: string;
   headerText: string;
   saveText?: string;
   headerActionContent?: React.ReactNode;
@@ -18,6 +18,23 @@ interface Props {
   ariaLabelSave?: string;
   saveButtonType?: "submit" | "button";
 }
+
+const CustomContextBox = styled(Box)({
+  marginTop: 10,
+  overflowX: "hidden",
+  "& p": { color: "#666" },
+  "& label": { color: "#999" },
+  "& ul": { paddingLeft: 0 },
+  "& li": {
+    listStyleType: "none",
+    marginBottom: 10,
+    "& i": { marginRight: 5 }
+  },
+  "& td": {
+    "& i": { marginRight: 5 }
+  }
+})
+
 export function InputBox({
   id,
   children,
@@ -33,52 +50,35 @@ export function InputBox({
   isSubmitting = false,
   ariaLabelDelete = "",
   ariaLabelSave = "",
-  saveButtonType = "submit"
+  saveButtonType = "button"
 }: Props) {
   let buttons = [];
-
-  if (cancelFunction)
-    buttons.push(
-      <Col key="cancel">
-        <Button variant="warning" block onClick={cancelFunction}>Cancel</Button>
-      </Col>
-    );
-
-  if (deleteFunction)
-    buttons.push(
-      <Col key="delete">
-        <Button id="delete" variant="danger" block aria-label={ariaLabelDelete} onClick={deleteFunction}>Delete</Button>
-      </Col>
-    );
-
-  if (saveFunction)
-    buttons.push(
-      <Col key="save">
-        <Button type={saveButtonType} variant="success" block aria-label={ariaLabelSave} onClick={saveFunction} disabled={isSubmitting}>{saveText}</Button>
-      </Col>
-    );
+  if (cancelFunction) buttons.push(<Button key="cancel" onClick={cancelFunction} color="warning" sx={{ "&:focus": { outline: "none" } }}>Cancel</Button>);
+  if (deleteFunction) buttons.push(<Button key="delete" id="delete" variant="outlined" aria-label={ariaLabelDelete} onClick={deleteFunction} color="error" sx={{ "&:focus": { outline: "none" } }}>Delete</Button>);
+  if (saveFunction) buttons.push(<Button key="save" type={saveButtonType} variant="contained" disableElevation aria-label={ariaLabelSave} onClick={saveFunction} disabled={isSubmitting} sx={{ "&:focus": { outline: "none" } }}>{saveText}</Button>);
 
   let classNames = ["inputBox"];
-  if (className) {
-    classNames.push(className);
-  }
-
+  if (className) classNames.push(className);
   return (
-    <div id={id} className={classNames.join(" ").trim()} data-cy={dataCy}>
-      <div className="header" data-cy="header">
-        <Row>
-          <Col xs={8}>
-            <i className={headerIcon}></i> {headerText}
-          </Col>
-          <Col xs={4} style={{ textAlign: "right" }}>
+    <Paper id={id} sx={{ padding: 2, marginBottom: 4 }} data-cy={dataCy}>
+      <form>
+        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }} data-cy="header">
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            {headerIcon && (headerIcon.startsWith("fa ") || headerIcon.startsWith("fas ")) && <i className={headerIcon} style={{ color: "#1976d2" }} />}
+            {headerIcon && (!headerIcon.startsWith("fa ") && !headerIcon.startsWith("fas ")) && <Icon sx={{ color: "#1976d2" }}>{headerIcon}</Icon>}
+            <Typography component="h2" sx={{ display: "inline-block", marginLeft: headerIcon ? 1 : 0 }} variant="h6" color="primary">
+              {headerText}
+            </Typography>
+          </Box>
+          <Box>
             {headerActionContent}
-          </Col>
-        </Row>
-      </div>
-      <div className="content">{children}</div>
-      <div className="footer">
-        <Row>{buttons}</Row>
-      </div>
-    </div>
+          </Box>
+        </Box>
+        <CustomContextBox>{children}</CustomContextBox>
+        <Stack direction="row" sx={{ marginTop: 1 }} spacing={1} justifyContent="end">
+          {buttons}
+        </Stack>
+      </form>
+    </Paper>
   );
 }

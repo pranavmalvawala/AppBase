@@ -1,7 +1,7 @@
 import React from "react";
 import { ReportInterface, ParameterInterface } from "../../interfaces";
 import { ApiHelper, ArrayHelper, DateHelper } from "../../helpers";
-import { FormControl } from "react-bootstrap";
+import { FormControl, InputLabel, Select, SelectChangeEvent, TextField } from "@mui/material";
 
 interface Props {
   parameter: ParameterInterface,
@@ -113,9 +113,9 @@ export const ReportFilterField = (props: Props) => {
     return result;
   }
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement> | SelectChangeEvent<string>) => {
     const p = { ...props.parameter };
-    p.value = e.currentTarget.value;
+    p.value = e.target.value;
     let parentIds = [];
     if (p.value) parentIds.push(p.value);
     props.onChange(p, parentIds);
@@ -126,10 +126,17 @@ export const ReportFilterField = (props: Props) => {
   let result = <></>
   switch (props.parameter.source) {
     case "dropdown":
-      result = (<FormControl as="select" value={props.parameter.value} onChange={handleChange} name={props.parameter.keyName}>{getOptions()}</FormControl>);
+      result = (
+        <FormControl fullWidth>
+          <InputLabel>{props.parameter.displayName}</InputLabel>
+          <Select value={props.parameter.value} onChange={handleChange} name={props.parameter.keyName}>
+            {getOptions()}
+          </Select>
+        </FormControl>
+      );
       break;
     case "date":
-      result = (<FormControl type="date" value={props.parameter.value} onChange={handleChange} name={props.parameter.keyName} />);
+      result = (<TextField type="date" value={props.parameter.value} onChange={handleChange} name={props.parameter.keyName} />)
       break;
   }
   return result;

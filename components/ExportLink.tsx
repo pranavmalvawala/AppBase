@@ -1,3 +1,4 @@
+import { Button, Icon } from "@mui/material";
 import React from "react";
 import { CSVLink } from "react-csv";
 
@@ -53,7 +54,7 @@ export const ExportLink: React.FC<Props> = (props) => {
   else {
     let items = [];
     if (props.spaceBefore) items.push(" ");
-    items.push(<CSVLink key={props.filename} data={props.data} headers={getHeaders()} filename={props.filename || "export.csv"}> <i className="fas fa-download"> </i></CSVLink>);
+    items.push(<CSVLink key={props.filename} data={props.data} headers={getHeaders()} filename={props.filename || "export.csv"}> <Button><Icon>file_download</Icon></Button></CSVLink>);
     if (props.spaceAfter) items.push(" ");
     return (<>{items}</>);
   }

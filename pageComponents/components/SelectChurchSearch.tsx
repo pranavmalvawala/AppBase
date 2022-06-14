@@ -1,5 +1,5 @@
+import { Button, TextField } from "@mui/material";
 import React from "react";
-import { InputGroup, Button, FormControl } from "react-bootstrap";
 import { ApiHelper } from "../../helpers"
 import { ChurchInterface } from "../../interfaces";
 import { SelectableChurch } from "./SelectableChurch";
@@ -59,10 +59,9 @@ export const SelectChurchSearch: React.FC<Props> = (props) => {
   if (showRegister) return (<SelectChurchRegister selectChurch={props.selectChurch} registeredChurchCallback={props.registeredChurchCallback} appName={props.appName} initialChurchName={searchText} />)
   else return (
     <>
-      <InputGroup>
-        <FormControl id="searchText" aria-label="searchBox" name="searchText" type="text" placeholder="Name" value={searchText} onChange={handleChange} onKeyDown={handleKeyDown} />
-        <Button id="searchButton" variant="primary" onClick={handleSubmit}>Search</Button>
-      </InputGroup>
+      <TextField fullWidth name="searchText" label="Name" value={searchText} onChange={handleChange} onKeyDown={handleKeyDown}
+        InputProps={{ endAdornment: <Button variant="contained" id="searchButton" data-cy="search-button" onClick={handleSubmit}>Search</Button> }}
+      />
       {getResults()}
     </>
 

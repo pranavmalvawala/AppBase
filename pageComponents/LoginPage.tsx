@@ -1,21 +1,14 @@
 import * as React from "react";
-import { ErrorMessages, PasswordField } from "../components";
+import { ErrorMessages, InputBox, Loading } from "../components";
 import { LoginResponseInterface, UserContextInterface, ChurchInterface, UserInterface } from "../interfaces";
 import { ApiHelper, ArrayHelper, UserHelper } from "../helpers";
-import { Button, FormControl, Alert, Form } from "react-bootstrap";
 import { Navigate } from "react-router-dom";
 import { useCookies } from "react-cookie"
-import * as yup from "yup"
-import { Formik, FormikHelpers } from "formik"
 import jwt_decode from "jwt-decode"
 import { Register } from "./components/Register"
 import { SelectChurchModal } from "./components/SelectChurchModal"
 import { Forgot } from "./components/Forgot";
-
-const schema = yup.object().shape({
-  email: yup.string().required("Please enter your email address.").email("Please enter a valid email address."),
-  password: yup.string().required("Please enter your password.")
-})
+import { TextField, Alert } from "@mui/material";
 
 interface Props {
   context: UserContextInterface,
@@ -42,6 +35,11 @@ export const LoginPage: React.FC<Props> = (props) => {
   const [showSelectModal, setShowSelectModal] = React.useState(false);
   const [loginResponse, setLoginResponse] = React.useState<LoginResponseInterface>(null)
   const [userJwt, setUserJwt] = React.useState("");
+
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
+
   const loginFormRef = React.useRef(null);
   const location = typeof window !== "undefined" && window.location;
   let selectedChurchId = "";
@@ -108,7 +106,7 @@ export const LoginPage: React.FC<Props> = (props) => {
     if (props.churchRegisteredCallback && registeredChurch) {
       props.churchRegisteredCallback(registeredChurch).then(() => {
         registeredChurch = null;
-        login({ jwt: userJwt || userJwtBackup }, undefined);
+        login({ jwt: userJwt || userJwtBackup });
       });
     } else continuedLoginProcess();
   }
@@ -120,7 +118,7 @@ export const LoginPage: React.FC<Props> = (props) => {
       //create/claim the person record and relogin
       const personClaim = await ApiHelper.get("/people/claim/" + church.id, "MembershipApi");
       await ApiHelper.post("/userChurch/claim", { encodedPerson: personClaim.encodedPerson }, "AccessApi");
-      login({ jwt: userJwt || userJwtBackup }, undefined);
+      login({ jwt: userJwt || userJwtBackup });
       return;
     }
     await UserHelper.selectChurch(props.context, undefined, props.keyName);
@@ -133,7 +131,6 @@ export const LoginPage: React.FC<Props> = (props) => {
       UserHelper.currentChurch.apis.forEach(api => {
         if (api.keyName === "AccessApi") setCookie("jwt", api.jwt, { path: "/" });
       })
-
       try {
         if (UserHelper.currentChurch.id) ApiHelper.patch(`/userChurch/${UserHelper.user.id}`, { churchId: UserHelper.currentChurch.id, appName: props.appName, lastAccessed: new Date() }, "AccessApi")
       } catch (e) {
@@ -143,12 +140,15 @@ export const LoginPage: React.FC<Props> = (props) => {
 
     const search = new URLSearchParams(location?.search);
     const returnUrl = search.get("returnUrl") || props.returnUrl;
-    if (returnUrl) {
-      setRedirectTo(returnUrl);
-    }
+    if (returnUrl) setRedirectTo(returnUrl);
 
     if (props.loginSuccessOverride !== undefined) props.loginSuccessOverride();
-    else props.context.setUserName(UserHelper.currentChurch.id.toString());
+    else {
+      props.context.setUser(UserHelper.user);
+      props.context.setChurches(UserHelper.churches)
+      props.context.setChurch(UserHelper.currentChurch)
+      ApiHelper.get(`/people/${UserHelper.currentChurch.personId}`, "MembershipApi").then(p => { props.context.setPerson(p); });
+    }
   }
 
   async function selectChurch(churchId: string) {
@@ -162,7 +162,7 @@ export const LoginPage: React.FC<Props> = (props) => {
         //create/claim the person record and relogin
         const personClaim = await ApiHelper.get("/people/claim/" + churchId, "MembershipApi");
         await ApiHelper.post("/userChurch/claim", { encodedPerson: personClaim.encodedPerson }, "AccessApi");
-        login({ jwt: userJwt || userJwtBackup }, undefined);
+        login({ jwt: userJwt || userJwtBackup });
         return;
       }
 
@@ -183,16 +183,33 @@ export const LoginPage: React.FC<Props> = (props) => {
     setErrors(["Invalid login. Please check your email or password."]);
   }
 
-  const login = (data: any, helpers?: FormikHelpers<any>) => {
+  const validateEmail = (email: string) => (/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(.\w{2,3})+$/.test(email))
+
+  const validate = () => {
+    const result = [];
+    if (!email) result.push("Please enter your email address.");
+    else if (!validateEmail(email)) result.push("Please enter a valid email address.");
+    if (!password) result.push("Please enter your password.");
+    setErrors(result);
+    return result.length === 0;
+  }
+
+  const submitLogin = () => {
+    if (validate()) login({ email, password });
+  }
+
+  const login = (data: any) => {
     setErrors([])
+    setIsSubmitting(true);
     ApiHelper.postAnonymous("/users/login", data, "AccessApi")
       .then((resp: LoginResponseInterface) => {
+        setIsSubmitting(false);
         handleLoginSuccess(resp);
       })
       .catch((e) => {
         setPendingAutoLogin(true);
         handleLoginErrors(e.toString());
-        helpers?.setSubmitting(false);
+        setIsSubmitting(false);
       });
 
   };
@@ -200,13 +217,13 @@ export const LoginPage: React.FC<Props> = (props) => {
   const getWelcomeBack = () => {
     if (welcomeBackName === "") return null;
     else {
-      return <Alert variant="info">Welcome back, <b>{welcomeBackName}</b>!  Please wait while we load your data.</Alert>
+      return <><Alert severity="info">Welcome back, <b>{welcomeBackName}</b>!  Please wait while we load your data.</Alert><Loading /></>;
     }
   }
 
   const getCheckEmail = () => {
     const search = new URLSearchParams(location?.search);
-    if (search.get("checkEmail") === "1") return <Alert variant="info">Thank you for registering.  Please check your email for your temporary password.</Alert>
+    if (search.get("checkEmail") === "1") return <Alert severity="info"> Thank you for registering.Please check your email for your temporary password.</Alert>
   }
 
   const handleShowRegister = (e: React.MouseEvent) => {
@@ -229,37 +246,23 @@ export const LoginPage: React.FC<Props> = (props) => {
   }
 
   const getLoginBox = () => (
-    <div id="loginBox" style={{ backgroundColor: "#FFF", border: "1px solid #CCC", borderRadius: 5, padding: 20 }}>
-      <h2>Please sign in</h2>
-      <Formik validationSchema={schema} initialValues={initialValues} onSubmit={login} innerRef={loginFormRef}>
-        {({ handleSubmit, handleChange, values, touched, errors, isSubmitting }) => (
-          <Form noValidate onSubmit={handleSubmit}>
-            <Form.Group>
-              <FormControl type="text" aria-label="email" id="email" name="email" value={values.email} onChange={handleChange} placeholder="Email address" isInvalid={touched.email && !!errors.email} />
-              <Form.Control.Feedback type="invalid">{errors.email}</Form.Control.Feedback>
-            </Form.Group>
-            <Form.Group>
-              <PasswordField value={values.password} onChange={handleChange} onKeyDown={e => e.key === "Enter" && login} isInvalid={touched.password && !!errors.password} errorText={errors.password} />
-            </Form.Group>
-            <Button type="submit" id="signInButton" size="lg" variant="primary" block disabled={isSubmitting} style={{ width: "100%" }}>
-              {isSubmitting ? "Please wait..." : "Sign in"}
-            </Button>
-          </Form>
-        )}
-      </Formik>
-      <br />
-      <div className="text-right">
-        {getRegisterLink()}
-        <a href="about:blank" onClick={(e) => { e.preventDefault(); setShowForgot(true); }}>Forgot Password</a>&nbsp;
-      </div>
-    </div>
+    <>
+      <InputBox headerText="Please Sign In" saveFunction={submitLogin} saveText={isSubmitting ? "Please wait..." : "Sign in"} isSubmitting={isSubmitting}>
+        <TextField fullWidth autoFocus name="email" type="email" label="Email" value={email} onChange={(e) => { e.preventDefault(); setEmail(e.target.value) }} />
+        <TextField fullWidth name="email" type="password" label="Password" value={password} onChange={(e) => { e.preventDefault(); setPassword(e.target.value) }} />
+        <div className="text-right">
+          {getRegisterLink()}
+          <a href="about:blank" onClick={(e) => { e.preventDefault(); setShowForgot(true); }}>Forgot Password</a>&nbsp;
+        </div>
+      </InputBox>
+    </>
   )
 
   const getLoginRegister = () => {
     if (showRegister) return (
       <div id="loginBox" style={{ backgroundColor: "#FFF", border: "1px solid #CCC", borderRadius: 5, padding: 20 }}>
         <h2>Create an Account</h2>
-        <Register updateErrors={setErrors} appName={props.appName} appUrl={props.appUrl} userRegisteredCallback={props.userRegisteredCallback} />
+        <Register updateErrors={setErrors} appName={props.appName} appUrl={props.appUrl} loginCallback={handleLoginCallback} userRegisteredCallback={props.userRegisteredCallback} />
       </div>
     );
     if (showForgot) return (
@@ -277,8 +280,6 @@ export const LoginPage: React.FC<Props> = (props) => {
 
   React.useEffect(init, []); //eslint-disable-line
 
-  const initialValues = { email: "", password: "" }
-
   if (redirectTo) return <Navigate to={redirectTo} />;
   else return (
     <div style={{ maxWidth: 350, marginLeft: "auto", marginRight: "auto" }}>
@@ -292,3 +293,4 @@ export const LoginPage: React.FC<Props> = (props) => {
   );
 
 };
+

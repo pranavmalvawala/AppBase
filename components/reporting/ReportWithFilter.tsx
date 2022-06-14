@@ -2,7 +2,7 @@ import React from "react";
 import { ReportInterface, ReportPermissionInterface } from "../../interfaces";
 import { ApiHelper, UserHelper } from "../../helpers"
 import { Loading } from "../Loading"
-import { Row, Col } from "react-bootstrap";
+import { Grid } from "@mui/material"
 import { ReportOutput } from "./ReportOutput"
 import { ReportFilter } from "./ReportFilter"
 
@@ -53,13 +53,13 @@ export const ReportWithFilter = (props: Props) => {
   if (!report) return <Loading />
   if (!checkAccess()) return <></>
   else {
-    return (<Row>
-      <Col lg={8}>
+    return (<Grid container spacing={3}>
+      <Grid item md={8} xs={12}>
         <ReportOutput report={reportToRun} />
-      </Col>
-      <Col lg={4}>
+      </Grid>
+      <Grid item md={4} xs={12}>
         <ReportFilter report={report} onChange={handleChange} onRun={handleRun} />
-      </Col>
-    </Row>)
+      </Grid>
+    </Grid>)
   }
 }

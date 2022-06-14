@@ -1,6 +1,6 @@
 import React from "react";
 import { FundDonationInterface, FundInterface } from "../../interfaces";
-import { Row, Col, FormGroup, FormControl, FormLabel } from "react-bootstrap";
+import { FormControl, Grid, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material"
 
 interface Props {
   fundDonation: FundDonationInterface,
@@ -13,11 +13,11 @@ export const FundDonation: React.FC<Props> = (props) => {
 
   const getOptions = () => {
     let result = [];
-    for (let i = 0; i < props.funds.length; i++) result.push(<option key={i} value={props.funds[i].id}>{props.funds[i].name}</option>);
+    for (let i = 0; i < props.funds.length; i++) result.push(<MenuItem key={i} value={props.funds[i].id}>{props.funds[i].name}</MenuItem>);
     return result;
   }
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement> | SelectChangeEvent<string>) => {
     let fd = { ...props.fundDonation }
     switch (e.target.name) {
       case "amount":
@@ -31,20 +31,19 @@ export const FundDonation: React.FC<Props> = (props) => {
   }
 
   return (
-    <Row>
-      <Col>
-        <FormGroup>
-          <FormLabel>Amount</FormLabel>
-          <FormControl name="amount" type="number" aria-label="amount" lang="en-150" min="0.00" step="0.01" value={props.fundDonation.amount} onChange={handleChange} />
-        </FormGroup>
-      </Col>
-      <Col>
-        <FormGroup>
-          <FormLabel>Fund</FormLabel>
-          <FormControl as="select" name="fund" aria-label="fund" value={props.fundDonation.fundId} onChange={handleChange}>{getOptions()}</FormControl>
-        </FormGroup>
-      </Col>
-    </Row>
+    <Grid container spacing={3}>
+      <Grid item md={6} xs={12}>
+        <TextField fullWidth name="amount" label="Amount" type="number" aria-label="amount" lang="en-150" value={props.fundDonation.amount} onChange={handleChange} />
+      </Grid>
+      <Grid item md={6} xs={12}>
+        <FormControl fullWidth>
+          <InputLabel>Fund</InputLabel>
+          <Select fullWidth label="Fund" name="fund" aria-label="fund" value={props.fundDonation.fundId} onChange={handleChange}>
+            {getOptions()}
+          </Select>
+        </FormControl>
+      </Grid>
+    </Grid>
   );
 }
 

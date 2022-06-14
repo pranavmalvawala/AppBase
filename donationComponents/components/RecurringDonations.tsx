@@ -1,9 +1,9 @@
 import React from "react";
-import { Table } from "react-bootstrap";
 import { DisplayBox } from "../../components";
 import { ApiHelper, UserHelper, CurrencyHelper, DateHelper } from "../../helpers";
 import { Permissions, SubscriptionInterface } from "../../interfaces";
 import { RecurringDonationsEdit } from ".";
+import { Icon, Table, TableBody, TableCell, TableRow, TableHead } from "@mui/material";
 
 interface Props { customerId: string, paymentMethods: any[], appName: string, dataUpdate: (message?: string) => void, };
 
@@ -70,12 +70,12 @@ export const RecurringDonations: React.FC<Props> = (props) => {
 
   const getEditOptions = (sub: SubscriptionInterface) => {
     if ((!UserHelper.checkAccess(Permissions.givingApi.settings.edit) && props.appName !== "B1App") || props?.paymentMethods?.length === 0) return null;
-    return <a aria-label="edit-button" onClick={handleEdit(sub)} href="about:blank"><i className="fas fa-pencil-alt"></i></a>;
+    return <a aria-label="edit-button" onClick={handleEdit(sub)} href="about:blank"><Icon>edit</Icon></a>;
   }
 
   const getTableHeader = () => {
     let result: JSX.Element[] = [];
-    result.push(<tr key="header"><th>Start Date</th><th>Amount</th><th>Interval</th><th>Payment Method</th>{props?.paymentMethods?.length > 0 && <th>Edit</th>}</tr>);
+    result.push(<TableRow key="header"><th>Start Date</th><th>Amount</th><th>Interval</th><th>Payment Method</th>{props?.paymentMethods?.length > 0 && <th>Edit</th>}</TableRow>);
     return result;
   }
 
@@ -84,13 +84,13 @@ export const RecurringDonations: React.FC<Props> = (props) => {
 
     subscriptions.forEach((sub: any) => {
       rows.push(
-        <tr key={sub.id}>
-          <td>{DateHelper.prettyDate(new Date(sub.billing_cycle_anchor * 1000))}</td>
-          <td>{getFunds(sub)}</td>
-          <td>Every {getInterval(sub)}</td>
-          <td className="capitalize">{getPaymentMethod(sub)}</td>
-          <td className="text-right">{getEditOptions(sub)}</td>
-        </tr>
+        <TableRow key={sub.id}>
+          <TableCell>{DateHelper.prettyDate(new Date(sub.billing_cycle_anchor * 1000))}</TableCell>
+          <TableCell>{getFunds(sub)}</TableCell>
+          <TableCell>Every {getInterval(sub)}</TableCell>
+          <TableCell className="capitalize">{getPaymentMethod(sub)}</TableCell>
+          <TableCell className="text-right">{getEditOptions(sub)}</TableCell>
+        </TableRow>
       );
     });
     return rows;
@@ -98,8 +98,8 @@ export const RecurringDonations: React.FC<Props> = (props) => {
 
   const getSubscriptionsTable = () => (
     <Table>
-      <thead>{getTableHeader()}</thead>
-      <tbody>{getTableRows()}</tbody>
+      <TableHead>{getTableHeader()}</TableHead>
+      <TableBody>{getTableRows()}</TableBody>
     </Table>
   )
 
@@ -108,7 +108,7 @@ export const RecurringDonations: React.FC<Props> = (props) => {
   if (!subscriptions.length) return null;
   if (mode === "display") {
     return (
-      <DisplayBox data-cy="recurring-donations" headerIcon="fas fa-sync-alt" headerText="Recurring Donations">
+      <DisplayBox data-cy="recurring-donations" headerIcon="restart_alt" headerText="Recurring Donations">
         {getSubscriptionsTable()}
       </DisplayBox>
     );

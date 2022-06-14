@@ -13,7 +13,11 @@ export const LogoutPage: React.FC<Props> = (props) => {
   removeCookie("name");
 
   ApiHelper.clearPermissions();
-  props.context?.setUserName("");
+  props.context?.setUser(null);
+  props.context?.setPerson(null);
+  props.context?.setChurches(null);
+  props.context?.setChurch(null);
+
   setTimeout(() => {
     // a must check for Nextjs
     if (typeof window !== "undefined") {

@@ -1,5 +1,5 @@
+import { Grid } from "@mui/material";
 import React from "react";
-import { Row, Col } from "react-bootstrap";
 import { ArrayHelper } from "../../helpers"
 import { ChurchInterface, GenericSettingInterface } from "../../interfaces";
 
@@ -16,28 +16,23 @@ export const SelectableChurch: React.FC<Props> = (props) => {
     if (l?.value) logo = l.value;
   }
   return (
-    <Row>
-      <Col md={6}>
-        <a href="about:blank" style={{ fontSize: "1.125rem", display: "block", marginTop: 20, marginBottom: 20 }} onClick={(e) => { e.preventDefault(); props.selectChurch(props.church.id) }}>
+    <Grid container spacing={3}>
+      <Grid item md={6} xs={12}>
+        <a href="about:blank" style={{ fontSize: "1.125rem", display: "block", marginTop: 15, marginBottom: 15 }} onClick={(e) => { e.preventDefault(); props.selectChurch(props.church.id) }}>
           <img src={logo} alt="church logo" className="w-100 h-auto" />
         </a>
-      </Col>
-      <Col md={6} className="m-auto">
-        <Row>
-          <div>
-            <a href="about:blank" style={{ fontSize: "1.125rem", display: "block" }} onClick={(e) => { e.preventDefault(); props.selectChurch(props.church.id) }}>{props.church.name}</a>
-            {(props.church.address1 || props.church.city) && <div>
-              {props.church.address1 ? (props.church.address1 + ", ") : ""}
-              {props.church.city && props.church.city}
-            </div>}
-            {(props.church.address1 || props.church.city) && <div>
-              {props.church.state ? (props.church.state + " ") : ""}
-              {props.church.zip && props.church.zip}
-            </div>}
-          </div>
-        </Row>
-      </Col>
+      </Grid>
+      <Grid item md={6} xs={12}>
+        <div>
+          <a href="about:blank" style={{ fontSize: "1.125rem", display: "block" }} onClick={(e) => { e.preventDefault(); props.selectChurch(props.church.id) }}>{props.church.name}</a>
+          {(props.church.address1) && <div>{props.church.address1}</div>}
+          {(props.church.city || props.church.state) && <div>
+            {props.church.city && props.church.city + ", "}
+            {props.church.state}
+          </div>}
+        </div>
+      </Grid>
       <span style={{ display: "block", width: "100%", borderTop: "1px solid #ccc", margin: "1rem" }}></span>
-    </Row>
+    </Grid>
   );
 };

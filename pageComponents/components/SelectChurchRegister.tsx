@@ -1,10 +1,8 @@
-import React, { useRef } from "react";
-import { Row, Col, FormGroup, Form, InputGroup } from "react-bootstrap"
+import React from "react";
 import { ApiHelper } from "../../helpers"
 import { ChurchInterface, RegisterChurchRequestInterface } from "../../interfaces";
-import * as yup from "yup"
-import { Formik, FormikHelpers } from "formik"
-import { InputBox } from "../../components"
+import { ErrorMessages, InputBox } from "../../components"
+import { Grid, InputAdornment, TextField } from "@mui/material";
 
 interface Props {
   initialChurchName: string,
@@ -13,113 +11,71 @@ interface Props {
   appName: string
 }
 
-const schema = yup.object().shape({
-  name: yup.string().required("Name is required"),
-  subDomain: yup.string().required("Subdomain is required"),
-  address1: yup.string().required("Address is required"),
-  city: yup.string().required("City is required"),
-  state: yup.string().required("State is required"),
-  zip: yup.string().required("Zip is required"),
-  country: yup.string().required("Country is required")
-})
-
 export const SelectChurchRegister: React.FC<Props> = (props) => {
-  const formikRef: any = useRef(null);
-  const initialValues: RegisterChurchRequestInterface = { name: props.initialChurchName, address1: "", address2: "", city: "", state: "", zip: "", country: "", subDomain: props.initialChurchName.toLowerCase().replace(/ /g, ""), appName: props.appName }
+  const [church, setChurch] = React.useState<RegisterChurchRequestInterface>({ name: props.initialChurchName });
+  const [errors, setErrors] = React.useState([]);
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
 
-  const handleSave = (church: RegisterChurchRequestInterface, { setSubmitting }: FormikHelpers<RegisterChurchRequestInterface>) => {
-    setSubmitting(true);
-    ApiHelper.post("/churches/add", church, "AccessApi").then(async resp => {
-      setSubmitting(false);
-      if (resp.errors !== undefined) {
-        let handleError = formikRef.current.setErrors;
-        handleError({ subDomain: resp.errors[0] })
-      }
-      else {
-        if (props.registeredChurchCallback) props.registeredChurchCallback(resp);
-        props.selectChurch(resp.id);
-      }
-    });
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const c = { ...church }
+    switch (e.target.name) {
+      case "name": c.name = e.target.value; break;
+      case "subDomain": c.subDomain = e.target.value; break;
+      case "address1": c.address1 = e.target.value; break;
+      case "address2": c.address2 = e.target.value; break;
+      case "city": c.city = e.target.value; break;
+      case "state": c.state = e.target.value; break;
+      case "zip": c.zip = e.target.value; break;
+      case "country": c.country = e.target.value; break;
+    }
+    setChurch(c);
+  }
+
+  const validate = () => {
+    let errors = [];
+    if (!church.name?.trim()) errors.push("name cannot be blank.");
+    if (!church.subDomain?.trim()) errors.push("Subdomain cannot be blank.");
+    if (!church.address1?.trim()) errors.push("Address cannot be blank.");
+    if (!church.city?.trim()) errors.push("City cannot be blank.");
+    if (!church.state?.trim()) errors.push("State/Province cannot be blank.");
+    if (!church.zip?.trim()) errors.push("Zip/Postal cannot be blank.");
+    if (!church.country?.trim()) errors.push("Country cannot be blank.");
+    setErrors(errors);
+    return errors.length === 0;
+  }
+
+  const handleSave = () => {
+    if (validate()) {
+      setIsSubmitting(true);
+      ApiHelper.post("/churches/add", church, "AccessApi").then(async resp => {
+        setIsSubmitting(false);
+        if (resp.errors !== undefined) setErrors(errors);
+        else {
+          if (props.registeredChurchCallback) props.registeredChurchCallback(resp);
+          props.selectChurch(resp.id);
+        }
+      });
+    }
   }
 
   return (
-    <>
-      <Formik validationSchema={schema} onSubmit={handleSave} initialValues={initialValues} enableReinitialize={true} innerRef={formikRef}>
-        {({ handleSubmit, handleChange, values, touched, errors, isSubmitting }) => (
-          <Form noValidate>
-            <InputBox id="churchBox" saveFunction={handleSubmit} headerText="Register a New Church" headerIcon="fas fa-church" isSubmitting={isSubmitting}>
-              <Row>
-                <Col>
-                  <FormGroup>
-                    <Form.Label htmlFor="name">Church Name</Form.Label>
-                    <Form.Control name="name" id="name" value={values.name || ""} onChange={handleChange} isInvalid={touched.name && !!errors.name} />
-                    <Form.Control.Feedback type="invalid">{errors.name}</Form.Control.Feedback>
-                  </FormGroup>
-                </Col>
-              </Row>
-              <Row>
-                <Col>
-                  <Form.Group>
-                    <Form.Label htmlFor="subDomain">Subdomain</Form.Label>
-                    <InputGroup>
-                      <Form.Control type="text" placeholder="yourchurch" name="subDomain" value={values.subDomain || ""} onChange={handleChange} isInvalid={touched.subDomain && !!errors.subDomain} />
-                      <InputGroup.Text>.churchapps.org</InputGroup.Text>
-                      <Form.Control.Feedback type="invalid">{errors.subDomain}</Form.Control.Feedback>
-                    </InputGroup>
-
-                  </Form.Group>
-                </Col>
-              </Row>
-              <Row>
-                <Col>
-                  <FormGroup>
-                    <Form.Label htmlFor="address1">Address Line 1</Form.Label>
-                    <Form.Control name="address1" id="address1" value={values.address1 || ""} onChange={handleChange} isInvalid={touched.address1 && !!errors.address1} />
-                    <Form.Control.Feedback type="invalid">{errors.address1}</Form.Control.Feedback>
-                  </FormGroup>
-                </Col>
-              </Row>
-              <Row>
-                <Col sm={6}>
-                  <FormGroup>
-                    <Form.Label htmlFor="address2">Address Line 2</Form.Label>
-                    <Form.Control name="address2" id="address2" value={values.address2 || ""} onChange={handleChange} isInvalid={touched.address2 && !!errors.address2} />
-                    <Form.Control.Feedback type="invalid">{errors.address2}</Form.Control.Feedback>
-                  </FormGroup>
-                </Col>
-                <Col sm={6}>
-                  <FormGroup>
-                    <Form.Label htmlFor="city">City</Form.Label>
-                    <Form.Control name="city" id="city" value={values.city || ""} onChange={handleChange} isInvalid={touched.city && !!errors.city} />
-                    <Form.Control.Feedback type="invalid">{errors.city}</Form.Control.Feedback>
-                  </FormGroup>
-                </Col>
-              </Row>
-              <Row>
-                <Col sm={6}>
-                  <FormGroup>
-                    <Form.Label htmlFor="state">State / Province</Form.Label>
-                    <Form.Control name="state" id="state" value={values.state || ""} onChange={handleChange} isInvalid={touched.state && !!errors.state} />
-                    <Form.Control.Feedback type="invalid">{errors.state}</Form.Control.Feedback>
-                  </FormGroup>
-                </Col>
-                <Col sm={6}>
-                  <FormGroup>
-                    <Form.Label htmlFor="zip">Zip / Postal Code</Form.Label>
-                    <Form.Control name="zip" id="zip" value={values.zip || ""} onChange={handleChange} isInvalid={touched.zip && !!errors.zip} />
-                    <Form.Control.Feedback type="invalid">{errors.zip}</Form.Control.Feedback>
-                  </FormGroup>
-                </Col>
-              </Row>
-              <FormGroup>
-                <Form.Label htmlFor="country">Country</Form.Label>
-                <Form.Control name="country" id="country" value={values.country || ""} onChange={handleChange} isInvalid={touched.country && !!errors.country} />
-                <Form.Control.Feedback type="invalid">{errors.country}</Form.Control.Feedback>
-              </FormGroup>
-            </InputBox>
-          </Form>
-        )}
-      </Formik>
-    </>
+    <InputBox id="churchBox" saveFunction={handleSave} headerText="Register a New Church" headerIcon="church" isSubmitting={isSubmitting}>
+      <ErrorMessages errors={errors} />
+      <TextField fullWidth name="name" label="Church Name" value={church.name} onChange={handleChange} />
+      <TextField fullWidth label="Subdomain" id="subDomain" InputProps={{
+        endAdornment: <InputAdornment position="end">.churchapps.org</InputAdornment>
+      }} />
+      <TextField required fullWidth name="address1" label="Address Line 1" value={church.address1} onChange={handleChange} />
+      <Grid container spacing={3}>
+        <Grid item xs={6}><TextField fullWidth name="address2" label="Address Line 2" value={church.address2} onChange={handleChange} /></Grid>
+        <Grid item xs={6}><TextField fullWidth name="city" label="City" value={church.city} onChange={handleChange} /></Grid>
+      </Grid>
+      <Grid container spacing={3}>
+        <Grid item xs={6}><TextField fullWidth name="state" label="State / Province" value={church.state} onChange={handleChange} /></Grid>
+        <Grid item xs={6}><TextField fullWidth name="zip" label="Zip / Postal" value={church.zip} onChange={handleChange} /></Grid>
+      </Grid>
+      <TextField fullWidth name="country" label="Country" value={church.country} onChange={handleChange} />
+    </InputBox>
   );
 };
+

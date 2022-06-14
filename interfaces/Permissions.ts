@@ -71,6 +71,10 @@ export class Permissions {
     },
     settings: {
       edit: { api: "AccessApi", contentType: "Settings", action: "Edit" }
+    },
+    server: {
+      admin: { api: "AccessApi", contentType: "Server", action: "Admin" }
     }
+
   }
 }

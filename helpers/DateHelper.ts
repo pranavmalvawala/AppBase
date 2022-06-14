@@ -21,6 +21,11 @@ export class DateHelper {
     return this.formatDateTime(date, "MMM d, yyyy h:mm a");
   }
 
+  static prettyTime(date: Date) {
+    if (date === undefined || date === null) return "";
+    return this.formatDateTime(date, "h:mm a");
+  }
+
   static getLastSunday() {
     let result = new Date();
     while (result.getDay() !== 0) result.setDate(result.getDate() - 1);

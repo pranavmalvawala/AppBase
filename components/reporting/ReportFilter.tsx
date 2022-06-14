@@ -2,7 +2,6 @@ import React from "react";
 import { ReportInterface, ParameterInterface } from "../../interfaces";
 import { ArrayHelper } from "../../helpers"
 import { InputBox } from "../"
-import { FormGroup, FormLabel } from "react-bootstrap";
 import { ReportFilterField } from "./ReportFilterField";
 
 interface Props { report: ReportInterface, onChange: (report: ReportInterface) => void, onRun: () => void }
@@ -29,13 +28,9 @@ export const ReportFilter = (props: Props) => {
         setRequiredParentIds(report, "group", permittedChildIds);
         break;
     }
-
   }
 
   const setRequiredParentIds = (report: ReportInterface, childSourceKey: string, requiredParentIds: string[]) => {
-    console.log("SET REQUIRED")
-    console.log(childSourceKey)
-    console.log(requiredParentIds)
     const child: ParameterInterface = ArrayHelper.getOne(report.parameters, "sourceKey", childSourceKey);
     if (child) child.requiredParentIds = requiredParentIds;
   }
@@ -44,10 +39,7 @@ export const ReportFilter = (props: Props) => {
     const result: JSX.Element[] = [];
     props.report.parameters.forEach(p => {
       if (p.source === "dropdown" || p.source === "date") {
-        result.push(<FormGroup>
-          <FormLabel>{p.displayName}</FormLabel>
-          <ReportFilterField parameter={p} report={props.report} onChange={handleChange} />
-        </FormGroup>)
+        result.push(<ReportFilterField parameter={p} report={props.report} onChange={handleChange} />)
       }
     });
     return result;
@@ -55,7 +47,7 @@ export const ReportFilter = (props: Props) => {
 
   const inputs = getInputs();
   if (inputs.length > 0) {
-    return <InputBox id="formSubmissionBox" headerText="Filter Report" headerIcon="fas fa-report" saveFunction={props.onRun} saveText="Run Report">
+    return <InputBox id="formSubmissionBox" headerText="Filter Report" headerIcon="summarize" saveFunction={props.onRun} saveText="Run Report">
       {inputs}
     </InputBox>
   } else return <></>

@@ -1,6 +1,5 @@
 import React from "react";
-import { Row, Col, Form } from "react-bootstrap";
-
+import { FormControl, Grid, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material"
 import { useStripe } from "@stripe/react-stripe-js";
 import { InputBox, ErrorMessages } from "../../components";
 import { ApiHelper } from "../../helpers";
@@ -82,9 +81,9 @@ export const BankForm: React.FC<Props> = (props) => {
     ? `${props.bank.name.toUpperCase()} ****${props.bank.last4}`
     : "Add New Bank Account"
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | SelectChangeEvent<string>) => {
     const bankData = { ...bankAccount };
-    const inputData = { [e.currentTarget.name]: e.currentTarget.value };
+    const inputData = { [e.target.name]: e.target.value };
     setBankAccount({ ...bankData, ...inputData });
     setShowSave(true);
   }
@@ -105,53 +104,52 @@ export const BankForm: React.FC<Props> = (props) => {
     if (props.showVerifyForm) {
       return (<>
         <p>Enter the two deposits you received in your account to finish verifying your bank account.</p>
-        <Row style={{ marginLeft: "10px", marginRight: "10px" }}>
-          <Col>
+        <Grid container style={{ marginLeft: "10px", marginRight: "10px" }}>
+          <Grid item md={6} xs={12}>
             <label>First Deposit</label>
             <input type="text" name="amount1" aria-label="amount1" placeholder="00" className="form-control" maxLength={2} onChange={handleVerify} onKeyPress={handleKeyPress} />
-          </Col>
-          <Col>
+          </Grid>
+          <Grid item md={6} xs={12}>
             <label>Second Deposit</label>
             <input type="text" name="amount2" aria-label="amount2" placeholder="00" className="form-control" maxLength={2} onChange={handleVerify} onKeyPress={handleKeyPress} />
-          </Col>
-        </Row>
+          </Grid>
+        </Grid>
       </>);
 
     } else {
       let accountDetails = <></>
-      if (props.bank.id) accountDetails = (
-        <Row>
-          <Col xs="12" style={{ marginBottom: "20px" }}>
-            <label>Routing Number</label>
-            <input type="number" name="routing_number" aria-label="routing-number" placeholder="Routing Number" className="form-control" onChange={handleChange} />
-          </Col>
-          <Col xs="12" style={{ marginBottom: "20px" }}>
-            <label>Account Number</label>
-            <input type="number" name="account_number" aria-label="account-number" placeholder="Account Number" className="form-control" onChange={handleChange} />
-          </Col>
-        </Row>
+      if (!props.bank.id) accountDetails = (
+        <Grid container spacing={3}>
+          <Grid item md={6} xs={12} style={{ marginBottom: "20px" }}>
+            <TextField fullWidth label="Routing Number" type="number" name="routing_number" aria-label="routing-number" placeholder="Routing Number" className="form-control" onChange={handleChange} />
+          </Grid>
+          <Grid item md={6} xs={12} style={{ marginBottom: "20px" }}>
+            <TextField fullWidth label="Account Number" type="number" name="account_number" aria-label="account-number" placeholder="Account Number" className="form-control" onChange={handleChange} />
+          </Grid>
+        </Grid>
       );
       return (<>
-        <Row>
-          <Col xs="12" style={{ marginBottom: "20px" }}>
-            <label>Account Holder Name</label>
-            <input type="text" name="account_holder_name" required aria-label="account-holder-name" placeholder="Account Holder Name" value={bankAccount.account_holder_name} className="form-control" onChange={handleChange} />
-          </Col>
-          <Col xs="12" style={{ marginBottom: "20px" }}>
-            <label>Account Holder Type</label>
-            <Form.Control as="select" name="account_holder_type" aria-label="account-holder-type" value={bankAccount.account_holder_type} onChange={handleChange}>
-              <option value="individual">Individual</option>
-              <option value="company">Company</option>
-            </Form.Control>
-          </Col>
-        </Row>
+        <Grid container spacing={3}>
+          <Grid item md={6} xs={12} style={{ marginBottom: "20px" }}>
+            <TextField fullWidth label="Account Holder Name" name="account_holder_name" required aria-label="account-holder-name" placeholder="Account Holder Name" value={bankAccount.account_holder_name} className="form-control" onChange={handleChange} />
+          </Grid>
+          <Grid item md={6} xs={12} style={{ marginBottom: "20px" }}>
+            <FormControl fullWidth>
+              <InputLabel>Account Holder Type</InputLabel>
+              <Select label="Account Holder Type" name="account_holder_type" aria-label="account-holder-type" value={bankAccount.account_holder_type} onChange={handleChange}>
+                <MenuItem value="individual">Individual</MenuItem>
+                <MenuItem value="company">Company</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
+        </Grid>
         {accountDetails}
       </>);
     }
   }
 
   return (
-    <InputBox headerIcon="fas fa-hand-holding-usd" headerText={getHeaderText()} ariaLabelSave="save-button" ariaLabelDelete="delete-button" cancelFunction={handleCancel} saveFunction={showSave ? handleSave : saveDisabled} deleteFunction={props.bank.id && !props.showVerifyForm ? handleDelete : undefined}>
+    <InputBox headerIcon="volunteer_activism" headerText={getHeaderText()} ariaLabelSave="save-button" ariaLabelDelete="delete-button" cancelFunction={handleCancel} saveFunction={showSave ? handleSave : saveDisabled} deleteFunction={props.bank.id && !props.showVerifyForm ? handleDelete : undefined}>
       {errorMessage && <ErrorMessages errors={[errorMessage]}></ErrorMessages>}
       <form style={{ margin: "10px" }}>
         {!props.bank.id && <p>Bank accounts will need to be verified before making any donations. Your account will receive two small deposits in approximately 1-3 business days. You will need to enter those deposit amounts to finish verifying your account by selecting the verify account link next to your bank account under the payment methods section.</p>}

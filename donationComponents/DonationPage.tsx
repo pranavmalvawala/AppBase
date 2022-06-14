@@ -5,7 +5,7 @@ import { DisplayBox, Loading } from "../components";
 import { ApiHelper, DateHelper, UniqueIdHelper, CurrencyHelper } from "../helpers";
 import { DonationInterface, PersonInterface, StripePaymentMethod } from "../interfaces";
 import { Link } from "react-router-dom"
-import { Alert, Table } from "react-bootstrap";
+import { Table, TableBody, TableRow, TableCell, TableHead, Alert } from "@mui/material"
 
 interface Props { personId: string, appName?: string }
 
@@ -52,20 +52,20 @@ export const DonationPage: React.FC<Props> = (props) => {
     let rows: JSX.Element[] = [];
 
     if (donations.length === 0) {
-      rows.push(<tr key="0"><td>Donations will appear once a donation has been entered.</td></tr>);
+      rows.push(<TableRow key="0"><TableCell>Donations will appear once a donation has been entered.</TableCell></TableRow>);
       return rows;
     }
 
     for (let i = 0; i < donations.length; i++) {
       let d = donations[i];
       rows.push(
-        <tr key={i}>
-          {appName !== "B1App" && <td><Link to={"/donations/" + d.batchId}>{d.batchId}</Link></td>}
-          <td>{DateHelper.prettyDate(new Date(d.donationDate))}</td>
-          <td>{d.method} - {d.methodDetails}</td>
-          <td>{d.fund.name}</td>
-          <td>{CurrencyHelper.formatCurrency(d.fund.amount)}</td>
-        </tr>
+        <TableRow key={i}>
+          {appName !== "B1App" && <TableCell><Link to={"/donations/" + d.batchId}>{d.batchId}</Link></TableCell>}
+          <TableCell>{DateHelper.prettyDate(new Date(d.donationDate))}</TableCell>
+          <TableCell>{d.method} - {d.methodDetails}</TableCell>
+          <TableCell>{d.fund.name}</TableCell>
+          <TableCell>{CurrencyHelper.formatCurrency(d.fund.amount)}</TableCell>
+        </TableRow>
       );
     }
     return rows;
@@ -76,13 +76,13 @@ export const DonationPage: React.FC<Props> = (props) => {
 
     if (donations.length > 0) {
       rows.push(
-        <tr key="header">
+        <TableRow key="header">
           {appName !== "B1App" && <th>Batch</th>}
           <th>Date</th>
           <th>Method</th>
           <th>Fund</th>
           <th>Amount</th>
-        </tr>
+        </TableRow>
       );
     }
 
@@ -94,8 +94,8 @@ export const DonationPage: React.FC<Props> = (props) => {
   const getTable = () => {
     if (!donations) return <Loading />;
     else return (<Table>
-      <thead>{getTableHeader()}</thead>
-      <tbody>{getRows()}</tbody>
+      <TableHead>{getTableHeader()}</TableHead>
+      <TableBody>{getRows()}</TableBody>
     </Table>);
   }
 
@@ -104,7 +104,7 @@ export const DonationPage: React.FC<Props> = (props) => {
     else return (
       <>
         <DonationForm person={person} customerId={customerId} paymentMethods={paymentMethods} stripePromise={stripePromise} donationSuccess={handleDataUpdate} />
-        <DisplayBox headerIcon="fas fa-file-invoice-dollar" headerText="Donations">
+        <DisplayBox headerIcon="payments" headerText="Donations">
           {getTable()}
         </DisplayBox>
         <RecurringDonations customerId={customerId} paymentMethods={paymentMethods} appName={appName} dataUpdate={handleDataUpdate} />
@@ -115,7 +115,7 @@ export const DonationPage: React.FC<Props> = (props) => {
 
   return (
     <>
-      {paymentMethods && message && <Alert variant="success">{message}</Alert>}
+      {paymentMethods && message && <Alert severity="success">{message}</Alert>}
       {getPaymentMethodComponents()}
     </>
   );

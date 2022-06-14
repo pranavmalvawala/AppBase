@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { ApiHelper } from "../helpers";
 import { PersonInterface } from "../interfaces"
-import { Table, Button, FormControl, InputGroup } from "react-bootstrap";
+import { TextField, Button, Table, TableBody, TableRow, TableCell, Icon } from "@mui/material";
 
 interface Props {
   addFunction: (person: PersonInterface) => void,
@@ -43,21 +43,22 @@ export const PersonAdd: React.FC<Props> = ({ addFunction, getPhotoUrl, searchCli
   for (let i = 0; i < searchResults.length; i++) {
     let sr = searchResults[i];
     rows.push(
-      <tr key={sr.id}>
-        <td><img src={getPhotoUrl(sr)} alt="avatar" /></td>
-        <td>{sr.name.display}</td>
-        <td><button className="text-success no-default-style" aria-label="addPerson" data-index={i} onClick={handleAdd}><i className="fas fa-user"></i> Add</button></td>
-      </tr>
+      <TableRow key={sr.id}>
+        <TableCell><img src={getPhotoUrl(sr)} alt="avatar" /></TableCell>
+        <TableCell>{sr.name.display}</TableCell>
+        <TableCell>
+          <button className="text-success no-default-style" aria-label="addPerson" data-index={i} onClick={handleAdd}><Icon>person</Icon> Add</button>
+        </TableCell>
+      </TableRow>
     );
   }
 
   return (
     <>
-      <InputGroup>
-        <FormControl id="personAddText" aria-label="searchbox" value={searchText} onChange={handleChange} onKeyDown={handleKeyDown} />
-        <div className="input-group-append"><Button id="personAddButton" variant="primary" onClick={handleSearch}><i className="fas fa-search"></i> Search</Button></div>
-      </InputGroup>
-      <Table size="sm" id="householdMemberAddTable"><tbody>{rows}</tbody></Table>
+      <TextField fullWidth name="personAddText" label="Person" value={searchText} onChange={handleChange} onKeyDown={handleKeyDown}
+        InputProps={{ endAdornment: <Button variant="contained" id="searchButton" data-cy="search-button" onClick={handleSearch}>Search</Button> }}
+      />
+      <Table size="small" id="householdMemberAddTable"><TableBody>{rows}</TableBody></Table>
     </>
   );
 }

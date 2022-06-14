@@ -1,8 +1,8 @@
 import React from "react";
-import { Col, FormControl, FormGroup, FormLabel, Row } from "react-bootstrap";
 import { ApiHelper } from "../../helpers";
 import { InputBox } from "../../components";
 import { StripePaymentMethod, SubscriptionInterface } from "../../interfaces";
+import { FormControl, Grid, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material"
 
 interface Props { subscriptionUpdated: (message?: string) => void, customerId: string, paymentMethods: StripePaymentMethod[], editSubscription: SubscriptionInterface };
 
@@ -30,10 +30,10 @@ export const RecurringDonationsEdit: React.FC<Props> = (props) => {
     Promise.all(promises).then(() => props.subscriptionUpdated("Recurring donation canceled."));
   }
 
-  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | SelectChangeEvent<string>) => {
     let sub = { ...editSubscription } as SubscriptionInterface;
     let value = e.target.value;
-    switch (e.currentTarget.name) {
+    switch (e.target.name) {
       case "method":
         let pm = props.paymentMethods.find((pm: StripePaymentMethod) => pm.id === value);
         sub.default_payment_method = pm.type === "card" ? value : null;
@@ -47,40 +47,37 @@ export const RecurringDonationsEdit: React.FC<Props> = (props) => {
 
   const getFields = () => (
     <>
-      <Row>
-        <Col>
-          <FormGroup>
-            <FormLabel>Method</FormLabel>
-            <FormControl as="select" name="method" aria-label="method" value={editSubscription.default_payment_method || editSubscription.default_source} className="capitalize" onChange={handleChange}>
-              {props.paymentMethods.map((paymentMethod: any, i: number) => <option key={i} value={paymentMethod.id}>{paymentMethod.name} ****{paymentMethod.last4}</option>)}
-            </FormControl>
-          </FormGroup>
-        </Col>
-      </Row>
-      <Row>
-        <Col>
-          <FormGroup>
-            <FormLabel>Interval Number</FormLabel>
-            <FormControl name="interval-number" aria-label="interval-number" type="number" value={editSubscription.plan.interval_count} min="1" step="1" onChange={handleChange} />
-          </FormGroup>
-        </Col>
-        <Col>
-          <FormGroup>
-            <FormLabel>Interval Type</FormLabel>
-            <FormControl as="select" name="interval-type" aria-label="interval-type" value={editSubscription.plan.interval} onChange={handleChange}>
-              <option value="day">Day(s)</option>
-              <option value="week">Week(s)</option>
-              <option value="month">Month(s)</option>
-              <option value="year">Year(s)</option>
-            </FormControl>
-          </FormGroup>
-        </Col>
-      </Row>
+      <Grid container spacing={3}>
+        <Grid item md={6} xs={12}>
+          <FormControl fullWidth>
+            <InputLabel>Method</InputLabel>
+            <Select label="Method" name="method" aria-label="method" value={editSubscription.default_payment_method || editSubscription.default_source} className="capitalize" onChange={handleChange}>
+              {props.paymentMethods.map((paymentMethod: any, i: number) => <MenuItem key={i} value={paymentMethod.id}>{paymentMethod.name} ****{paymentMethod.last4}</MenuItem>)}
+            </Select>
+          </FormControl>
+        </Grid>
+      </Grid>
+      <Grid container spacing={3}>
+        <Grid item md={6} xs={12}>
+          <TextField fullWidth label="Interval Number" name="interval-number" aria-label="interval-number" type="number" value={editSubscription.plan.interval_count} InputProps={{ inputProps: { min: 0, max: 10 } }} onChange={handleChange} />
+        </Grid>
+        <Grid item md={6} xs={12}>
+          <FormControl fullWidth>
+            <InputLabel>Interval Type</InputLabel>
+            <Select label="Interval Type" name="interval-type" aria-label="interval-type" value={editSubscription.plan.interval} onChange={handleChange}>
+              <MenuItem value="day">Day(s)</MenuItem>
+              <MenuItem value="week">Week(s)</MenuItem>
+              <MenuItem value="month">Month(s)</MenuItem>
+              <MenuItem value="year">Year(s)</MenuItem>
+            </Select>
+          </FormControl>
+        </Grid>
+      </Grid>
     </>
   )
 
   return (
-    <InputBox aria-label="person-details-box" headerIcon="fas fa-user" headerText="Edit Recurring Donation" ariaLabelSave="save-button" ariaLabelDelete="delete-button" cancelFunction={handleCancel} deleteFunction={handleDelete} saveFunction={handleSave}>
+    <InputBox aria-label="person-details-box" headerIcon="person" headerText="Edit Recurring Donation" ariaLabelSave="save-button" ariaLabelDelete="delete-button" cancelFunction={handleCancel} deleteFunction={handleDelete} saveFunction={handleSave}>
       {getFields()}
     </InputBox>
   );

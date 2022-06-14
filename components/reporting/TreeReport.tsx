@@ -1,6 +1,7 @@
 import React from "react";
 import { ColumnInterface, ReportOutputInterface, ReportResultInterface } from "../../interfaces"
 import { DateHelper } from "../../helpers"
+import { Table, TableBody, TableRow, TableCell, TableHead } from "@mui/material"
 
 interface Props { reportResult: ReportResultInterface, output: ReportOutputInterface }
 
@@ -35,10 +36,10 @@ export const TreeReport = (props: Props) => {
       groupingRows.forEach(gr => result.push(gr));
       for (let i = totalGroupings; i < columns.length; i++) {
         const c = columns[i];
-        if (i === totalGroupings) row.push(<td style={{ paddingLeft: 30 * totalGroupings }}>{getField(c, d)}</td>);
-        else row.push(<td>{getField(c, d)}</td>);
+        if (i === totalGroupings) row.push(<TableCell style={{ paddingLeft: 30 * totalGroupings }}>{getField(c, d)}</TableCell>);
+        else row.push(<TableCell>{getField(c, d)}</TableCell>);
       }
-      result.push(<tr>{row}</tr>);
+      result.push(<TableRow>{row}</TableRow>);
       previousData = d;
     });
     return result;
@@ -60,10 +61,10 @@ export const TreeReport = (props: Props) => {
     for (let i = prevCols; i < prevCols + g; i++) {
       const c = props.output.columns[i];
       const className = "heading" + (groupNumber + 1);
-      if (i === prevCols && i > 0) outputRow.push(<td className={className} style={{ paddingLeft: 30 * groupNumber }}>{getField(c, row)}</td>);
-      else outputRow.push(<td className={className}>{getField(c, row)}</td>);
+      if (i === prevCols && i > 0) outputRow.push(<TableCell className={className} style={{ paddingLeft: 30 * groupNumber }}>{getField(c, row)}</TableCell>);
+      else outputRow.push(<TableCell className={className}>{getField(c, row)}</TableCell>);
     }
-    return (<tr>{outputRow}</tr>);
+    return (<TableRow>{outputRow}</TableRow>);
   }
 
   const getFirstGroupModified = (previousRow: any, row: any) => {
@@ -96,15 +97,15 @@ export const TreeReport = (props: Props) => {
   }
 
   return (
-    <table className="table table-sm report">
-      <thead className="thead-dark">
-        <tr>
+    <Table className="table table-sm report">
+      <TableHead className="thead-dark">
+        <TableRow>
           {getHeaders()}
-        </tr>
-      </thead>
-      <tbody>
+        </TableRow>
+      </TableHead>
+      <TableBody>
         {getRows()}
-      </tbody>
-    </table>
+      </TableBody>
+    </Table>
   );
 }

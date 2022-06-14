@@ -1,11 +1,11 @@
 import React from "react";
-import { Table } from "react-bootstrap";
 import { Stripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import { CardForm, BankForm } from ".";
 import { DisplayBox, Loading } from "../../components";
 import { ApiHelper, UserHelper } from "../../helpers";
 import { PersonInterface, StripePaymentMethod, Permissions } from "../../interfaces";
+import { Icon, Table, TableBody, TableCell, TableRow } from "@mui/material";
 
 interface Props { person: PersonInterface, customerId: string, paymentMethods: StripePaymentMethod[], stripePromise: Promise<Stripe>, appName: string, dataUpdate: (message?: string) => void }
 
@@ -35,10 +35,10 @@ export const PaymentMethods: React.FC<Props> = (props) => {
     if (!UserHelper.checkAccess(Permissions.givingApi.settings.edit) && props.appName !== "B1App") return null;
     return (
       <>
-        <a id="addBtnGroup" aria-label="add-button" type="button" data-toggle="dropdown" aria-expanded="false" href="about:blank"><i className="fas fa-plus"></i></a>
+        <a id="addBtnGroup" aria-label="add-button" type="button" data-toggle="dropdown" aria-expanded="false" href="about:blank"><Icon>add</Icon></a>
         <div className="dropdown-menu" aria-labelledby="addBtnGroup">
-          <a className="dropdown-item" aria-label="add-card" href="about:blank" onClick={handleEdit(new StripePaymentMethod({ type: "card" }))}><i className="fas fa-credit-card"></i> Add Card</a>
-          <a className="dropdown-item" aria-label="add-bank" href="about:blank" onClick={handleEdit(new StripePaymentMethod({ type: "bank" }))}><i className="fas fa-university"></i> Add Bank</a>
+          <a className="dropdown-item" aria-label="add-card" href="about:blank" onClick={handleEdit(new StripePaymentMethod({ type: "card" }))}><Icon>credit_card</Icon> Add Card</a>
+          <a className="dropdown-item" aria-label="add-bank" href="about:blank" onClick={handleEdit(new StripePaymentMethod({ type: "bank" }))}><Icon>account_balance</Icon> Add Bank</a>
         </div>
       </>
     );
@@ -46,21 +46,21 @@ export const PaymentMethods: React.FC<Props> = (props) => {
 
   const getEditOptions = (pm: StripePaymentMethod) => {
     if (!UserHelper.checkAccess(Permissions.givingApi.settings.edit) && props.appName !== "B1App") return null;
-    return <a aria-label="edit-button" onClick={handleEdit(pm)} href="about:blank"><i className="fas fa-pencil-alt"></i></a>;
+    return <a aria-label="edit-button" onClick={handleEdit(pm)} href="about:blank"><Icon>edit</Icon></a>;
   }
 
-  const getPMIcon = (type: string) => (type === "card" ? <i className="fas fa-credit-card"></i> : <i className="fas fa-university"></i>)
+  const getPMIcon = (type: string) => (type === "card" ? <Icon>credit_card</Icon> : <Icon>account_balance</Icon>)
 
   const getPaymentRows = () => {
     let rows: JSX.Element[] = [];
 
     props.paymentMethods.forEach((method: StripePaymentMethod) => {
       rows.push(
-        <tr key={method.id}>
-          <td className="capitalize">{getPMIcon(method.type)} {method.name + " ****" + method.last4}</td>
-          <td>{method?.status === "new" && <a href="about:blank" aria-label="verify-account" onClick={handleEdit(method, true)}>Verify Account</a>}</td>
-          <td className="text-right">{getEditOptions(method)}</td>
-        </tr>
+        <TableRow key={method.id}>
+          <TableCell className="capitalize">{getPMIcon(method.type)} {method.name + " ****" + method.last4}</TableCell>
+          <TableCell>{method?.status === "new" && <a href="about:blank" aria-label="verify-account" onClick={handleEdit(method, true)}>Verify Account</a>}</TableCell>
+          <TableCell className="text-right">{getEditOptions(method)}</TableCell>
+        </TableRow>
       );
     });
     return rows;
@@ -71,9 +71,9 @@ export const PaymentMethods: React.FC<Props> = (props) => {
     if (props.paymentMethods.length) {
       return (
         <Table>
-          <tbody>
+          <TableBody>
             {getPaymentRows()}
-          </tbody>
+          </TableBody>
         </Table>
       );
     }
@@ -90,7 +90,7 @@ export const PaymentMethods: React.FC<Props> = (props) => {
   const PaymentMethods = () => {
     if (mode === "display") {
       return (
-        <DisplayBox aria-label="payment-methods-box" headerIcon="fas fa-credit-card" headerText="Payment Methods" editContent={getNewContent()}>
+        <DisplayBox aria-label="payment-methods-box" headerIcon="credit_card" headerText="Payment Methods" editContent={getNewContent()}>
           <PaymentMethodsTable></PaymentMethodsTable>
         </DisplayBox>
       );

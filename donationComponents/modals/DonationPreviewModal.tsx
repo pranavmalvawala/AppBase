@@ -1,7 +1,7 @@
 import React from "react";
-import { Modal, Button, Table } from "react-bootstrap";
 import { DateHelper, CurrencyHelper } from "../../helpers";
 import { StripeDonationInterface } from "../../interfaces";
+import { Table, TableBody, TableRow, TableCell, Dialog, DialogTitle, DialogContent, DialogActions, Button } from "@mui/material"
 
 interface Props {
   show: boolean;
@@ -15,7 +15,7 @@ interface Props {
 }
 
 export const DonationPreviewModal: React.FC<Props> = (props) => {
-  const donationType: any = {once: "One-time Donation", recurring: "Recurring Donation"};
+  const donationType: any = { once: "One-time Donation", recurring: "Recurring Donation" };
   const [isLoading, setLoading] = React.useState<boolean>(false);
 
   const handleClick = () => {
@@ -33,42 +33,34 @@ export const DonationPreviewModal: React.FC<Props> = (props) => {
   }
 
   return (
-    <Modal
-      {...props}
-      size="lg"
-      aria-labelledby="contained-modal-title-vcenter"
-      centered>
-      <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter">
-          Donation Preview
-        </Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
+    <Dialog open={props.show} {...props}>
+      <DialogTitle>Donation Preview</DialogTitle>
+      <DialogContent>
         <Table>
-          <tbody>
-            <tr><td>Name:</td><td>{props.donation.person.name}</td></tr>
-            <tr><td>Payment Method:</td><td className="capitalize">{props.paymentMethodName}</td></tr>
-            <tr><td>Type:</td><td>{donationType[props.donationType]}</td></tr>
+          <TableBody>
+            <TableRow><TableCell>Name:</TableCell><TableCell>{props.donation.person.name}</TableCell></TableRow>
+            <TableRow><TableCell>Payment Method:</TableCell><TableCell className="capitalize">{props.paymentMethodName}</TableCell></TableRow>
+            <TableRow><TableCell>Type:</TableCell><TableCell>{donationType[props.donationType]}</TableCell></TableRow>
             {props.donationType === "once"
-              && <tr><td>Donation Date:</td><td>{DateHelper.formatHtml5Date(new Date(props.donation.billing_cycle_anchor))}</td></tr>
+              && <TableRow><TableCell>Donation Date:</TableCell><TableCell>{DateHelper.formatHtml5Date(new Date(props.donation.billing_cycle_anchor))}</TableCell></TableRow>
             }
-            <tr><td>Notes:</td><td>{props.donation.notes}</td></tr>
-            { props.donationType === "recurring"
+            <TableRow><TableCell>Notes:</TableCell><TableCell>{props.donation.notes}</TableCell></TableRow>
+            {props.donationType === "recurring"
               && <>
-                <tr><td>Starting On:</td><td>{DateHelper.formatHtml5Date(new Date(props.donation.billing_cycle_anchor))}</td></tr>
-                <tr><td>Recurring Every:</td><td className="capitalize">{formatInterval()}</td></tr>
+                <TableRow><TableCell>Starting On:</TableCell><TableCell>{DateHelper.formatHtml5Date(new Date(props.donation.billing_cycle_anchor))}</TableCell></TableRow>
+                <TableRow><TableCell>Recurring Every:</TableCell><TableCell className="capitalize">{formatInterval()}</TableCell></TableRow>
               </>
             }
-            <tr><td>Funds:</td><td>{props.donation.funds.map((fund: any, i: number) => <p key={i}>{CurrencyHelper.formatCurrency(fund.amount)} - {fund.name}</p>)}</td></tr>
-            { props.payFee > 0 && <tr><td>Transaction Fee:</td><td>{CurrencyHelper.formatCurrency(props.payFee)}</td></tr> }
-            <tr><td>Total:</td><td><h4>{CurrencyHelper.formatCurrency(props.donation.amount)}</h4></td></tr>
-          </tbody>
+            <TableRow><TableCell>Funds:</TableCell><TableCell>{props.donation.funds.map((fund: any, i: number) => <p key={i}>{CurrencyHelper.formatCurrency(fund.amount)} - {fund.name}</p>)}</TableCell></TableRow>
+            {props.payFee > 0 && <TableRow><TableCell>Transaction Fee:</TableCell><TableCell>{CurrencyHelper.formatCurrency(props.payFee)}</TableCell></TableRow>}
+            <TableRow><TableCell>Total:</TableCell><TableCell><h4>{CurrencyHelper.formatCurrency(props.donation.amount)}</h4></TableCell></TableRow>
+          </TableBody>
         </Table>
-      </Modal.Body>
-      <Modal.Footer bsPrefix="modal-footer justify-content-center">
-        <Button onClick={props.onHide} variant="secondary" aria-label="cancel-button">Cancel</Button>
-        <Button onClick={handleClick} variant="primary" aria-label="donate-button" disabled={isLoading}>Donate</Button>
-      </Modal.Footer>
-    </Modal>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={props.onHide} variant="outlined" aria-label="cancel-button">Cancel</Button>
+        <Button onClick={handleClick} variant="contained" aria-label="donate-button" disabled={isLoading}>Donate</Button>
+      </DialogActions>
+    </Dialog>
   );
 }

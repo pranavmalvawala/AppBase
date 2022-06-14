@@ -1,25 +1,22 @@
-import React from "react";
+import React, { FormEventHandler } from "react";
 import { LoginResponseInterface, RegisterUserInterface, UserInterface } from "../../interfaces";
 import { ApiHelper } from "../../helpers";
-import { Button, FormControl, Form } from "react-bootstrap";
-import * as yup from "yup"
-import { Formik, FormikHelpers } from "formik"
-
-const schema = yup.object().shape({
-  email: yup.string().required("Please enter your email address.").email("Please enter a valid email address."),
-  firstName: yup.string().required("Please enter your first name."),
-  lastName: yup.string().required("Please enter your last name.")
-})
+import { ErrorMessages } from "../../components";
+import { Button, Stack, TextField } from "@mui/material";
 
 interface Props {
   appName?: string,
   appUrl?: string,
   updateErrors: (errors: string[]) => void,
+  loginCallback?: () => void
   userRegisteredCallback?: (user: UserInterface) => Promise<void>;
 }
 
 export const Register: React.FC<Props> = (props) => {
   const [registered, setRegistered] = React.useState(false);
+  const [user, setUser] = React.useState<RegisterUserInterface>({ firstName: "", lastName: "", email: "", appName: props.appName, appUrl: props.appUrl });
+  const [errors, setErrors] = React.useState([]);
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
 
   const handleRegisterErrors = (errors: string[]) => {
     props.updateErrors(errors)
@@ -30,22 +27,45 @@ export const Register: React.FC<Props> = (props) => {
     if (props.userRegisteredCallback) props.userRegisteredCallback(resp.user);
   }
 
-  const register = (data: RegisterUserInterface, helpers?: FormikHelpers<any>) => {
+  const validateEmail = (email: string) => (/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(.\w{2,3})+$/.test(email))
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const u = { ...user }
+    switch (e.target.name) {
+      case "firstName": u.firstName = e.target.value; break;
+      case "lastName": u.lastName = e.target.value; break;
+      case "email": u.email = e.target.value; break;
+    }
+    setUser(u);
+  }
+
+  const validate = () => {
+    let errors = [];
+    if (!user.email?.trim()) errors.push("Please enter your email address.");
+    else if (!validateEmail(user.email)) errors.push("Please enter a valid email address.");
+    if (!user.firstName?.trim()) errors.push("Please enter your first name.");
+    if (!user.lastName?.trim()) errors.push("Please enter your last name.");
+    setErrors(errors);
+    return errors.length === 0;
+  }
+
+  const register: FormEventHandler = (e) => {
     props.updateErrors([])
-    ApiHelper.postAnonymous("/users/register", data, "AccessApi")
-      .then((resp: any) => {
-        if (resp.errors) handleRegisterErrors(resp.errors);
-        else handleRegisterSuccess(resp);
-      })
-      .catch((e) => { props.updateErrors([e.toString()]); throw e; })
-      .finally(() => {
-        helpers?.setSubmitting(false)
-      });
+    if (validate()) {
+      setIsSubmitting(true);
+      ApiHelper.postAnonymous("/users/register", user, "AccessApi")
+        .then((resp: any) => {
+          if (resp.errors) handleRegisterErrors(resp.errors);
+          else handleRegisterSuccess(resp);
+        })
+        .catch((e) => { props.updateErrors([e.toString()]); throw e; })
+        .finally(() => {
+          setIsSubmitting(false)
+        });
+    } else {
+      e.preventDefault();
+    }
   };
-
-  //React.useEffect(init, []);
-
-  const initialValues = { firstName: "", lastName: "", email: "", appName: props.appName, appUrl: props.appUrl }
 
   const getThankYou = () => (
     <>
@@ -54,29 +74,23 @@ export const Register: React.FC<Props> = (props) => {
     </>
   )
 
-  const getForm = () => (
-    <Formik validationSchema={schema} initialValues={initialValues} onSubmit={register}>
-      {({ handleSubmit, handleChange, values, touched, errors, isSubmitting }) => (
-        <Form noValidate onSubmit={handleSubmit}>
-          <Form.Group>
-            <FormControl type="text" aria-label="firstName" id="firstName" name="firstName" value={values.firstName} onChange={handleChange} placeholder="First name" isInvalid={touched.firstName && !!errors.firstName} />
-            <Form.Control.Feedback type="invalid">{errors.firstName}</Form.Control.Feedback>
-          </Form.Group>
-          <Form.Group>
-            <FormControl type="text" aria-label="lastName" id="lastName" name="lastName" value={values.lastName} onChange={handleChange} placeholder="Last name" isInvalid={touched.lastName && !!errors.lastName} />
-            <Form.Control.Feedback type="invalid">{errors.lastName}</Form.Control.Feedback>
-          </Form.Group>
-          <Form.Group>
-            <FormControl type="text" aria-label="email" id="email" name="email" value={values.email} onChange={handleChange} placeholder="Email address" isInvalid={touched.email && !!errors.email} />
-            <Form.Control.Feedback type="invalid">{errors.email}</Form.Control.Feedback>
-          </Form.Group>
-          <Button type="submit" id="signInButton" size="lg" variant="primary" block disabled={isSubmitting} style={{ width: "100%" }}>
-            {isSubmitting ? "Please wait..." : "Register"}
-          </Button>
-        </Form>
-      )}
-    </Formik>
-  )
+  const getForm = () => (<>
+    <ErrorMessages errors={errors} />
+    <form onSubmit={register}>
+      <TextField fullWidth autoFocus name="firstName" label="First Name" value={user.firstName} onChange={handleChange} />
+      <TextField fullWidth name="lastName" label="Last Name" value={user.lastName} onChange={handleChange} />
+      <TextField fullWidth type="email" name="email" label="Email" value={user.email} onChange={handleChange} />
+      <br />
+      <div className="text-right">
+        <a href="about:blank" onClick={(e) => { e.preventDefault(); props.loginCallback(); }}>Login</a>
+      </div>
+      <Stack direction="row" sx={{ marginTop: 1 }} spacing={1} justifyContent="end">
+        <Button id="signInButton" variant="contained" disableElevation type="submit" disabled={isSubmitting} color="primary" onClick={register} sx={{ "&:focus": { outline: "none" } }}>
+          {isSubmitting ? "Please wait..." : "Register"}
+        </Button>
+      </Stack>
+    </form>
+  </>)
 
   if (registered) return getThankYou();
   else return getForm();

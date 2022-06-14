@@ -4,6 +4,7 @@ export { DisplayBox } from "./DisplayBox";
 export { InputBox } from "./InputBox";
 export { PersonAdd } from "./PersonAdd";
 export { Loading } from "./Loading";
-export { PasswordField } from "./PasswordField";
 export { QuestionEdit } from "./QuestionEdit";
 export { FormSubmissionEdit } from "./FormSubmissionEdit";
+export { SmallButton } from "./SmallButton";
+export * from "./material";

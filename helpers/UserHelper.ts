@@ -23,10 +23,9 @@ export class UserHelper {
       UserHelper.setupApiHelper(UserHelper.currentChurch);
       // TODO - remove context code from here and perform the logic in the component itself.
       if (context) {
-        if (context.churchName !== "") UserHelper.churchChanged = true;
-        context.setChurchName(UserHelper.currentChurch.name);
+        if (context.church !== null) UserHelper.churchChanged = true;
+        context.setChurch(UserHelper.currentChurch);
       }
-
     }
   }
 

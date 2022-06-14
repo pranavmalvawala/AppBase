@@ -1,6 +1,7 @@
 import React from "react";
 import { ColumnInterface, ReportOutputInterface, ReportResultInterface } from "../../interfaces";
 import { DateHelper } from "../../helpers";
+import { Table, TableBody, TableRow, TableCell, TableHead } from "@mui/material";
 
 interface Props { reportResult: ReportResultInterface, output: ReportOutputInterface }
 
@@ -19,9 +20,9 @@ export const TableReport = (props: Props) => {
     props.reportResult.table.forEach(d => {
       const row: JSX.Element[] = [];
       props.output.columns.forEach(c => {
-        row.push(<td>{getField(c, d)}</td>);
+        row.push(<TableCell>{getField(c, d)}</TableCell>);
       })
-      result.push(<tr>{row}</tr>);
+      result.push(<TableRow>{row}</TableRow>);
     });
     return result;
   }
@@ -42,15 +43,15 @@ export const TableReport = (props: Props) => {
   }
 
   return (
-    <table className="table">
-      <thead>
-        <tr>
+    <Table className="table">
+      <TableHead>
+        <TableRow>
           {getHeaders()}
-        </tr>
-      </thead>
-      <tbody>
+        </TableRow>
+      </TableHead>
+      <TableBody>
         {getRows()}
-      </tbody>
-    </table>
+      </TableBody>
+    </Table>
   );
 }

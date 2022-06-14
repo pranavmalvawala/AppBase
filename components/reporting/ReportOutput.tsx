@@ -6,6 +6,7 @@ import { useReactToPrint } from "react-to-print";
 import { TableReport } from "./TableReport";
 import { ChartReport } from "./ChartReport";
 import { TreeReport } from "./TreeReport";
+import { Icon } from "@mui/material";
 
 interface Props { report: ReportInterface }
 
@@ -37,7 +38,7 @@ export const ReportOutput = (props: Props) => {
     const result: JSX.Element[] = [];
 
     if (reportResult) {
-      result.push(<button type="button" className="no-default-style" key={result.length - 2} onClick={handlePrint} title="print"><i className="fas fa-print"></i></button>);
+      result.push(<button type="button" className="no-default-style" key={result.length - 2} onClick={handlePrint} title="print"><Icon>print</Icon></button>);
       result.push(<ExportLink key={result.length - 1} data={reportResult.table} filename={props.report.displayName.replace(" ", "_") + ".csv"} />);
     }
     return result;
@@ -55,11 +56,11 @@ export const ReportOutput = (props: Props) => {
   }
 
   const getResults = () => {
-    if (!props.report) return (<DisplayBox ref={contentRef} id="reportsBox" headerIcon="fas fa-table" headerText="Run Report" editContent={getEditContent()}><p>Use the filter to run the report.</p></DisplayBox>);
+    if (!props.report) return (<DisplayBox ref={contentRef} id="reportsBox" headerIcon="summarize" headerText="Run Report" editContent={getEditContent()}><p>Use the filter to run the report.</p></DisplayBox>);
 
     else if (!reportResult) return <Loading />
     else {
-      return (<DisplayBox ref={contentRef} id="reportsBox" headerIcon="fas fa-table" headerText={props.report.displayName} editContent={getEditContent()}>
+      return (<DisplayBox ref={contentRef} id="reportsBox" headerIcon="summarize" headerText={props.report.displayName} editContent={getEditContent()}>
         {getOutputs()}
       </DisplayBox>);
     }

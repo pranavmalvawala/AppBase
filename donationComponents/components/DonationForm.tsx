@@ -1,11 +1,11 @@
 import React from "react";
 import { Stripe } from "@stripe/stripe-js";
-import { Button, Col, FormCheck, FormControl, FormGroup, FormLabel, Row } from "react-bootstrap";
 import { InputBox, ErrorMessages } from "../../components";
 import { FundDonations } from ".";
 import { DonationPreviewModal } from "../modals/DonationPreviewModal";
 import { ApiHelper, CurrencyHelper, DateHelper } from "../../helpers";
 import { PersonInterface, StripePaymentMethod, StripeDonationInterface, FundDonationInterface, FundInterface } from "../../interfaces";
+import { Grid, InputLabel, MenuItem, Select, TextField, FormControl, Button, SelectChangeEvent, FormControlLabel, Checkbox, FormGroup } from "@mui/material"
 
 interface Props { person: PersonInterface, customerId: string, paymentMethods: StripePaymentMethod[], stripePromise: Promise<Stripe>, donationSuccess: (message: string) => void }
 
@@ -46,11 +46,21 @@ export const DonationForm: React.FC<Props> = (props) => {
   }
 
   const handleKeyDown = (e: React.KeyboardEvent<any>) => { if (e.key === "Enter") { e.preventDefault(); handleSave(); } }
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+
+  const handleCheckChange = (e: React.SyntheticEvent<Element, Event>, checked: boolean) => {
+    let d = { ...donation } as StripeDonationInterface;
+    d.amount = checked ? fundsTotal + transactionFee : fundsTotal;
+    let showFee = checked ? transactionFee : 0;
+    setTotal(d.amount);
+    setPayFee(showFee);
+    setDonation(d);
+  }
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement> | SelectChangeEvent<string>) => {
     setErrorMessage(null);
     let d = { ...donation } as StripeDonationInterface;
     let value = e.target.value;
-    switch (e.currentTarget.name) {
+    switch (e.target.name) {
       case "method":
         d.id = value;
         let pm = props.paymentMethods.find(pm => pm.id === value);
@@ -63,7 +73,7 @@ export const DonationForm: React.FC<Props> = (props) => {
       case "interval-type": d.interval.interval = value; break;
       case "notes": d.notes = value; break;
       case "transaction-fee":
-        const element = e.currentTarget as HTMLInputElement
+        const element = e.target as HTMLInputElement
         d.amount = element.checked ? fundsTotal + transactionFee : fundsTotal;
         let showFee = element.checked ? transactionFee : 0;
         setTotal(d.amount);
@@ -129,71 +139,64 @@ export const DonationForm: React.FC<Props> = (props) => {
   else return (
     <>
       <DonationPreviewModal show={showDonationPreviewModal} onHide={() => setShowDonationPreviewModal(false)} handleDonate={makeDonation} donation={donation} donationType={donationType} payFee={payFee} paymentMethodName={paymentMethodName} funds={funds} />
-      <InputBox id="donationBox" aria-label="donation-box" headerIcon="fas fa-hand-holding-usd" headerText="Donate" ariaLabelSave="save-button" cancelFunction={donationType ? handleCancel : undefined} saveFunction={donationType ? handleSave : undefined} saveText="Preview Donation">
-        <Row>
-          <Col>
-            <Button aria-label="single-donation" size="sm" block style={{ minHeight: "50px" }} variant={donationType === "once" ? "primary" : "light"} onClick={() => handleDonationSelect("once")}>Make a Donation</Button>
-          </Col>
-          <Col>
-            <Button aria-label="recurring-donation" size="sm" block style={{ minHeight: "50px" }} variant={donationType === "recurring" ? "primary" : "light"} onClick={() => handleDonationSelect("recurring")}>Make a Recurring Donation</Button>
-          </Col>
-        </Row>
+      <InputBox id="donationBox" aria-label="donation-box" headerIcon="volunteer_activism" headerText="Donate" ariaLabelSave="save-button" cancelFunction={donationType ? handleCancel : undefined} saveFunction={donationType ? handleSave : undefined} saveText="Preview Donation">
+        <Grid container spacing={3}>
+          <Grid item md={6} xs={12}>
+            <Button aria-label="single-donation" size="small" fullWidth style={{ minHeight: "50px" }} variant={donationType === "once" ? "contained" : "outlined"} onClick={() => handleDonationSelect("once")}>Make a Donation</Button>
+          </Grid>
+          <Grid item md={6} xs={12}>
+            <Button aria-label="recurring-donation" size="small" fullWidth style={{ minHeight: "50px" }} variant={donationType === "recurring" ? "contained" : "outlined"} onClick={() => handleDonationSelect("recurring")}>Make a Recurring Donation</Button>
+          </Grid>
+        </Grid>
         {donationType
           && <div style={{ marginTop: "20px" }}>
-            <FormGroup>
-              <FormLabel>Method</FormLabel>
-              <FormControl as="select" name="method" aria-label="method" value={donation.id} className="capitalize" onChange={handleChange}>
-                {props.paymentMethods.map((paymentMethod: any, i: number) => <option key={i} value={paymentMethod.id}>{paymentMethod.name} ****{paymentMethod.last4}</option>)}
-              </FormControl>
-            </FormGroup>
-            <FormGroup>
-              <FormLabel>{donationType === "once" ? "Donation Date" : "Recurring Donation Start Date"}</FormLabel>
-              <FormControl name="date" type="date" aria-label="date" min={DateHelper.formatHtml5Date(new Date())} value={DateHelper.formatHtml5Date(new Date(donation.billing_cycle_anchor))} onChange={handleChange} onKeyDown={handleKeyDown} />
-            </FormGroup>
+            <Grid container spacing={3}>
+              <Grid item md={6} xs={12}>
+                <FormControl fullWidth>
+                  <InputLabel>Method</InputLabel>
+                  <Select label="Method" name="method" aria-label="method" value={donation.id} className="capitalize" onChange={handleChange}>
+                    {props.paymentMethods.map((paymentMethod: any, i: number) => <MenuItem key={i} value={paymentMethod.id}>{paymentMethod.name} ****{paymentMethod.last4}</MenuItem>)}
+                  </Select>
+                </FormControl>
+              </Grid>
+              <Grid item md={6} xs={12}>
+                <TextField fullWidth name="date" type="date" aria-label="date" label={donationType === "once" ? "Donation Date" : "Recurring Donation Start Date"} value={DateHelper.formatHtml5Date(new Date(donation.billing_cycle_anchor))} onChange={handleChange} onKeyDown={handleKeyDown} />
+              </Grid>
+            </Grid>
             {donationType === "recurring"
-              && <Row>
-                <Col>
-                  <FormGroup>
-                    <FormLabel>Interval Number</FormLabel>
-                    <FormControl name="interval-number" type="number" value={donation.interval.interval_count} aria-label="interval-number" min="1" step="1" onChange={handleChange} />
-                  </FormGroup>
-                </Col>
-                <Col>
-                  <FormGroup>
-                    <FormLabel>Interval Type</FormLabel>
-                    <FormControl as="select" name="interval-type" aria-label="interval-type" value={donation.interval.interval} onChange={handleChange}>
-                      <option value="day">Day(s)</option>
-                      <option value="week">Week(s)</option>
-                      <option value="month">Month(s)</option>
-                      <option value="year">Year(s)</option>
-                    </FormControl>
-                  </FormGroup>
-                </Col>
-              </Row>
+              && <Grid container spacing={3}>
+                <Grid item md={6} xs={12}>
+                  <TextField fullWidth type="number" name="interval-number" label="Interval Number" value={donation.interval.interval_count} aria-label="interval-number" onChange={handleChange} />
+                </Grid>
+                <Grid item md={6} xs={12}>
+                  <FormControl fullWidth>
+                    <InputLabel>Interval Type</InputLabel>
+                    <Select label="Interval Type" name="interval-type" aria-label="interval-type" value={donation.interval.interval} onChange={handleChange}>
+                      <MenuItem value="day">Day(s)</MenuItem>
+                      <MenuItem value="week">Week(s)</MenuItem>
+                      <MenuItem value="month">Month(s)</MenuItem>
+                      <MenuItem value="year">Year(s)</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Grid>
+              </Grid>
             }
             <div className="form-group">
               {funds && fundDonations
-                && <FormGroup>
-                  <FormLabel>Fund</FormLabel>
+                && <>
+                  <h4>Fund</h4>
                   <FundDonations fundDonations={fundDonations} funds={funds} updatedFunction={handleFundDonationsChange} />
-                </FormGroup>
+                </>
               }
               {fundsTotal > 0
                 && <>
-                  <FormGroup controlId="formBasicCheckbox">
-                    <FormCheck
-                      type="checkbox"
-                      className="dark"
-                      name="transaction-fee"
-                      label={`I'll generously add ${CurrencyHelper.formatCurrency(transactionFee)} to cover the transaction fees so you can keep 100% of my donation.`}
-                      onChange={handleChange}>
-                    </FormCheck>
+                  <FormGroup>
+                    <FormControlLabel control={<Checkbox />} name="transaction-fee" label={`I'll generously add ${CurrencyHelper.formatCurrency(transactionFee)} to cover the transaction fees so you can keep 100% of my donation.`} onChange={handleCheckChange} />
                   </FormGroup>
                   <p>Total Donation Amount: ${total}</p>
                 </>
               }
-              <label>Notes</label>
-              <textarea className="form-control" aria-label="note" name="notes" value={donation.notes || ""} onChange={handleChange} onKeyDown={handleKeyDown}></textarea>
+              <TextField fullWidth label="Notes" multiline aria-label="note" name="notes" value={donation.notes || ""} onChange={handleChange} onKeyDown={handleKeyDown} />
             </div>
             {errorMessage && <ErrorMessages errors={[errorMessage]}></ErrorMessages>}
           </div>

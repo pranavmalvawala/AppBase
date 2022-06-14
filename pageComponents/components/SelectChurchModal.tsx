@@ -1,9 +1,9 @@
 import React from "react";
 import { ChurchInterface } from "../../interfaces";
-import { Modal } from "react-bootstrap";
 import { SelectChurchSearch } from "./SelectChurchSearch";
 import { SelectableChurch } from "./SelectableChurch";
 import { ErrorMessages } from "../../components"
+import { Dialog, DialogContent, DialogTitle } from "@mui/material";
 
 interface Props {
   appName: string,
@@ -30,15 +30,12 @@ export const SelectChurchModal: React.FC<Props> = (props) => {
   }
 
   return (
-    <Modal show={props.show} onHide={handleClose} backdrop="static">
-      <Modal.Header closeButton>
-        <Modal.Title>Select Church</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
+    <Dialog open={props.show} onClose={handleClose}>
+      <DialogTitle>Select Church</DialogTitle>
+      <DialogContent sx={{ width: 500 }}>
         <ErrorMessages errors={props.errors} />
         {getContents()}
-
-      </Modal.Body>
-    </Modal>
+      </DialogContent>
+    </Dialog>
   );
 };
