@@ -247,7 +247,7 @@ export const LoginPage: React.FC<Props> = (props) => {
 
   const getLoginBox = () => (
     <>
-      <InputBox headerText="Please Sign In" saveFunction={submitLogin} saveText={isSubmitting ? "Please wait..." : "Sign in"} isSubmitting={isSubmitting}>
+      <InputBox headerText="Please Sign In" saveFunction={submitLogin} saveButtonType="submit" saveText={isSubmitting ? "Please wait..." : "Sign in"} isSubmitting={isSubmitting}>
         <TextField fullWidth autoFocus name="email" type="email" label="Email" value={email} onChange={(e) => { e.preventDefault(); setEmail(e.target.value) }} />
         <TextField fullWidth name="email" type="password" label="Password" value={password} onChange={(e) => { e.preventDefault(); setPassword(e.target.value) }} />
         <div className="text-right">
