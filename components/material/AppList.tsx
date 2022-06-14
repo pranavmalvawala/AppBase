@@ -1,22 +1,11 @@
 import React from "react";
 import { NavItem } from "./NavItem";
 
-export interface Props {
-}
-
-export const AppList: React.FC<Props> = props => {
-  const getAppLinks = () => {
-    let result: JSX.Element[] = [];
-    result.push(<NavItem url="https://chums.org/" target="_new" label="Chums" icon="logout" />);
-    result.push(<NavItem url="https://streaminglive.church/" target="_new" label="StreamingLive" icon="logout" />);
-    result.push(<NavItem url="https://b1.church/" target="_new" label="B1.Church" icon="logout" />);
-    result.push(<NavItem url="https://lessons.church/" target="_new" label="Lessons.church" icon="logout" />);
-    return result;
-  }
-
-  return (
-    <>
-      {getAppLinks()}
-    </>
-  );
-};
+export const AppList: React.FC = () => (
+  <>
+    <NavItem url="https://app.chums.org/login" external={true} label="Chums" icon="logout" />
+    <NavItem url="https://streaminglive.church/login" external={true} label="StreamingLive" icon="logout" />
+    <NavItem url="https://b1.church/login" external={true} label="B1.Church" icon="logout" />
+    <NavItem url="https://lessons.church/login" external={true} label="Lessons.church" icon="logout" />
+  </>
+);
