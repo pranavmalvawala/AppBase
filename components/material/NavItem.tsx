@@ -10,6 +10,7 @@ interface Props {
   onClick?: () => void;
   router?: any;
   external?: boolean;
+  selected?: boolean;
 }
 
 const StyledNavLink = styled(NavLink)({
@@ -31,8 +32,9 @@ export const NavItem: React.FC<Props> = (props) => {
     <ListItemText primary={props.label} />
   </ListItemButton>)
 
-  if (props.router) return (<a href={props.url} target={props.target} onClick={(e) => { e.preventDefault(); props.onClick ? props.onClick() : props.router.push(props.url) }}>{getLinkContents()}</a>)
+  if (props.router)
+    return (<a href={props.url} target={props.target} onClick={(e) => { e.preventDefault(); props.onClick ? props.onClick() : props.router.push(props.url) }}>{getLinkContents()}</a>)
   else if(props.external)
     return (<a href={props.url} target={props.target} rel="noreferrer" style={{textDecoration: "none"}}>{getLinkContents()}</a>)
-  else return (<StyledNavLink to={props.url} target={props.target} onClick={props.onClick ? (e) => { e.preventDefault(); props.onClick() } : null}>{getLinkContents()}</StyledNavLink>)
+  else return (<StyledNavLink to={props.url} target={props.target} sx={{".MuiListItemButton-root, .MuiIcon-root": {backgroundColor: props.selected ? "#1976d2" : undefined}}} onClick={props.onClick ? (e) => { e.preventDefault(); props.onClick() } : null}>{getLinkContents()}</StyledNavLink>)
 };
