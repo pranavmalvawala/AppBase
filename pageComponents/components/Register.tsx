@@ -81,10 +81,8 @@ export const Register: React.FC<Props> = (props) => {
       <TextField fullWidth name="lastName" label="Last Name" value={user.lastName} onChange={handleChange} />
       <TextField fullWidth type="email" name="email" label="Email" value={user.email} onChange={handleChange} />
       <br />
-      <div className="text-right">
-        <a href="about:blank" onClick={(e) => { e.preventDefault(); props.loginCallback(); }}>Login</a>
-      </div>
       <Stack direction="row" sx={{ marginTop: 1 }} spacing={1} justifyContent="end">
+        <Button variant="text" onClick={(e) => { e.preventDefault(); props.loginCallback(); }}>Login</Button>
         <Button id="signInButton" variant="contained" disableElevation type="submit" disabled={isSubmitting} color="primary" onClick={register} sx={{ "&:focus": { outline: "none" } }}>
           {isSubmitting ? "Please wait..." : "Register"}
         </Button>
