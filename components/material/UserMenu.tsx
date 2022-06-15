@@ -1,7 +1,7 @@
 import React from "react";
 import { Avatar, Menu, Typography, Icon, Button, Box, Tabs, Tab, styled } from "@mui/material";
 import { NavItem, AppList } from "./";
-import { ChurchInterface } from "../../interfaces";
+import { ChurchInterface, UserContextInterface } from "../../interfaces";
 import { ChurchList } from "./ChurchList";
 import { SupportModal } from "../../pageComponents/components/SupportModal";
 
@@ -36,6 +36,7 @@ interface Props {
   profilePicture: string;
   churches: ChurchInterface[];
   currentChurch: ChurchInterface;
+  context: UserContextInterface;
 }
 
 export const UserMenu: React.FC<Props> = (props) => {
@@ -101,7 +102,7 @@ export const UserMenu: React.FC<Props> = (props) => {
         {getMainLinks()}
       </TabPanel>
       <TabPanel value={tabIndex} index={1}>
-        <ChurchList churches={props.churches} currentChurch={props.currentChurch} />
+        <ChurchList churches={props.churches} currentChurch={props.currentChurch} context={props.context} />
       </TabPanel>
       <TabPanel value={tabIndex} index={2}>
         <AppList />

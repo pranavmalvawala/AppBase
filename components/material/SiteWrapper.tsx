@@ -93,7 +93,7 @@ export const SiteWrapper: React.FC<Props> = props => {
         </IconButton>
         <Typography variant="h6" noWrap>{UserHelper.currentChurch?.name || ""}</Typography>
         <div style={{ flex: 1 }}></div>
-        {UserHelper.user && <UserMenu profilePicture={PersonHelper.getPhotoUrl(props.context?.person)} userName={`${UserHelper.user?.firstName} ${UserHelper.user?.lastName}`} churches={UserHelper.churches} currentChurch={UserHelper.currentChurch} />}
+        {UserHelper.user && <UserMenu profilePicture={PersonHelper.getPhotoUrl(props.context?.person)} userName={`${UserHelper.user?.firstName} ${UserHelper.user?.lastName}`} churches={UserHelper.churches} currentChurch={UserHelper.currentChurch} context={props.context} />}
         {!UserHelper.user && <Link href="/login" color="inherit" style={{ textDecoration: "none" }}>Login</Link>}
       </Toolbar>
     </CustomAppBar>
