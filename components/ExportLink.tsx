@@ -1,6 +1,7 @@
 import { Button, Icon } from "@mui/material";
 import React from "react";
 import { CSVLink } from "react-csv";
+import { SmallButton } from "./SmallButton";
 
 interface Props {
   data: any[],
@@ -54,7 +55,8 @@ export const ExportLink: React.FC<Props> = (props) => {
   else {
     let items = [];
     if (props.spaceBefore) items.push(" ");
-    items.push(<CSVLink key={props.filename} data={props.data} headers={getHeaders()} filename={props.filename || "export.csv"}> <Button><Icon>file_download</Icon></Button></CSVLink>);
+    //items.push(<CSVLink key={props.filename} data={props.data} headers={getHeaders()} filename={props.filename || "export.csv"}> <Button><Icon>file_download</Icon></Button></CSVLink>);
+    items.push(<CSVLink key={props.filename} data={props.data} headers={getHeaders()} filename={props.filename || "export.csv"}><SmallButton icon="file_download" /></CSVLink>);
     if (props.spaceAfter) items.push(" ");
     return (<>{items}</>);
   }

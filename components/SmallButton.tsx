@@ -7,7 +7,7 @@ interface Props {
   icon: string;
   color?: "inherit" | "primary" | "secondary" | "success" | "error" | "info" | "warning";
   toolTip?: string;
-  onClick: (e: React.MouseEvent) => void;
+  onClick?: (e: React.MouseEvent) => void;
 }
 
 export const SmallButton = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
@@ -18,12 +18,12 @@ export const SmallButton = React.forwardRef<HTMLDivElement, Props>((props, ref) 
   }
 
   const style = (props.text)
-    ? { backgroundColor: props.color || "#444", "& span": { marginRight: 5 } }
-    : { minWidth: "auto", padding: "4px 4px", backgroundColor: props.color || "#444", "& span": { fontSize: "1rem" } }
+    ? { backgroundColor: props.color || "#444", "& span": { marginRight: 1 } }
+    : { minWidth: "auto", padding: "4px 4px" }
 
   return (
     <Tooltip title={props.toolTip || ""} arrow placement="top">
-      <Button style={style} variant="contained" color={props.color} aria-label={props.ariaLabel || "editButton"} onClick={handleClick} size="small">
+      <Button sx={style} variant={props.text ? "outlined" : "text"} color={props.color} aria-label={props.ariaLabel || "editButton"} onClick={handleClick} size="small">
         <Icon>{props.icon}</Icon>{(props.text) ? props.text : ""}
       </Button>
     </Tooltip>

@@ -38,7 +38,7 @@ export const DisplayBox = React.forwardRef<HTMLDivElement, Props>((props, ref) =
 
   let editContent: React.ReactNode;
   if (props.editFunction !== undefined) {
-    editContent = <SmallButton icon="edit" text="Edit" aria-label={props.ariaLabel || "editButton"} onClick={props.editFunction} />
+    editContent = <SmallButton icon="edit" aria-label={props.ariaLabel || "editButton"} onClick={props.editFunction} />
   }
   else if (props.editContent !== undefined) editContent = props.editContent;
 

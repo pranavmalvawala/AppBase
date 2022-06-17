@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { ApiHelper } from "../helpers";
 import { PersonInterface } from "../interfaces"
 import { TextField, Button, Table, TableBody, TableRow, TableCell, Icon } from "@mui/material";
+import { SmallButton } from "./SmallButton";
 
 interface Props {
   addFunction: (person: PersonInterface) => void,
@@ -30,24 +31,25 @@ export const PersonAdd: React.FC<Props> = ({ addFunction, getPhotoUrl, searchCli
         }
       });
   }
-  const handleAdd = (e: React.MouseEvent) => {
-    let anchor = e.currentTarget as HTMLAnchorElement;
-    let idx = anchor.getAttribute("data-index");
+  const handleAdd = (person: PersonInterface) => {
     let sr: PersonInterface[] = [...searchResults];
-    let person: PersonInterface = sr.splice(parseInt(idx), 1)[0];
+    const idx = sr.indexOf(person);
+    sr.splice(idx, 1);
     setSearchResults(sr);
     addFunction(person);
   }
 
+  //<button className="text-success no-default-style" aria-label="addPerson" data-index={i} onClick={handleAdd}><Icon>person</Icon> Add</button>
   let rows = [];
   for (let i = 0; i < searchResults.length; i++) {
-    let sr = searchResults[i];
+    const sr = searchResults[i];
+
     rows.push(
       <TableRow key={sr.id}>
         <TableCell><img src={getPhotoUrl(sr)} alt="avatar" /></TableCell>
         <TableCell>{sr.name.display}</TableCell>
         <TableCell>
-          <button className="text-success no-default-style" aria-label="addPerson" data-index={i} onClick={handleAdd}><Icon>person</Icon> Add</button>
+          <SmallButton color="success" icon="person" text="Add" ariaLabel="addPerson" onClick={() => handleAdd(sr)} />
         </TableCell>
       </TableRow>
     );
