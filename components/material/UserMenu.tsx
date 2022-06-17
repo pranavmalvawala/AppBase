@@ -7,20 +7,48 @@ import { SupportModal } from "../../pageComponents/components/SupportModal";
 
 interface TabPanelProps { children?: React.ReactNode; index: number; value: number; }
 
+
+const StyledMenuBox = styled(Box)(
+  ({ theme }) => ({
+    paddingTop: 10,
+    "& .MuiListItemButton-root": { paddingLeft: 30, },
+    "& .MuiListItemIcon-root": {
+      color: theme.palette.primary.main
+    },
+    "& .MuiListItemText-root": { color: theme.palette.text.primary },
+    "& .selected .MuiListItemText-root span": { fontWeight: "bold" }
+  })
+);
+
 function TabPanel(props: TabPanelProps) {
   const { children, value, index } = props;
 
   return (
-    <div role="tabpanel" hidden={value !== index} id={`simple-tabpanel-${index}`} aria-labelledby={`simple-tab-${index}`}>
+    <div role="tabpanel" hidden={value !== index} id={`userMenuPanel-${index}`}>
       {value === index && (
-        <Box sx={{ p: 3 }}>
+        <StyledMenuBox >
           <Typography>{children}</Typography>
-        </Box>
+        </StyledMenuBox>
       )}
     </div>
   );
 }
 
+/*
+const StyledTabPanel = styled(TabPanel)(
+  ({ theme }) => ({
+    padding: 0,
+    backgroundColor: "#FF0000",
+    "& .MuiBox-root": {
+      padding: 0,
+      backgroundColor: "#FF0000"
+    },
+    
+
+  })
+);*/
+
+/*
 const StyledMenu = styled(Menu)(
   ({ theme }) => ({
     "& .MuiPaper-root": {
@@ -29,7 +57,7 @@ const StyledMenu = styled(Menu)(
     "& .MuiListItemButton-root, & .MuiListItemIcon-root, & .MuiButtonBase-root": { color: "#FFFFFF" },
     "& .Mui-selected": { borderBottomColor: "#FFFFFF" }
   })
-);
+);*/
 
 interface Props {
   userName: string;
@@ -93,8 +121,8 @@ export const UserMenu: React.FC<Props> = (props) => {
 
   const getTabs = () => (
     <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-      <Tabs variant="fullWidth" value={tabIndex} onChange={handleChange} aria-label="basic tabs example">
-        <Tab label="Actions" />
+      <Tabs variant="fullWidth" value={tabIndex} onChange={handleChange} >
+        <Tab label="User" />
         <Tab label="Church" />
         <Tab label="App" />
       </Tabs>
@@ -118,10 +146,10 @@ export const UserMenu: React.FC<Props> = (props) => {
         <Typography color="inherit" noWrap>{userName}</Typography>
       </Button>
 
-      <StyledMenu anchorEl={anchorEl} id="account-menu" open={open} onClose={handleClose} onClick={(e) => { handleItemClick(e) }} PaperProps={paperProps} transformOrigin={{ horizontal: "right", vertical: "top" }} anchorOrigin={{ horizontal: "right", vertical: "bottom" }}>
+      <Menu anchorEl={anchorEl} id="account-menu" open={open} onClose={handleClose} onClick={(e) => { handleItemClick(e) }} PaperProps={paperProps} transformOrigin={{ horizontal: "right", vertical: "top" }} anchorOrigin={{ horizontal: "right", vertical: "bottom" }} sx={{ "& .MuiBox-root": { borderBottom: 0 } }}>
         {getTabs()}
 
-      </StyledMenu>
+      </Menu>
     </>
   );
 };

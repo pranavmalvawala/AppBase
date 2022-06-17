@@ -8,4 +8,7 @@ export class Themes {
       MuiFormControl: { defaultProps: { margin: "normal" } }
     }
   });
+
+  static NavBarStyle = { "& .selected .MuiListItemButton-root": { backgroundColor: "#333333" } }
+
 }
