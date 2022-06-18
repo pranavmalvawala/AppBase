@@ -18,7 +18,7 @@ export const SmallButton = React.forwardRef<HTMLDivElement, Props>((props, ref) 
   }
 
   const style = (props.text)
-    ? { backgroundColor: props.color || "#444", "& span": { marginRight: 1 } }
+    ? { backgroundColor: props.color, "& span": { marginRight: 1 } }
     : { minWidth: "auto", padding: "4px 4px" }
 
   return (
