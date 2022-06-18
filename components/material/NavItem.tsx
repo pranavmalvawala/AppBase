@@ -20,6 +20,13 @@ const StyledNavLink = styled(NavLink)({
 });
 
 export const NavItem: React.FC<Props> = (props) => {
+  var isReact = false;
+  try {
+    const a = typeof useLocation();
+    isReact = true;
+  } catch { }
+
+
   const getIcon = () => {
     if (props.icon.startsWith("fa ") || props.icon.startsWith("fas ") || props.icon.startsWith("far ") || props.icon.startsWith("fab ")) return <i className={props.icon} />
     else return <Icon>{props.icon}</Icon>
@@ -33,14 +40,6 @@ export const NavItem: React.FC<Props> = (props) => {
   </ListItemButton>)
 
   if (props.router) return (<a href={props.url} target={props.target} onClick={(e) => { e.preventDefault(); props.onClick ? props.onClick() : props.router.push(props.url) }} className={(props.selected) ? "selected" : ""}>{getLinkContents()}</a>)
-  else if (props.external) return (<a href={props.url} target={props.target} rel="noreferrer" style={{ textDecoration: "none" }} className={(props.selected) ? "selected" : ""}>{getLinkContents()}</a>)
-  else {
-    try {
-      const a = typeof useLocation();
-      return (<StyledNavLink to={props.url} target={props.target} className={(props.selected) ? "selected" : ""} onClick={props.onClick ? (e) => { e.preventDefault(); props.onClick() } : null}>{getLinkContents()}</StyledNavLink>)
-    } catch {
-      return (<a href={props.url} target={props.target} rel="noreferrer" style={{ textDecoration: "none" }} className={(props.selected) ? "selected" : ""}>{getLinkContents()}</a>);
-    }
-  }
-  //else return (<StyledNavLink to={props.url} target={props.target} sx={{ ".MuiListItemButton-root, .MuiIcon-root": { backgroundColor: props.selected ? "#1976d2" : undefined } }} onClick={props.onClick ? (e) => { e.preventDefault(); props.onClick() } : null}>{getLinkContents()}</StyledNavLink>)
+  else if (props.external || !isReact) return (<a href={props.url} target={props.target} rel="noreferrer" style={{ textDecoration: "none" }} className={(props.selected) ? "selected" : ""}>{getLinkContents()}</a>)
+  else return (<StyledNavLink to={props.url} target={props.target} className={(props.selected) ? "selected" : ""} onClick={props.onClick ? (e) => { e.preventDefault(); props.onClick() } : null}>{getLinkContents()}</StyledNavLink>)
 };

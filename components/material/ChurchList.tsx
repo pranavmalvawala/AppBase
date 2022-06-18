@@ -15,7 +15,7 @@ export const ChurchList: React.FC<Props> = props => {
     churches.forEach(c => {
       const church = c;
       const churchName = c.name;
-      result.push(<NavItem url={location.pathname} selected={(c.id === props.currentChurch.id) && true} onClick={() => UserHelper.selectChurch(props.context, church.id, null)} label={churchName} icon="church" />);
+      result.push(<NavItem selected={(c.id === props.currentChurch.id) && true} onClick={() => UserHelper.selectChurch(props.context, church.id, null)} label={churchName} icon="church" />);
     });
     return <>{result}</>;
   }
