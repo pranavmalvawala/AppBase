@@ -7,7 +7,8 @@ import { UserContextInterface } from "../../interfaces";
 interface Props {
   navContent: JSX.Element,
   context: UserContextInterface,
-  children: React.ReactNode
+  children: React.ReactNode,
+  appName: string
 }
 
 const OpenDrawer = styled(Drawer)(
@@ -93,7 +94,7 @@ export const SiteWrapper: React.FC<Props> = props => {
         </IconButton>
         <Typography variant="h6" noWrap>{UserHelper.currentChurch?.name || ""}</Typography>
         <div style={{ flex: 1 }}></div>
-        {UserHelper.user && <UserMenu profilePicture={PersonHelper.getPhotoUrl(props.context?.person)} userName={`${UserHelper.user?.firstName} ${UserHelper.user?.lastName}`} churches={UserHelper.churches} currentChurch={UserHelper.currentChurch} context={props.context} />}
+        {UserHelper.user && <UserMenu profilePicture={PersonHelper.getPhotoUrl(props.context?.person)} userName={`${UserHelper.user?.firstName} ${UserHelper.user?.lastName}`} churches={UserHelper.churches} currentChurch={UserHelper.currentChurch} context={props.context} appName={props.appName} />}
         {!UserHelper.user && <Link href="/login" color="inherit" style={{ textDecoration: "none" }}>Login</Link>}
       </Toolbar>
     </CustomAppBar>

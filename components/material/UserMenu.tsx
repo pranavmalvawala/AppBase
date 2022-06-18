@@ -39,6 +39,7 @@ interface Props {
   churches: ChurchInterface[];
   currentChurch: ChurchInterface;
   context: UserContextInterface;
+  appName: string;
 }
 
 export const UserMenu: React.FC<Props> = (props) => {
@@ -107,14 +108,14 @@ export const UserMenu: React.FC<Props> = (props) => {
         <ChurchList churches={props.churches} currentChurch={props.currentChurch} context={props.context} />
       </TabPanel>
       <TabPanel value={tabIndex} index={2}>
-        <AppList />
+        <AppList appName={props.appName} />
       </TabPanel>
     </Box>
   );
 
   return (
     <>
-      {showSupport && <SupportModal onClose={() => setShowSupport(false)} />}
+      {showSupport && <SupportModal onClose={() => setShowSupport(false)} appName={props.appName} />}
       <Button onClick={handleClick} color="inherit" aria-controls={open ? "account-menu" : undefined} aria-haspopup="true" aria-expanded={open ? "true" : undefined} style={{ textTransform: "none" }} endIcon={<Icon>expand_more</Icon>}>
         <Avatar sx={{ width: 32, height: 32, marginRight: 1 }}>{getProfilePic()}</Avatar>
         <Typography color="inherit" noWrap>{userName}</Typography>
