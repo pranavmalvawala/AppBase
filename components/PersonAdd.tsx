@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { ApiHelper } from "../helpers";
 import { PersonInterface } from "../interfaces"
-import { TextField, Button, Table, TableBody, TableRow, TableCell, Icon } from "@mui/material";
+import { TextField, Button, Table, TableBody, TableRow, TableCell } from "@mui/material";
 import { SmallButton } from "./SmallButton";
 
 interface Props {

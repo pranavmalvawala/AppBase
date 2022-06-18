@@ -7,11 +7,10 @@ import { SupportModal } from "../../pageComponents/components/SupportModal";
 
 interface TabPanelProps { children?: React.ReactNode; index: number; value: number; }
 
-
 const StyledMenuBox = styled(Box)(
   ({ theme }) => ({
     paddingTop: 10,
-    "& .MuiListItemButton-root": { paddingLeft: 30, },
+    "& .MuiListItemButton-root": { paddingLeft: 30 },
     "& .MuiListItemIcon-root": {
       color: theme.palette.primary.main
     },
@@ -26,38 +25,13 @@ function TabPanel(props: TabPanelProps) {
   return (
     <div role="tabpanel" hidden={value !== index} id={`userMenuPanel-${index}`}>
       {value === index && (
-        <StyledMenuBox >
+        <StyledMenuBox>
           <Typography>{children}</Typography>
         </StyledMenuBox>
       )}
     </div>
   );
 }
-
-/*
-const StyledTabPanel = styled(TabPanel)(
-  ({ theme }) => ({
-    padding: 0,
-    backgroundColor: "#FF0000",
-    "& .MuiBox-root": {
-      padding: 0,
-      backgroundColor: "#FF0000"
-    },
-    
-
-  })
-);*/
-
-/*
-const StyledMenu = styled(Menu)(
-  ({ theme }) => ({
-    "& .MuiPaper-root": {
-      backgroundColor: theme.palette.secondary.main
-    },
-    "& .MuiListItemButton-root, & .MuiListItemIcon-root, & .MuiButtonBase-root": { color: "#FFFFFF" },
-    "& .Mui-selected": { borderBottomColor: "#FFFFFF" }
-  })
-);*/
 
 interface Props {
   userName: string;
@@ -121,7 +95,7 @@ export const UserMenu: React.FC<Props> = (props) => {
 
   const getTabs = () => (
     <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-      <Tabs variant="fullWidth" value={tabIndex} onChange={handleChange} >
+      <Tabs variant="fullWidth" value={tabIndex} onChange={handleChange}>
         <Tab label="User" />
         <Tab label="Church" />
         <Tab label="App" />
