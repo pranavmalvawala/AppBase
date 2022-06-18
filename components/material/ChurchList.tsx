@@ -1,5 +1,4 @@
 import React from "react";
-import { useLocation } from "react-router-dom";
 import { UserContextInterface } from "../../interfaces";
 import { UserHelper } from "../../helpers/UserHelper";
 import { ChurchInterface } from "../../interfaces";
@@ -8,7 +7,6 @@ import { NavItem } from "./NavItem";
 export interface Props { churches: ChurchInterface[], currentChurch: ChurchInterface, context: UserContextInterface }
 
 export const ChurchList: React.FC<Props> = props => {
-  const location = useLocation();
 
   if (props.churches.length < 2) return <></>;
   else {
