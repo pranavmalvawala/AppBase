@@ -20,12 +20,11 @@ const StyledNavLink = styled(NavLink)({
 });
 
 export const NavItem: React.FC<Props> = (props) => {
-  var isReact = false;
+  let isReact = false;
   try {
     const a = typeof useLocation();
-    isReact = true;
+    if (a !== null) isReact = true;
   } catch { }
-
 
   const getIcon = () => {
     if (props.icon.startsWith("fa ") || props.icon.startsWith("fas ") || props.icon.startsWith("far ") || props.icon.startsWith("fab ")) return <i className={props.icon} />
