@@ -58,14 +58,11 @@ export const UserMenu: React.FC<Props> = (props) => {
   };
 
   const getMainLinks = () => {
-    if (props.churches.length < 2) return null;
-    else {
-      let result: JSX.Element[] = [];
-      result.push(<NavItem url="/profile" label="Profile" icon="person" />);
-      result.push(<NavItem url="/logout" label="Logout" icon="logout" />);
-      result.push(<NavItem url="" label="Support" icon="help" onClick={() => { setShowSupport(true) }} />);
-      return result;
-    }
+    let result: JSX.Element[] = [];
+    result.push(<NavItem url="/profile" label="Profile" icon="person" />);
+    result.push(<NavItem url="/logout" label="Logout" icon="logout" />);
+    result.push(<NavItem url="" label="Support" icon="help" onClick={() => { setShowSupport(true) }} />);
+    return result;
   }
 
   const getProfilePic = () => {
@@ -98,16 +95,17 @@ export const UserMenu: React.FC<Props> = (props) => {
     <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
       <Tabs variant="fullWidth" value={tabIndex} onChange={handleChange}>
         <Tab label="User" />
-        <Tab label="Church" />
+        {props.churches.length > 1 && <Tab label="Church" />}
         <Tab label="App" />
       </Tabs>
       <TabPanel value={tabIndex} index={0}>
         {getMainLinks()}
       </TabPanel>
-      <TabPanel value={tabIndex} index={1}>
+      {props.churches.length > 1 && <TabPanel value={tabIndex} index={1}>
         <ChurchList churches={props.churches} currentChurch={props.currentChurch} context={props.context} />
       </TabPanel>
-      <TabPanel value={tabIndex} index={2}>
+      }
+      <TabPanel value={tabIndex} index={(props.churches.length > 1) ? 2 : 1}>
         <AppList appName={props.appName} />
       </TabPanel>
     </Box>
