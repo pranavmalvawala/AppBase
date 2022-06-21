@@ -64,7 +64,7 @@ export const SelectChurchRegister: React.FC<Props> = (props) => {
       <TextField fullWidth name="name" label="Church Name" value={church.name} onChange={handleChange} />
       <TextField fullWidth label="Subdomain" id="subDomain" InputProps={{
         endAdornment: <InputAdornment position="end">.churchapps.org</InputAdornment>
-      }} />
+      }} value={church.subDomain} onChange={handleChange} />
       <TextField required fullWidth name="address1" label="Address Line 1" value={church.address1} onChange={handleChange} />
       <Grid container spacing={3}>
         <Grid item xs={6}><TextField fullWidth name="address2" label="Address Line 2" value={church.address2} onChange={handleChange} /></Grid>
