@@ -62,7 +62,7 @@ export const SelectChurchRegister: React.FC<Props> = (props) => {
     <InputBox id="churchBox" saveFunction={handleSave} headerText="Register a New Church" headerIcon="church" isSubmitting={isSubmitting}>
       <ErrorMessages errors={errors} />
       <TextField fullWidth name="name" label="Church Name" value={church.name} onChange={handleChange} />
-      <TextField fullWidth label="Subdomain" id="subDomain" InputProps={{
+      <TextField fullWidth name="subDomain" label="Subdomain" id="subDomain" InputProps={{
         endAdornment: <InputAdornment position="end">.churchapps.org</InputAdornment>
       }} value={church.subDomain} onChange={handleChange} />
       <TextField required fullWidth name="address1" label="Address Line 1" value={church.address1} onChange={handleChange} />
