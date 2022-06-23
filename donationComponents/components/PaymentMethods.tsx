@@ -5,7 +5,7 @@ import { CardForm, BankForm } from ".";
 import { DisplayBox, Loading } from "../../components";
 import { ApiHelper, UserHelper } from "../../helpers";
 import { PersonInterface, StripePaymentMethod, Permissions } from "../../interfaces";
-import { Icon, Table, TableBody, TableCell, TableRow } from "@mui/material";
+import { Icon, Table, TableBody, TableCell, TableRow, IconButton, Menu, MenuItem } from "@mui/material";
 
 interface Props { person: PersonInterface, customerId: string, paymentMethods: StripePaymentMethod[], stripePromise: Promise<Stripe>, appName: string, dataUpdate: (message?: string) => void }
 
@@ -31,17 +31,50 @@ export const PaymentMethods: React.FC<Props> = (props) => {
     }
   }
 
-  const getNewContent = () => {
-    if (!UserHelper.checkAccess(Permissions.givingApi.settings.edit) && props.appName !== "B1App") return null;
+  const MenuIcon = () => {
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const open = Boolean(anchorEl);
+    const handleClick = (e: React.MouseEvent) => {
+      setAnchorEl(e.currentTarget);
+    };
+    const handleClose = () => {
+      setAnchorEl(null);
+    };
     return (
       <>
-        <a id="addBtnGroup" aria-label="add-button" type="button" data-toggle="dropdown" aria-expanded="false" href="about:blank"><Icon>add</Icon></a>
-        <div className="dropdown-menu" aria-labelledby="addBtnGroup">
-          <a className="dropdown-item" aria-label="add-card" href="about:blank" onClick={handleEdit(new StripePaymentMethod({ type: "card" }))}><Icon>credit_card</Icon> Add Card</a>
-          <a className="dropdown-item" aria-label="add-bank" href="about:blank" onClick={handleEdit(new StripePaymentMethod({ type: "bank" }))}><Icon>account_balance</Icon> Add Bank</a>
-        </div>
+        <IconButton
+          aria-label="add-button"
+          id="addBtnGroup"
+          aria-controls={open ? "add-menu" : undefined}
+          aria-expanded={open ? "true" : undefined}
+          aria-haspopup="true"
+          onClick={handleClick}
+        >
+          <Icon color="primary">add</Icon>
+        </IconButton>
+        <Menu
+          id="add-menu"
+          MenuListProps={{
+            "aria-labelledby": "addBtnGroup"
+          }}
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleClose}
+        >
+          <MenuItem aria-label="add-card" onClick={handleEdit(new StripePaymentMethod({ type: "card" }))}>
+            <Icon sx={{mr: "3px"}}>credit_card</Icon> Add Card
+          </MenuItem>
+          <MenuItem aria-label="add-bank" onClick={handleEdit(new StripePaymentMethod({ type: "bank" }))}>
+            <Icon sx={{mr: "3px"}}>account_balance</Icon> Add Bank
+          </MenuItem>
+        </Menu>
       </>
     );
+  }
+
+  const getNewContent = () => {
+    if (!UserHelper.checkAccess(Permissions.givingApi.settings.edit) && props.appName !== "B1App") return null;
+    return <MenuIcon />;
   }
 
   const getEditOptions = (pm: StripePaymentMethod) => {
@@ -99,5 +132,4 @@ export const PaymentMethods: React.FC<Props> = (props) => {
   }
 
   return props.stripePromise ? <PaymentMethods></PaymentMethods> : null;
-
 }
