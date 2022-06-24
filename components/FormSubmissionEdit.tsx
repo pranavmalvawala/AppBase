@@ -17,7 +17,7 @@ interface Props {
 
 export const FormSubmissionEdit: React.FC<Props> = (props) => {
   const [formSubmission, setFormSubmission] = React.useState(null);
-  const [errors, setErrors] = React.useState(null);
+  const [errors, setErrors] = React.useState([]);
 
   const getDeleteFunction = () => (!UniqueIdHelper.isMissing(formSubmission?.id)) ? handleDelete : undefined
   const handleDelete = () => {
