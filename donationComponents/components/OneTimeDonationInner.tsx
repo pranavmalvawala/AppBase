@@ -16,7 +16,7 @@ export const OneTimeDonationInner: React.FC<Props> = (props) => {
   const [lastName, setLastName] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [amount, setAmount] = React.useState(0);
-  const [errors, setErrors] = React.useState(null);
+  const [errors, setErrors] = React.useState([]);
   const [fundDonations, setFundDonations] = React.useState<FundDonationInterface[]>([]);
   const [funds, setFunds] = React.useState<FundInterface[]>([]);
   const [donationComplete, setDonationComplete] = React.useState(false);
