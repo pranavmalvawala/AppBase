@@ -104,14 +104,12 @@ export const BankForm: React.FC<Props> = (props) => {
     if (props.showVerifyForm) {
       return (<>
         <p>Enter the two deposits you received in your account to finish verifying your bank account.</p>
-        <Grid container style={{ marginLeft: "10px", marginRight: "10px" }}>
+        <Grid container columnSpacing={2}>
           <Grid item md={6} xs={12}>
-            <label>First Deposit</label>
-            <input type="text" name="amount1" aria-label="amount1" placeholder="00" className="form-control" maxLength={2} onChange={handleVerify} onKeyPress={handleKeyPress} />
+            <TextField fullWidth aria-label="amount1" label="First Deposit" name="amount1" placeholder="00" inputProps={{ maxLength: 2 }} onChange={handleVerify} onKeyPress={handleKeyPress} />
           </Grid>
           <Grid item md={6} xs={12}>
-            <label>Second Deposit</label>
-            <input type="text" name="amount2" aria-label="amount2" placeholder="00" className="form-control" maxLength={2} onChange={handleVerify} onKeyPress={handleKeyPress} />
+            <TextField fullWidth aria-label="amount2" label="Second Deposit" name="amount2" placeholder="00" inputProps={{ maxLength: 2 }} onChange={handleVerify} onKeyPress={handleKeyPress} />
           </Grid>
         </Grid>
       </>);
@@ -151,7 +149,7 @@ export const BankForm: React.FC<Props> = (props) => {
   return (
     <InputBox headerIcon="volunteer_activism" headerText={getHeaderText()} ariaLabelSave="save-button" ariaLabelDelete="delete-button" cancelFunction={handleCancel} saveFunction={showSave ? handleSave : saveDisabled} deleteFunction={props.bank.id && !props.showVerifyForm ? handleDelete : undefined}>
       {errorMessage && <ErrorMessages errors={[errorMessage]}></ErrorMessages>}
-      <form style={{ margin: "10px" }}>
+      <form>
         {!props.bank.id && <p>Bank accounts will need to be verified before making any donations. Your account will receive two small deposits in approximately 1-3 business days. You will need to enter those deposit amounts to finish verifying your account by selecting the verify account link next to your bank account under the payment methods section.</p>}
         {getForm()}
       </form>

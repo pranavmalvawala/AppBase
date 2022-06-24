@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Grid } from "@mui/material"
+import { Grid, TextField } from "@mui/material"
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { InputBox, ErrorMessages } from "../../components";
 import { ApiHelper } from "../../helpers";
@@ -85,17 +85,15 @@ export const CardForm: React.FC<Props> = (props) => {
   return (
     <InputBox headerIcon="volunteer_activism" headerText={getHeaderText()} ariaLabelSave="save-button" ariaLabelDelete="delete-button" cancelFunction={handleCancel} saveFunction={showSave ? handleSave : saveDisabled} deleteFunction={props.card.id ? handleDelete : undefined}>
       {errorMessage && <ErrorMessages errors={[errorMessage]}></ErrorMessages>}
-      <form style={{ margin: "10px" }}>
+      <form>
         {!props.card.id
           ? <CardElement options={formStyling} />
           : <Grid container spacing={3}>
             <Grid item md={6} xs={12}>
-              <label>Card Expiration Month:</label>
-              <input type="text" name="exp_month" aria-label="card-exp-month" value={cardUpdate.cardData.card.exp_month} onKeyPress={handleKeyPress} onChange={handleChange} placeholder="MM" className="form-control" maxLength={2} />
+              <TextField fullWidth aria-label="card-exp-month" label="Card Expiration Month:" name="exp_month" value={cardUpdate.cardData.card.exp_month} placeholder="MM" inputProps={{ maxLength: 2 }} onChange={handleChange} onKeyPress={handleKeyPress} />
             </Grid>
             <Grid item md={6} xs={12}>
-              <label>Card Expiration Year:</label>
-              <input type="text" name="exp_year" aria-label="card-exp-year" value={cardUpdate.cardData.card.exp_year} onKeyPress={handleKeyPress} onChange={handleChange} placeholder="YY" className="form-control" maxLength={2} />
+              <TextField fullWidth aria-label="card-exp-year" label="Card Expiration Year:" name="exp_year" value={cardUpdate.cardData.card.exp_year} placeholder="YY" inputProps={{ maxLength: 2 }} onChange={handleChange} onKeyPress={handleKeyPress} />
             </Grid>
           </Grid>
         }
