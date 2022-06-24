@@ -50,5 +50,5 @@ export const ReportFilter = (props: Props) => {
     return <InputBox id="formSubmissionBox" headerText="Filter Report" headerIcon="summarize" saveFunction={props.onRun} saveText="Run Report">
       {inputs}
     </InputBox>
-  } else return <></>
+  } else return <> </>
 }
