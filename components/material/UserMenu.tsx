@@ -4,6 +4,7 @@ import { NavItem, AppList } from "./";
 import { ChurchInterface, UserContextInterface } from "../../interfaces";
 import { ChurchList } from "./ChurchList";
 import { SupportModal } from "../../pageComponents/components/SupportModal";
+import { CommonEnvironmentHelper } from "../../helpers/CommonEnvironmentHelper";
 
 interface TabPanelProps { children?: React.ReactNode; index: number; value: number; }
 
@@ -59,9 +60,9 @@ export const UserMenu: React.FC<Props> = (props) => {
 
   const getMainLinks = () => {
     let result: JSX.Element[] = [];
-    result.push(<NavItem url="/profile" label="Profile" icon="person" />);
+    result.push(<NavItem url={CommonEnvironmentHelper.AccountsRoot + "/profile"} label="Profile" icon="person" external={true} />);
     result.push(<NavItem url="/logout" label="Logout" icon="logout" />);
-    result.push(<NavItem url="" label="Support" icon="help" onClick={() => { setShowSupport(true) }} />);
+    result.push(<NavItem label="Support" icon="help" onClick={() => { setShowSupport(true) }} />);
     return result;
   }
 
@@ -103,10 +104,9 @@ export const UserMenu: React.FC<Props> = (props) => {
       </TabPanel>
       {props.churches.length > 1 && <TabPanel value={tabIndex} index={1}>
         <ChurchList churches={props.churches} currentChurch={props.currentChurch} context={props.context} />
-      </TabPanel>
-      }
+      </TabPanel>}
       <TabPanel value={tabIndex} index={(props.churches.length > 1) ? 2 : 1}>
-        <AppList appName={props.appName} />
+        <AppList currentChurch={props.currentChurch} appName={props.appName} />
       </TabPanel>
     </Box>
   );

@@ -17,6 +17,7 @@ export const ChurchList: React.FC<Props> = props => {
       const churchName = c.name;
       result.push(<NavItem selected={(c.id === props.currentChurch.id) && true} onClick={() => UserHelper.selectChurch(props.context, church.id, null)} label={churchName} icon="church" />);
     });
+
     return <>{result}</>;
   }
 };
