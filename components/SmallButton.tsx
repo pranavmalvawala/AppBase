@@ -24,7 +24,7 @@ export const SmallButton = React.forwardRef<HTMLDivElement, Props>((props, ref) 
 
   return (
     <Tooltip title={props.toolTip || ""} arrow placement="top">
-      <Button sx={style} variant={props.text ? "outlined" : "text"} color={props.color} aria-label={props.ariaLabel || "editButton"} onClick={handleClick} size="small" href={props.href}>
+      <Button sx={style} variant={props.text ? "outlined" : "text"} color={props.color} aria-label={props.ariaLabel || "editButton"} onClick={(props.onClick) ? handleClick : null} size="small" href={props.href}>
         <Icon>{props.icon}</Icon>{(props.text) ? props.text : ""}
       </Button>
     </Tooltip>
