@@ -89,7 +89,7 @@ export const RecurringDonations: React.FC<Props> = (props) => {
           <TableCell>{getFunds(sub)}</TableCell>
           <TableCell>Every {getInterval(sub)}</TableCell>
           <TableCell className="capitalize">{getPaymentMethod(sub)}</TableCell>
-          <TableCell className="text-right">{getEditOptions(sub)}</TableCell>
+          <TableCell align="right">{getEditOptions(sub)}</TableCell>
         </TableRow>
       );
     });

@@ -76,7 +76,7 @@ export const DonationPage: React.FC<Props> = (props) => {
 
     if (donations.length > 0) {
       rows.push(
-        <TableRow key="header">
+        <TableRow key="header" sx={{textAlign: "left"}}>
           {appName !== "B1App" && <th>Batch</th>}
           <th>Date</th>
           <th>Method</th>

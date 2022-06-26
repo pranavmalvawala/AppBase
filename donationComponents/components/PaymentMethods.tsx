@@ -92,7 +92,7 @@ export const PaymentMethods: React.FC<Props> = (props) => {
         <TableRow key={method.id}>
           <TableCell className="capitalize">{getPMIcon(method.type)} {method.name + " ****" + method.last4}</TableCell>
           <TableCell>{method?.status === "new" && <a href="about:blank" aria-label="verify-account" onClick={handleEdit(method, true)}>Verify Account</a>}</TableCell>
-          <TableCell className="text-right">{getEditOptions(method)}</TableCell>
+          <TableCell align="right">{getEditOptions(method)}</TableCell>
         </TableRow>
       );
     });

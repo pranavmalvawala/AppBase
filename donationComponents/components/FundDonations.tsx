@@ -32,7 +32,7 @@ export const FundDonations: React.FC<Props> = (props) => {
   return (
     <>
       {getRows()}
-      <a href="about:blank" aria-label="add-fund-donation" style={{ display: "block", marginBottom: "15px" }} onClick={addRow}>Add more</a>
+      <a href="about:blank" aria-label="add-fund-donation" className="text-decoration" style={{ display: "block", marginBottom: "15px" }} onClick={addRow}>Add more</a>
     </>
   );
 }

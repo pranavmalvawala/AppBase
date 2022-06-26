@@ -8,7 +8,7 @@ import jwt_decode from "jwt-decode"
 import { Register } from "./components/Register"
 import { SelectChurchModal } from "./components/SelectChurchModal"
 import { Forgot } from "./components/Forgot";
-import { TextField, Alert } from "@mui/material";
+import { TextField, Alert, Box } from "@mui/material";
 
 interface Props {
   context: UserContextInterface,
@@ -232,7 +232,7 @@ export const LoginPage: React.FC<Props> = (props) => {
   }
 
   const getRegisterLink = () => (
-    <><a href="about:blank" onClick={handleShowRegister}>Register</a> &nbsp; | &nbsp; </>
+    <><a href="about:blank" className="text-decoration" onClick={handleShowRegister}>Register</a> &nbsp; | &nbsp; </>
   )
 
   const handleRegisterCallback = () => {
@@ -250,10 +250,10 @@ export const LoginPage: React.FC<Props> = (props) => {
       <InputBox headerText="Please Sign In" saveFunction={submitLogin} saveButtonType="submit" saveText={isSubmitting ? "Please wait..." : "Sign in"} isSubmitting={isSubmitting}>
         <TextField fullWidth autoFocus name="email" type="email" label="Email" value={email} onChange={(e) => { e.preventDefault(); setEmail(e.target.value) }} />
         <TextField fullWidth name="email" type="password" label="Password" value={password} onChange={(e) => { e.preventDefault(); setPassword(e.target.value) }} />
-        <div className="text-right">
+        <Box sx={{textAlign: "right"}}>
           {getRegisterLink()}
-          <a href="about:blank" onClick={(e) => { e.preventDefault(); setShowForgot(true); }}>Forgot Password</a>&nbsp;
-        </div>
+          <a href="about:blank" className="text-decoration" onClick={(e) => { e.preventDefault(); setShowForgot(true); }}>Forgot Password</a>&nbsp;
+        </Box>
       </InputBox>
     </>
   )

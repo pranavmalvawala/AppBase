@@ -19,7 +19,7 @@ export const SelectableChurch: React.FC<Props> = (props) => {
     <Grid container spacing={3}>
       <Grid item md={6} xs={12}>
         <a href="about:blank" style={{ fontSize: "1.125rem", display: "block", marginTop: 15, marginBottom: 15 }} onClick={(e) => { e.preventDefault(); props.selectChurch(props.church.id) }}>
-          <img src={logo} alt="church logo" className="w-100 h-auto" />
+          <img src={logo} alt="church logo" className="w-100" />
         </a>
       </Grid>
       <Grid item md={6} xs={12}>

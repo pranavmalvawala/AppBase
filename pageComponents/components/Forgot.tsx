@@ -2,7 +2,7 @@ import React, { FormEventHandler } from "react";
 import { ApiHelper } from "../../helpers";
 import { ErrorMessages } from "../../components";
 import { ResetPasswordRequestInterface, ResetPasswordResponseInterface } from "../../interfaces";
-import { Button, Stack, TextField } from "@mui/material";
+import { Button, Stack, TextField, Box } from "@mui/material";
 
 interface Props {
   registerCallback: () => void,
@@ -53,10 +53,10 @@ export const Forgot: React.FC<Props> = props => {
       {successMessage}
       <TextField fullWidth autoFocus label="Email" aria-label="email" id="email" name="email" value={email} onChange={handleChange} placeholder="Email address" onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => e.key === "Enter" && reset} />
       <br />
-      <div className="text-right">
-        <a href="about:blank" onClick={(e) => { e.preventDefault(); props.registerCallback(); }}>Register</a> &nbsp; | &nbsp;
-        <a href="about:blank" onClick={(e) => { e.preventDefault(); props.loginCallback(); }}>Login</a>&nbsp;
-      </div>
+      <Box sx={{textAlign: "right"}}>
+        <a href="about:blank" className="text-decoration" onClick={(e) => { e.preventDefault(); props.registerCallback(); }}>Register</a> &nbsp; | &nbsp;
+        <a href="about:blank" className="text-decoration" onClick={(e) => { e.preventDefault(); props.loginCallback(); }}>Login</a>&nbsp;
+      </Box>
       <Stack direction="row" sx={{ marginTop: 1 }} spacing={1} justifyContent="end">
         <Button variant="contained" type="submit" disabled={isSubmitting}>Reset</Button>
       </Stack>
