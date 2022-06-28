@@ -26,10 +26,7 @@ export const NavItem: React.FC<Props> = (props) => {
     if (a !== null) isReact = true;
   } catch { }
 
-  const getIcon = () => {
-    if (props.icon.startsWith("fa ") || props.icon.startsWith("fas ") || props.icon.startsWith("far ") || props.icon.startsWith("fab ")) return <i className={props.icon} />
-    else return <Icon>{props.icon}</Icon>
-  }
+  const getIcon = () => <Icon>{props.icon}</Icon>
 
   const getLinkContents = () => (<ListItemButton>
     <Tooltip title={props.label || ""} arrow placement="right">

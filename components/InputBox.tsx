@@ -64,8 +64,7 @@ export function InputBox({
       <form>
         <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }} data-cy="header">
           <Box sx={{ display: "flex", alignItems: "center" }}>
-            {headerIcon && (headerIcon.startsWith("fa ") || headerIcon.startsWith("fas ")) && <i className={headerIcon} style={{ color: "#1976d2" }} />}
-            {headerIcon && (!headerIcon.startsWith("fa ") && !headerIcon.startsWith("fas ")) && <Icon sx={{ color: "#1976d2" }}>{headerIcon}</Icon>}
+            {headerIcon && <Icon sx={{ color: "#1976d2" }}>{headerIcon}</Icon>}
             <Typography component="h2" sx={{ display: "inline-block", marginLeft: headerIcon ? 1 : 0 }} variant="h6" color="primary">
               {headerText}
             </Typography>

@@ -46,8 +46,7 @@ export const DisplayBox = React.forwardRef<HTMLDivElement, Props>((props, ref) =
     <Paper sx={{ padding: 2, marginBottom: 4 }} id={props.id} data-cy={props["data-cy"] || ""}>
       <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <Box sx={{ display: "flex", alignItems: "center" }}>
-          {props.headerIcon && (props.headerIcon.startsWith("fa ") || props.headerIcon.startsWith("fas ")) && <i className={props.headerIcon} style={{ color: "#1976d2" }} />}
-          {props.headerIcon && (!props.headerIcon.startsWith("fa ") && !props.headerIcon.startsWith("fas ")) && <Icon sx={{ color: "#1976d2" }}>{props.headerIcon}</Icon>}
+          {props.headerIcon && <Icon sx={{ color: "#1976d2" }}>{props.headerIcon}</Icon>}
           <Typography component="h2" sx={{ display: "inline-block", marginLeft: props.headerIcon ? 1 : 0 }} variant="h6" color="primary">
             {props.headerText}
           </Typography>
