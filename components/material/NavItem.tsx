@@ -36,6 +36,6 @@ export const NavItem: React.FC<Props> = (props) => {
   </ListItemButton>)
 
   if (props.router) return (<a href={props.url} target={props.target} onClick={(e) => { e.preventDefault(); props.onClick ? props.onClick() : props.router.push(props.url) }} className={(props.selected) ? "selected" : ""}>{getLinkContents()}</a>)
-  else if (props.external || !isReact) return (<a href={props.url} target={props.target} rel="noreferrer" style={{ textDecoration: "none" }} className={(props.selected) ? "selected" : ""}>{getLinkContents()}</a>)
+  else if (props.external || !isReact) return (<a href={props.url} target={props.target} rel="noreferrer" style={{ textDecoration: "none" }} className={(props.selected) ? "selected" : ""} onClick={(e) => { e.preventDefault(); props.onClick ? props.onClick() : props.router.push(props.url) }} >{getLinkContents()}</a>)
   else return (<StyledNavLink to={props.url || "about:blank"} target={props.target} className={(props.selected) ? "selected" : ""} onClick={props.onClick ? (e) => { e.preventDefault(); props.onClick() } : null}>{getLinkContents()}</StyledNavLink>)
 };
