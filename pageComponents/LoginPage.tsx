@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ErrorMessages, InputBox, Loading } from "../components";
+import { ErrorMessages, FloatingSupport, InputBox, Loading } from "../components";
 import { LoginResponseInterface, UserContextInterface, ChurchInterface, UserInterface } from "../interfaces";
 import { ApiHelper, ArrayHelper, UserHelper } from "../helpers";
 import { Navigate } from "react-router-dom";
@@ -250,7 +250,7 @@ export const LoginPage: React.FC<Props> = (props) => {
       <InputBox headerText="Please Sign In" saveFunction={submitLogin} saveButtonType="submit" saveText={isSubmitting ? "Please wait..." : "Sign in"} isSubmitting={isSubmitting}>
         <TextField fullWidth autoFocus name="email" type="email" label="Email" value={email} onChange={(e) => { e.preventDefault(); setEmail(e.target.value) }} />
         <TextField fullWidth name="email" type="password" label="Password" value={password} onChange={(e) => { e.preventDefault(); setPassword(e.target.value) }} />
-        <Box sx={{textAlign: "right"}}>
+        <Box sx={{ textAlign: "right" }}>
           {getRegisterLink()}
           <a href="about:blank" className="text-decoration" onClick={(e) => { e.preventDefault(); setShowForgot(true); }}>Forgot Password</a>&nbsp;
         </Box>
@@ -289,6 +289,7 @@ export const LoginPage: React.FC<Props> = (props) => {
       {getCheckEmail()}
       {pendingAutoLogin && getLoginRegister()}
       <SelectChurchModal show={showSelectModal} churches={loginResponse?.churches} selectChurch={selectChurch} registeredChurchCallback={handleChurchRegistered} errors={errors} appName={props.appName} />
+      <FloatingSupport appName={props.appName} />
     </div>
   );
 
