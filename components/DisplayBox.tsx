@@ -35,7 +35,7 @@ const CustomContextBox = styled(Box)({
 })
 
 export const DisplayBox = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
-
+  
   let editContent: React.ReactNode;
   if (props.editFunction !== undefined) {
     editContent = <SmallButton icon="edit" aria-label={props.ariaLabel || "editButton"} onClick={props.editFunction} />
@@ -60,3 +60,5 @@ export const DisplayBox = React.forwardRef<HTMLDivElement, Props>((props, ref) =
     </Paper>
   );
 })
+
+DisplayBox.displayName = "DisplayBox";

@@ -11,6 +11,8 @@ interface Props {
   href?: string;
 }
 
+
+
 export const SmallButton = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
 
   const handleClick = (e: React.MouseEvent) => {
@@ -31,3 +33,5 @@ export const SmallButton = React.forwardRef<HTMLDivElement, Props>((props, ref) 
   );
 
 });
+
+SmallButton.displayName = "SmallButton";
