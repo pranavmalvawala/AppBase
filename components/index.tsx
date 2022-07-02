@@ -7,4 +7,5 @@ export { Loading } from "./Loading";
 export { QuestionEdit } from "./QuestionEdit";
 export { FormSubmissionEdit } from "./FormSubmissionEdit";
 export { SmallButton } from "./SmallButton";
+export { FloatingSupport } from "./FloatingSupport";
 export * from "./material";

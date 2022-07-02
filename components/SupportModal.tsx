@@ -13,9 +13,6 @@ export const SupportModal: React.FC<Props> = (props) => {
     else return "";
   }
 
-  //Let's break this hover icon into a separate control from the modal itself.
-  //<div style={{ position: "fixed", cursor: "pointer", color: "#03a9f4", fontSize: "30px", bottom: "1px", right: "10px" }} onClick={toggleShowSupport}><Icon>help</Icon></div>
-
   return (<>
     <Dialog open={true} {...props}>
       <DialogTitle>Get Support</DialogTitle>

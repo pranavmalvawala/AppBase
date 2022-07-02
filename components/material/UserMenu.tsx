@@ -3,7 +3,7 @@ import { Avatar, Menu, Typography, Icon, Button, Box, Tabs, Tab, styled } from "
 import { NavItem, AppList } from "./";
 import { ChurchInterface, UserContextInterface } from "../../interfaces";
 import { ChurchList } from "./ChurchList";
-import { SupportModal } from "../../pageComponents/components/SupportModal";
+import { SupportModal } from "../SupportModal";
 import { CommonEnvironmentHelper } from "../../helpers/CommonEnvironmentHelper";
 
 interface TabPanelProps { children?: React.ReactNode; index: number; value: number; }
