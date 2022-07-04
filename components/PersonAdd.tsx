@@ -11,9 +11,10 @@ interface Props {
   searchClicked?: () => void,
   filterList?: string[]
   includeEmail?: boolean
+  actionLabel?: string
 }
 
-export const PersonAdd: React.FC<Props> = ({ addFunction, getPhotoUrl, searchClicked, filterList = [], includeEmail = false }) => {
+export const PersonAdd: React.FC<Props> = ({ addFunction, getPhotoUrl, searchClicked, filterList = [], includeEmail = false, actionLabel }) => {
   const [searchResults, setSearchResults] = useState<PersonInterface[]>([]);
   const [searchText, setSearchText] = useState("");
 
@@ -50,7 +51,7 @@ export const PersonAdd: React.FC<Props> = ({ addFunction, getPhotoUrl, searchCli
         <TableCell><img src={getPhotoUrl(sr)} alt="avatar" /></TableCell>
         <TableCell>{sr.name.display}{includeEmail && (<><br /><i style={{ color: "#999" }}>{sr.contactInfo.email}</i></>)}</TableCell>
         <TableCell>
-          <SmallButton color="success" icon="person" text="Add" ariaLabel="addPerson" onClick={() => handleAdd(sr)} />
+          <SmallButton color="success" icon="person" text={actionLabel || "Add"} ariaLabel="addPerson" onClick={() => handleAdd(sr)} />
         </TableCell>
       </TableRow>
     );

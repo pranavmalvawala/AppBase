@@ -2,6 +2,7 @@
 export class CommonEnvironmentHelper {
   public static AccessApi = "";
   public static AttendanceApi = "";
+  public static DoingApi = "";
   public static GivingApi = "";
   public static MembershipApi = "";
   public static ReportingApi = "";
@@ -25,6 +26,7 @@ export class CommonEnvironmentHelper {
     this.initStaging(); //Use staging values for anything not provided
     CommonEnvironmentHelper.AccessApi = process.env.REACT_APP_ACCESS_API || CommonEnvironmentHelper.AccessApi;
     CommonEnvironmentHelper.AttendanceApi = process.env.REACT_APP_ATTENDANCE_API || CommonEnvironmentHelper.AttendanceApi;
+    CommonEnvironmentHelper.DoingApi = process.env.REACT_APP_DOING_API || CommonEnvironmentHelper.DoingApi;
     CommonEnvironmentHelper.GivingApi = process.env.REACT_APP_GIVING_API || CommonEnvironmentHelper.GivingApi;
     CommonEnvironmentHelper.MembershipApi = process.env.REACT_APP_MEMBERSHIP_API || CommonEnvironmentHelper.MembershipApi;
     CommonEnvironmentHelper.ReportingApi = process.env.REACT_APP_REPORTING_API || CommonEnvironmentHelper.ReportingApi;
@@ -41,6 +43,7 @@ export class CommonEnvironmentHelper {
   static initStaging = () => {
     CommonEnvironmentHelper.AccessApi = "https://accessapi.staging.churchapps.org";
     CommonEnvironmentHelper.AttendanceApi = "https://attendanceapi.staging.churchapps.org";
+    CommonEnvironmentHelper.DoingApi = "https://doingapi.staging.churchapps.org";
     CommonEnvironmentHelper.GivingApi = "https://givingapi.staging.churchapps.org";
     CommonEnvironmentHelper.MembershipApi = "https://membershipapi.staging.churchapps.org";
     CommonEnvironmentHelper.ReportingApi = "https://reportingapi.staging.churchapps.org";
@@ -57,6 +60,7 @@ export class CommonEnvironmentHelper {
   static initProd = () => {
     CommonEnvironmentHelper.AccessApi = "https://accessapi.churchapps.org";
     CommonEnvironmentHelper.AttendanceApi = "https://attendanceapi.churchapps.org";
+    CommonEnvironmentHelper.DoingApi = "https://doingapi.churchapps.org";
     CommonEnvironmentHelper.GivingApi = "https://givingapi.churchapps.org";
     CommonEnvironmentHelper.MembershipApi = "https://membershipapi.churchapps.org";
     CommonEnvironmentHelper.ReportingApi = "https://reportingapi.churchapps.org";
