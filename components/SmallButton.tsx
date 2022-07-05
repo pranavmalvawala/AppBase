@@ -11,14 +11,8 @@ interface Props {
   href?: string;
 }
 
-
-
 export const SmallButton = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
-
-  const handleClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    props.onClick(e);
-  }
+  const handleClick = (e: React.MouseEvent) => { e.preventDefault(); props.onClick(e); }
 
   const style = (props.text)
     ? { backgroundColor: props.color, "& span": { marginRight: 1 } }
@@ -31,7 +25,6 @@ export const SmallButton = React.forwardRef<HTMLDivElement, Props>((props, ref) 
       </Button>
     </Tooltip>
   );
-
 });
 
 SmallButton.displayName = "SmallButton";

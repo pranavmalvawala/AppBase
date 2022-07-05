@@ -32,10 +32,10 @@ const CustomContextBox = styled(Box)({
   "& td:last-of-type": { paddingRight: 0 },
   "& th:first-of-type": { paddingLeft: 0 },
   "& th:last-of-type": { paddingRight: 0 }
-})
+});
 
 export const DisplayBox = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
-  
+
   let editContent: React.ReactNode;
   if (props.editFunction !== undefined) {
     editContent = <SmallButton icon="edit" aria-label={props.ariaLabel || "editButton"} onClick={props.editFunction} />

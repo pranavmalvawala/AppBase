@@ -1,11 +1,12 @@
 import { ApiHelper } from "./ApiHelper"
-import { UserInterface, ChurchInterface, UserContextInterface, IPermission } from "../interfaces";
+import { UserInterface, ChurchInterface, UserContextInterface, IPermission, PersonInterface } from "../interfaces";
 
 export class UserHelper {
   static currentChurch: ChurchInterface;
   static churches: ChurchInterface[];
   static user: UserInterface;
   static churchChanged: boolean = false;
+  static person: PersonInterface;
 
   static selectChurch = async (context?: UserContextInterface, churchId?: string, keyName?: string) => {
     let church = null;
