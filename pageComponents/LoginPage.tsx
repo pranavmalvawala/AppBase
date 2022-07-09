@@ -8,7 +8,7 @@ import jwt_decode from "jwt-decode"
 import { Register } from "./components/Register"
 import { SelectChurchModal } from "./components/SelectChurchModal"
 import { Forgot } from "./components/Forgot";
-import { TextField, Alert, Box } from "@mui/material";
+import { TextField, Alert, Box, Typography } from "@mui/material";
 
 interface Props {
   context: UserContextInterface,
@@ -260,16 +260,16 @@ export const LoginPage: React.FC<Props> = (props) => {
 
   const getLoginRegister = () => {
     if (showRegister) return (
-      <div id="loginBox" style={{ backgroundColor: "#FFF", border: "1px solid #CCC", borderRadius: 5, padding: 20 }}>
-        <h2>Create an Account</h2>
+      <Box id="loginBox" sx={{ backgroundColor: "#FFF", border: "1px solid #CCC", borderRadius: "5px", padding: "20px" }}>
+        <Typography component="h2" sx={{fontSize: "32px", fontWeight: 500, lineHeight: 1.2, margin: "0 0 8px 0"}}>Create an Account</Typography>
         <Register updateErrors={setErrors} appName={props.appName} appUrl={props.appUrl} loginCallback={handleLoginCallback} userRegisteredCallback={props.userRegisteredCallback} />
-      </div>
+      </Box>
     );
     if (showForgot) return (
-      <div id="loginBox" style={{ backgroundColor: "#FFF", border: "1px solid #CCC", borderRadius: 5, padding: 20 }}>
-        <h2>Reset Password</h2>
+      <Box id="loginBox" sx={{ backgroundColor: "#FFF", border: "1px solid #CCC", borderRadius: "5px", padding: "20px" }}>
+        <Typography component="h2" sx={{fontSize: "32px", fontWeight: 500, lineHeight: 1.2, margin: "0 0 8px 0"}}>Reset Password</Typography>
         <Forgot registerCallback={handleRegisterCallback} loginCallback={handleLoginCallback} />
-      </div>
+      </Box>
     );
     else return getLoginBox();
   }
@@ -282,7 +282,7 @@ export const LoginPage: React.FC<Props> = (props) => {
 
   if (redirectTo) return <Navigate to={redirectTo} />;
   else return (
-    <div style={{ maxWidth: 350, marginLeft: "auto", marginRight: "auto" }}>
+    <Box sx={{maxWidth: "382px"}} px="16px" mx="auto">
       <img src={props.logo || "/images/logo-login.png"} alt="logo" style={{ width: "100%", marginTop: 100, marginBottom: 60 }} />
       <ErrorMessages errors={errors} />
       {getWelcomeBack()}
@@ -290,7 +290,7 @@ export const LoginPage: React.FC<Props> = (props) => {
       {pendingAutoLogin && getLoginRegister()}
       <SelectChurchModal show={showSelectModal} churches={loginResponse?.churches} selectChurch={selectChurch} registeredChurchCallback={handleChurchRegistered} errors={errors} appName={props.appName} />
       <FloatingSupport appName={props.appName} />
-    </div>
+    </Box>
   );
 
 };
