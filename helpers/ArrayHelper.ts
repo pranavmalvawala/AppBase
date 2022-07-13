@@ -10,6 +10,14 @@ export class ArrayHelper {
     return result;
   }
 
+  static getIndex(array: any[], propertyName: string, value: any) {
+    for (let i = 0; i < array.length; i++) {
+      const item = array[i];
+      if (ArrayHelper.compare(item, propertyName, value)) return i;
+    }
+    return -1;
+  }
+
   static getOne(array: any[], propertyName: string, value: any) {
     for (const item of array) if (ArrayHelper.compare(item, propertyName, value)) return item;
     return null
