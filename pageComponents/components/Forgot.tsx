@@ -2,7 +2,8 @@ import React, { FormEventHandler } from "react";
 import { ApiHelper } from "../../helpers";
 import { ErrorMessages } from "../../components";
 import { ResetPasswordRequestInterface, ResetPasswordResponseInterface } from "../../interfaces";
-import { Button, Stack, TextField, Box } from "@mui/material";
+import { Stack, TextField, Box, Typography } from "@mui/material";
+import LoadingButton from "@mui/lab/LoadingButton";
 
 interface Props {
   registerCallback: () => void,
@@ -36,7 +37,12 @@ export const Forgot: React.FC<Props> = props => {
       ApiHelper.postAnonymous("/users/forgot", req, "AccessApi").then((resp: ResetPasswordResponseInterface) => {
         if (resp.emailed) {
           setErrors([]);
-          setSuccessMessage(<div className="alert alert-success" role="alert">Password reset email sent</div>);
+          setSuccessMessage(
+            <Typography textAlign="center" marginTop="35px">
+              Password reset email sent! <br /><br /><a href="about:blank" className="text-decoration" onClick={(e) => { e.preventDefault(); props.loginCallback(); }}>Go to Login</a>
+            </Typography>
+          );
+          setEmail("");
         } else {
           setErrors(["We could not find an account with this email address"]);
           setSuccessMessage(<></>);
@@ -51,15 +57,19 @@ export const Forgot: React.FC<Props> = props => {
       <p>Enter your email address to request a password reset.</p>
       <ErrorMessages errors={errors} />
       {successMessage}
-      <TextField fullWidth autoFocus label="Email" aria-label="email" id="email" name="email" value={email} onChange={handleChange} placeholder="Email address" onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => e.key === "Enter" && reset} />
-      <br />
-      <Box sx={{textAlign: "right", marginY: 1 }}>
-        <a href="about:blank" className="text-decoration" onClick={(e) => { e.preventDefault(); props.registerCallback(); }}>Register</a> &nbsp; | &nbsp;
-        <a href="about:blank" className="text-decoration" onClick={(e) => { e.preventDefault(); props.loginCallback(); }}>Login</a>&nbsp;
-      </Box>
-      <Stack direction="row" sx={{ marginTop: 1.5 }} spacing={1} justifyContent="end">
-        <Button variant="contained" type="submit" disabled={isSubmitting}>Reset</Button>
-      </Stack>
+      {!successMessage && (
+        <>
+          <TextField fullWidth autoFocus label="Email" aria-label="email" id="email" name="email" value={email} onChange={handleChange} placeholder="Email address" onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => e.key === "Enter" && reset} />
+          <br />
+          <Box sx={{textAlign: "right", marginY: 1 }}>
+            <a href="about:blank" className="text-decoration" onClick={(e) => { e.preventDefault(); props.registerCallback(); }}>Register</a> &nbsp; | &nbsp;
+            <a href="about:blank" className="text-decoration" onClick={(e) => { e.preventDefault(); props.loginCallback(); }}>Login</a>&nbsp;
+          </Box>
+          <Stack direction="row" sx={{ marginTop: 1.5 }} spacing={1} justifyContent="flex-end">
+            <LoadingButton loading={isSubmitting} variant="contained" type="submit" disabled={isSubmitting}>Reset</LoadingButton>
+          </Stack>
+        </>
+      )}
     </form>
   );
 }
