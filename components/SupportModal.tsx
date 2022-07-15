@@ -18,7 +18,7 @@ export const SupportModal: React.FC<Props> = ({ appName = "", onClose }) => {
         <Stack direction="row" alignItems="center" sx={{flexWrap: "wrap"}} mb={2}><b><Stack direction="row" alignItems="center" mr="5px"><Icon sx={{marginRight: "5px"}}>forum</Icon> Messenger:</Stack></b> <a href="https://m.me/livecsolutions" target="_new">https://m.me/livecsolutions</a></Stack>
         <Stack direction="row" alignItems="center" sx={{flexWrap: "wrap"}}><b><Stack direction="row" alignItems="center" mr="5px"><Icon sx={{marginRight: "5px"}}>info</Icon> Knowledge Base:</Stack></b> <a href="https://support.churchapps.org" target="_new">https://support.churchapps.org</a></Stack>
       </DialogContent>
-      <DialogActions>
+      <DialogActions sx={{ paddingX: "16px", paddingBottom: "12px" }}>
         <Button variant="outlined" onClick={onClose}>Close</Button>
       </DialogActions>
     </Dialog>

@@ -53,11 +53,11 @@ export const Forgot: React.FC<Props> = props => {
       {successMessage}
       <TextField fullWidth autoFocus label="Email" aria-label="email" id="email" name="email" value={email} onChange={handleChange} placeholder="Email address" onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => e.key === "Enter" && reset} />
       <br />
-      <Box sx={{textAlign: "right"}}>
+      <Box sx={{textAlign: "right", marginY: 1 }}>
         <a href="about:blank" className="text-decoration" onClick={(e) => { e.preventDefault(); props.registerCallback(); }}>Register</a> &nbsp; | &nbsp;
         <a href="about:blank" className="text-decoration" onClick={(e) => { e.preventDefault(); props.loginCallback(); }}>Login</a>&nbsp;
       </Box>
-      <Stack direction="row" sx={{ marginTop: 1 }} spacing={1} justifyContent="end">
+      <Stack direction="row" sx={{ marginTop: 1.5 }} spacing={1} justifyContent="end">
         <Button variant="contained" type="submit" disabled={isSubmitting}>Reset</Button>
       </Stack>
     </form>
