@@ -1,22 +1,9 @@
 import * as React from "react";
-import { styled } from "@mui/material/styles";
+import { styled, Icon, InputBase, Typography, debounce, Grid, IconButton, FormControlLabel, RadioGroup, Radio, SvgIcon, Pagination, Stack } from "@mui/material";
 import MuiPaper from "@mui/material/Paper";
-import InputBase from "@mui/material/InputBase";
-import Typography from "@mui/material/Typography";
-import { debounce } from "@mui/material/utils";
-import Grid from "@mui/material/Grid";
-import IconButton from "@mui/material/IconButton";
 import { Id, Index as FlexSearchIndex } from "flexsearch";
-import SearchIcon from "@mui/icons-material/Search";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import RadioGroup from "@mui/material/RadioGroup";
-import Radio from "@mui/material/Radio";
-import SvgIcon from "@mui/material/SvgIcon";
-import Pagination from "@mui/material/Pagination";
-import Stack from "@mui/material/Stack";
-
-import * as mui from "@mui/icons-material";
 import synonyms from "./synonyms";
+import * as mui from "@mui/icons-material";
 
 const UPDATE_SEARCH_INDEX_WAIT_MS = 220;
 
@@ -184,7 +171,7 @@ export default function SearchIcons(props: Props) {
   );
 
   const pagesCount = Math.ceil(icons.length / pageSize);
-  console.log({page, pagesCount});
+  console.log({ page, pagesCount });
 
   return (
     <Grid container sx={{ minHeight: 360, padding: "16px" }}>
@@ -210,7 +197,7 @@ export default function SearchIcons(props: Props) {
       <Grid item xs={12} sm={9}>
         <Paper>
           <IconButton sx={{ padding: "10px" }} aria-label="search">
-            <SearchIcon />
+            <Icon>search</Icon>
           </IconButton>
           <Input
             autoFocus
@@ -225,7 +212,7 @@ export default function SearchIcons(props: Props) {
         >{`${icons.length} matching results`}</Typography>
         <Icons icons={paged(icons, page)} handleOpenClick={props.onSelect} />
       </Grid>
-      <Stack spacing={2} sx={{margin: "0 auto"}}>
+      <Stack spacing={2} sx={{ margin: "0 auto" }}>
         <Pagination
           count={pagesCount}
           page={page}
