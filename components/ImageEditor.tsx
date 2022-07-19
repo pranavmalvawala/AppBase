@@ -6,8 +6,8 @@ interface Props {
   title?: string;
   photoUrl: string;
   aspectRatio: number;
-  onUpdate?: (dataUrl?: string) => void;
-  onCancel?: () => void;
+  onUpdate: (dataUrl?: string) => void;
+  onCancel: () => void;
 }
 
 export function ImageEditor({ title = "Crop", photoUrl, aspectRatio, onUpdate, onCancel }: Props) {
