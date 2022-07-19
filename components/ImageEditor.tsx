@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import Cropper from "react-cropper";
+import "cropperjs/dist/cropper.css";
 import { InputBox, SmallButton } from ".";
 
 interface Props {
