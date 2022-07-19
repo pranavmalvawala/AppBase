@@ -8,4 +8,5 @@ export { QuestionEdit } from "./QuestionEdit";
 export { FormSubmissionEdit } from "./FormSubmissionEdit";
 export { SmallButton } from "./SmallButton";
 export { FloatingSupport } from "./FloatingSupport";
+export { ImageEditor } from "./ImageEditor";
 export * from "./material";
