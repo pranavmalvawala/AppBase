@@ -142,7 +142,7 @@ export default function SearchIcons(props: Props) {
         if (value === "") {
           setKeys(null);
         } else {
-          searchIndex.searchAsync(value, { limit: 3000 }).then((results) => {
+          searchIndex.searchAsync(value, { limit: 3000 }).then((results: any) => {
             setKeys(results);
             setPage(1);
           });
