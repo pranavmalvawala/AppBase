@@ -9,8 +9,8 @@ export const TableReport = (props: Props) => {
 
   const getHeaders = () => {
     const result: JSX.Element[] = []
-    props.output.columns.forEach(c => {
-      result.push(<th>{c.header}</th>);
+    props.output.columns.forEach((c, i) => {
+      result.push(<th key={i}>{c.header}</th>);
     })
     return result;
   }

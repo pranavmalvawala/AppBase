@@ -85,7 +85,7 @@ export const CardForm: React.FC<Props> = (props) => {
   return (
     <InputBox headerIcon="volunteer_activism" headerText={getHeaderText()} ariaLabelSave="save-button" ariaLabelDelete="delete-button" cancelFunction={handleCancel} saveFunction={showSave ? handleSave : saveDisabled} deleteFunction={props.card.id ? handleDelete : undefined}>
       {errorMessage && <ErrorMessages errors={[errorMessage]}></ErrorMessages>}
-      <form>
+      <div>
         {!props.card.id
           ? <CardElement options={formStyling} />
           : <Grid container spacing={3}>
@@ -97,7 +97,7 @@ export const CardForm: React.FC<Props> = (props) => {
             </Grid>
           </Grid>
         }
-      </form>
+      </div>
     </InputBox>
   );
 

@@ -27,7 +27,7 @@ function TabPanel(props: TabPanelProps) {
     <div role="tabpanel" hidden={value !== index} id={`userMenuPanel-${index}`}>
       {value === index && (
         <StyledMenuBox>
-          <Typography>{children}</Typography>
+          <Box>{children}</Box>
         </StyledMenuBox>
       )}
     </div>
@@ -60,9 +60,9 @@ export const UserMenu: React.FC<Props> = (props) => {
 
   const getMainLinks = () => {
     let result: JSX.Element[] = [];
-    result.push(<NavItem url={CommonEnvironmentHelper.AccountsRoot + "/profile"} label="Profile" icon="person" external={true} />);
-    result.push(<NavItem url="/logout" label="Logout" icon="logout" />);
-    result.push(<NavItem label="Support" icon="help" onClick={() => { setShowSupport(true) }} />);
+    result.push(<NavItem url={CommonEnvironmentHelper.AccountsRoot + "/profile"} key="/profile" label="Profile" icon="person" external={true} />);
+    result.push(<NavItem url="/logout" label="Logout" icon="logout" key="/logout" />);
+    result.push(<NavItem label="Support" key="Support" icon="help" onClick={() => { setShowSupport(true) }} />);
     return result;
   }
 

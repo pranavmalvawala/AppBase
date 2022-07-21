@@ -7,20 +7,24 @@ import { TableReport } from "./TableReport";
 import { ChartReport } from "./ChartReport";
 import { TreeReport } from "./TreeReport";
 import { Icon } from "@mui/material";
+import useMountedState from "../../hooks/useMountedState";
 
 interface Props { report: ReportInterface }
 
 export const ReportOutput = (props: Props) => {
   const [reportResult, setReportResult] = React.useState<ReportResultInterface>(null);
   const contentRef = useRef<HTMLDivElement>(null);
+  const isMounted = useMountedState();
 
   const handlePrint = useReactToPrint({
     content: () => contentRef.current
   })
 
   const runReport = () => {
+    if(!isMounted()) {
+      return;
+    }
     if (props.report) {
-      console.log("RUNNING: " + props.report.displayName)
       const queryParams: string[] = [];
       props.report.parameters.forEach(p => {
         if (p.value) queryParams.push(p.keyName + "=" + p.value);
@@ -32,7 +36,7 @@ export const ReportOutput = (props: Props) => {
     }
   }
 
-  React.useEffect(runReport, [props.report]);
+  React.useEffect(runReport, [props.report, isMounted]);
 
   const getEditContent = () => {
     const result: JSX.Element[] = [];
@@ -47,9 +51,9 @@ export const ReportOutput = (props: Props) => {
   const getOutputs = () => {
     const result: JSX.Element[] = [];
     reportResult.outputs.forEach(o => {
-      if (o.outputType === "table") result.push(<TableReport reportResult={reportResult} output={o} />)
-      if (o.outputType === "tree") result.push(<TreeReport reportResult={reportResult} output={o} />)
-      else if (o.outputType === "barChart") result.push(<ChartReport reportResult={reportResult} output={o} />)
+      if (o.outputType === "table") result.push(<TableReport key={o.outputType} reportResult={reportResult} output={o} />)
+      if (o.outputType === "tree") result.push(<TreeReport key={o.outputType} reportResult={reportResult} output={o} />)
+      else if (o.outputType === "barChart") result.push(<ChartReport key={o.outputType} reportResult={reportResult} output={o} />)
     })
 
     return result;

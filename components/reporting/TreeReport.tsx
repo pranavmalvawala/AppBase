@@ -20,8 +20,8 @@ export const TreeReport = (props: Props) => {
     const columns = props.output.columns;
     for (let i = totalGroupings; i < columns.length; i++) {
       const c = columns[i];
-      if (i === totalGroupings) result.push(<th>{c.header}</th>);
-      else result.push(<th>{c.header}</th>);
+      if (i === totalGroupings) result.push(<th key={i}>{c.header}</th>);
+      else result.push(<th key={i}>{c.header}</th>);
     }
     return result;
   }

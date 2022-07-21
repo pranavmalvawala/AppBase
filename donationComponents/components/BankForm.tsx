@@ -149,10 +149,10 @@ export const BankForm: React.FC<Props> = (props) => {
   return (
     <InputBox headerIcon="volunteer_activism" headerText={getHeaderText()} ariaLabelSave="save-button" ariaLabelDelete="delete-button" cancelFunction={handleCancel} saveFunction={showSave ? handleSave : saveDisabled} deleteFunction={props.bank.id && !props.showVerifyForm ? handleDelete : undefined}>
       {errorMessage && <ErrorMessages errors={[errorMessage]}></ErrorMessages>}
-      <form>
+      <div>
         {!props.bank.id && <p>Bank accounts will need to be verified before making any donations. Your account will receive two small deposits in approximately 1-3 business days. You will need to enter those deposit amounts to finish verifying your account by selecting the verify account link next to your bank account under the payment methods section.</p>}
         {getForm()}
-      </form>
+      </div>
     </InputBox>
   );
 

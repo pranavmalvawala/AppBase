@@ -33,7 +33,7 @@ export const FundDonation: React.FC<Props> = (props) => {
   return (
     <Grid container spacing={3}>
       <Grid item md={6} xs={12}>
-        <TextField fullWidth name="amount" label="Amount" type="number" aria-label="amount" lang="en-150" value={props.fundDonation.amount} onChange={handleChange} />
+        <TextField fullWidth name="amount" label="Amount" type="number" aria-label="amount" lang="en-150" value={props.fundDonation.amount || ""} onChange={handleChange} />
       </Grid>
       <Grid item md={6} xs={12}>
         <FormControl fullWidth>

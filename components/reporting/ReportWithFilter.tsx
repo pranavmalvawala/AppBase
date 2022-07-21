@@ -20,7 +20,6 @@ export const ReportWithFilter = (props: Props) => {
 
   const handleAutoRun = () => {
     if (props.autoRun && report) {
-      console.log(report.displayName)
       setReportToRun(report);
     }
   }

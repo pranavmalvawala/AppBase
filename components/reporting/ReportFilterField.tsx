@@ -108,8 +108,7 @@ export const ReportFilterField = (props: Props) => {
     }
 
     const result: JSX.Element[] = [];
-
-    options.forEach(o => { result.push(<MenuItem value={o.value}>{o.text}</MenuItem>) });
+    options.forEach((o, i) => { result.push(<MenuItem key={i} value={o.value}>{o.text}</MenuItem>) });
     return result;
   }
 
@@ -129,14 +128,14 @@ export const ReportFilterField = (props: Props) => {
       result = (
         <FormControl fullWidth>
           <InputLabel>{props.parameter.displayName}</InputLabel>
-          <Select value={props.parameter.value} label={props.parameter.displayName} onChange={handleChange} name={props.parameter.keyName}>
+          <Select value={props.parameter.value || ""} label={props.parameter.displayName} onChange={handleChange} name={props.parameter.keyName}>
             {getOptions()}
           </Select>
         </FormControl>
       );
       break;
     case "date":
-      result = (<TextField type="date" fullWidth InputLabelProps={{shrink: true}} label="Date" value={props.parameter.value} onChange={handleChange} name={props.parameter.keyName} />)
+      result = (<TextField type="date" fullWidth InputLabelProps={{shrink: true}} label="Date" value={props.parameter.value || ""} onChange={handleChange} name={props.parameter.keyName} />)
       break;
   }
   return result;
