@@ -5,17 +5,23 @@ import { Loading } from "../Loading"
 import { Grid } from "@mui/material"
 import { ReportOutput } from "./ReportOutput"
 import { ReportFilter } from "./ReportFilter"
+import useMountedState from "../../hooks/useMountedState";
 
 interface Props { keyName: string, autoRun: boolean }
 
 export const ReportWithFilter = (props: Props) => {
   const [report, setReport] = React.useState<ReportInterface>(null);
   const [reportToRun, setReportToRun] = React.useState<ReportInterface>(null);
+  const isMounted = useMountedState();
 
   const loadData = () => {
     setReportToRun(null);
     setReport(null);
-    ApiHelper.get("/reports/" + props.keyName, "ReportingApi").then(data => setReport(data));
+    ApiHelper.get("/reports/" + props.keyName, "ReportingApi").then(data => {
+      if(isMounted()) {
+        setReport(data);
+      }
+    });
   }
 
   const handleAutoRun = () => {
@@ -24,7 +30,7 @@ export const ReportWithFilter = (props: Props) => {
     }
   }
 
-  React.useEffect(loadData, [props.keyName]);
+  React.useEffect(loadData, [props.keyName, isMounted]);
   React.useEffect(handleAutoRun, [report, props.autoRun]);
 
   const handleRun = () => { setReportToRun(report); }

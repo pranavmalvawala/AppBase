@@ -96,7 +96,11 @@ export class ApiHelper {
     try {
       const response = await fetch(url, requestOptions);
       if (!response.ok) await this.throwApiError(response);
-      else return response.json();
+      else {
+        if (response.status !== 204 ) {
+          return response.json();
+        }
+      }
     } catch (e) {
       console.log("Error loading url: " + url);
       console.log(e)

@@ -6,6 +6,7 @@ import { ApiHelper, DateHelper, UniqueIdHelper, CurrencyHelper } from "../helper
 import { DonationInterface, PersonInterface, StripePaymentMethod } from "../interfaces";
 import { Link } from "react-router-dom"
 import { Table, TableBody, TableRow, TableCell, TableHead, Alert } from "@mui/material"
+import useMountedState from "../hooks/useMountedState";
 
 interface Props { personId: string, appName?: string }
 
@@ -17,15 +18,24 @@ export const DonationPage: React.FC<Props> = (props) => {
   const [person, setPerson] = React.useState<PersonInterface>(null);
   const [message, setMessage] = React.useState<string>(null);
   const [appName, setAppName] = React.useState<string>("");
+  const isMounted = useMountedState();
 
   const loadData = () => {
     if (props?.appName) setAppName(props.appName);
     if (!UniqueIdHelper.isMissing(props.personId)) {
-      ApiHelper.get("/donations?personId=" + props.personId, "GivingApi").then(data => setDonations(data));
+      ApiHelper.get("/donations?personId=" + props.personId, "GivingApi").then(data => {
+        if(isMounted()) {
+          setDonations(data);
+        }});
       ApiHelper.get("/gateways", "GivingApi").then(data => {
         if (data.length && data[0]?.publicKey) {
-          setStripe(loadStripe(data[0].publicKey));
+          if(isMounted()) {
+            setStripe(loadStripe(data[0].publicKey));
+          }
           ApiHelper.get("/paymentmethods/personid/" + props.personId, "GivingApi").then(results => {
+            if(!isMounted()) {
+              return;
+            }
             if (!results.length) setPaymentMethods([]);
             else {
               let cards = results[0].cards.data.map((card: any) => new StripePaymentMethod(card));
@@ -35,7 +45,11 @@ export const DonationPage: React.FC<Props> = (props) => {
               setPaymentMethods(methods);
             }
           });
-          ApiHelper.get("/people/" + props.personId, "MembershipApi").then(data => { setPerson(data) });
+          ApiHelper.get("/people/" + props.personId, "MembershipApi").then(data => {
+            if(isMounted()) {
+              setPerson(data);
+            }
+          });
         }
         else setPaymentMethods([]);
       });
@@ -89,7 +103,7 @@ export const DonationPage: React.FC<Props> = (props) => {
     return rows;
   }
 
-  React.useEffect(loadData, []); //eslint-disable-line
+  React.useEffect(loadData, [isMounted]); //eslint-disable-line
 
   const getTable = () => {
     if (!donations) return <Loading />;

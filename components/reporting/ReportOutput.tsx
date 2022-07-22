@@ -21,9 +21,6 @@ export const ReportOutput = (props: Props) => {
   })
 
   const runReport = () => {
-    if(!isMounted()) {
-      return;
-    }
     if (props.report) {
       const queryParams: string[] = [];
       props.report.parameters.forEach(p => {
@@ -32,7 +29,11 @@ export const ReportOutput = (props: Props) => {
       let url = "/reports/" + props.report.keyName + "/run";
       if (queryParams) url += "?" + queryParams.join("&");
 
-      ApiHelper.get(url, "ReportingApi").then((data: ReportResultInterface) => setReportResult(data));
+      ApiHelper.get(url, "ReportingApi").then((data: ReportResultInterface) => {
+        if(isMounted()) {
+          setReportResult(data);
+        }
+      });
     }
   }
 

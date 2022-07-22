@@ -2,6 +2,7 @@ import React from "react";
 import { ReportInterface, ParameterInterface } from "../../interfaces";
 import { ApiHelper, ArrayHelper, DateHelper } from "../../helpers";
 import { FormControl, InputLabel, Select, SelectChangeEvent, TextField, MenuItem } from "@mui/material";
+import useMountedState from "../../hooks/useMountedState";
 
 interface Props {
   parameter: ParameterInterface,
@@ -13,6 +14,7 @@ export const ReportFilterField = (props: Props) => {
 
   const [rawData, setRawData] = React.useState<any[]>(null);
   const [secondaryData, setSecondaryData] = React.useState<any[]>(null);
+  const isMounted = useMountedState();
 
   const init = async () => {
     switch (props.parameter.sourceKey) {
@@ -23,17 +25,32 @@ export const ReportFilterField = (props: Props) => {
         setRawData(getMonths());
         break;
       case "campus":
-        ApiHelper.get("/campuses", "AttendanceApi").then(data => { data.unshift({ id: "", name: "Any" }); setRawData(data); })
+        ApiHelper.get("/campuses", "AttendanceApi").then(data => { data.unshift({ id: "", name: "Any" });
+          if(isMounted()) {
+            setRawData(data);
+          }})
         break;
       case "service":
-        ApiHelper.get("/services", "AttendanceApi").then(data => { data.unshift({ id: "", name: "Any" }); setRawData(data); })
+        ApiHelper.get("/services", "AttendanceApi").then(data => { data.unshift({ id: "", name: "Any" });
+          if(isMounted()) {
+            setRawData(data);
+          }})
         break;
       case "serviceTime":
-        ApiHelper.get("/serviceTimes", "AttendanceApi").then(data => { data.unshift({ id: "", name: "Any" }); setRawData(data); })
+        ApiHelper.get("/serviceTimes", "AttendanceApi").then(data => { data.unshift({ id: "", name: "Any" });
+          if(isMounted()) {
+            setRawData(data);
+          }})
         break;
       case "group":
-        ApiHelper.get("/groups", "MembershipApi").then(data => { data.unshift({ id: "", name: "Any" }); setRawData(data); })
-        ApiHelper.get("/groupServiceTimes", "AttendanceApi").then(data => { setSecondaryData(data); })
+        ApiHelper.get("/groups", "MembershipApi").then(data => { data.unshift({ id: "", name: "Any" });
+          if(isMounted()) {
+            setRawData(data);
+          }})
+        ApiHelper.get("/groupServiceTimes", "AttendanceApi").then(data => {
+          if(isMounted()) {
+            setSecondaryData(data);
+          }})
         break;
     }
     setDefaultValue();
@@ -120,7 +137,7 @@ export const ReportFilterField = (props: Props) => {
     props.onChange(p, parentIds);
   }
 
-  React.useEffect(() => { init() }, [props.parameter.keyName]); //eslint-disable-line
+  React.useEffect(() => { init() }, [props.parameter.keyName, isMounted]); //eslint-disable-line
 
   let result = <></>
   switch (props.parameter.source) {
