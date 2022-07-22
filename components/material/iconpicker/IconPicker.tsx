@@ -41,23 +41,21 @@ const StyledSvgIcon: any = styled(SvgIcon)(({ theme }) => ({
   }
 }));
 
-const Icons = React.memo(function Icons(props: {
-  icons: any[];
-  handleOpenClick: (name: string) => void;
-}) {
+const Icons = React.memo(function Icons(props: { icons: any[]; handleOpenClick: (name: string) => void; }) {
   const { icons, handleOpenClick } = props;
+
+  const handleIconClick = (name: string) => {
+    const camel = name.substring(0, 1).toLocaleLowerCase() + name.substring(1, name.length);
+    const underscored = camel.replace(/[A-Z]/g, m => "_" + m.toLowerCase());
+    console.log(underscored);
+    handleOpenClick(underscored)
+  }
 
   return (
     <div>
       {icons.map((icon) => (
         <StyledIcon key={icon.importName}>
-          <StyledSvgIcon
-            component={icon.Component}
-            fontSize="large"
-            tabIndex={-1}
-            onClick={() => handleOpenClick(icon.importName)}
-            title={icon.importName}
-          />
+          <StyledSvgIcon component={icon.Component} fontSize="large" tabIndex={-1} onClick={() => { handleIconClick(icon.importName) }} title={icon.importName} />
         </StyledIcon>
       ))}
     </div>
@@ -74,53 +72,29 @@ const StyledRadioGroup = styled(RadioGroup)(({ theme }) => ({
   }
 }));
 
-const Paper = styled(MuiPaper)(({ theme }) => ({
-  padding: "2px 4px",
-  display: "flex",
-  alignItems: "center",
-  marginBottom: theme.spacing(2),
-  width: "100%"
-}));
+const Paper = styled(MuiPaper)(({ theme }) => ({ padding: "2px 4px", display: "flex", alignItems: "center", marginBottom: theme.spacing(2), width: "100%" }));
 
-const Input = styled(InputBase)({
-  marginLeft: 8,
-  flex: 1
-});
+const Input = styled(InputBase)({ marginLeft: 8, flex: 1 });
 
-const searchIndex = new FlexSearchIndex({
-  tokenize: "full"
-});
+const searchIndex = new FlexSearchIndex({ tokenize: "full" });
 
 const allIconsMap: any = {};
 const allIcons = Object.keys(mui)
   .sort()
   .map((importName) => {
     let theme;
-    if (importName.indexOf("Outlined") !== -1) {
-      theme = "Outlined";
-    } else if (importName.indexOf("TwoTone") !== -1) {
-      theme = "Two tone";
-    } else if (importName.indexOf("Rounded") !== -1) {
-      theme = "Rounded";
-    } else if (importName.indexOf("Sharp") !== -1) {
-      theme = "Sharp";
-    } else {
-      theme = "Filled";
-    }
+    if (importName.indexOf("Outlined") !== -1) theme = "Outlined";
+    else if (importName.indexOf("TwoTone") !== -1) theme = "Two tone";
+    else if (importName.indexOf("Rounded") !== -1) theme = "Rounded";
+    else if (importName.indexOf("Sharp") !== -1) theme = "Sharp";
+    else theme = "Filled";
 
     const name = importName.replace(/(Outlined|TwoTone|Rounded|Sharp)$/, "");
     let searchable = name;
-    if (synonyms[searchable]) {
-      searchable += ` ${synonyms[searchable]}`;
-    }
+    if (synonyms[searchable]) searchable += ` ${synonyms[searchable]}`;
     searchIndex.addAsync(importName, searchable);
 
-    const icon = {
-      importName,
-      name,
-      theme,
-      Component: (mui as any)[importName]
-    };
+    const icon = { importName, name, theme, Component: (mui as any)[importName] };
     allIconsMap[importName] = icon;
     return icon;
   });
@@ -139,24 +113,13 @@ export default function SearchIcons(props: Props) {
   const updateSearchResults = React.useMemo(
     () =>
       debounce((value) => {
-        if (value === "") {
-          setKeys(null);
-        } else {
-          searchIndex.searchAsync(value, { limit: 3000 }).then((results: any) => {
-            setKeys(results);
-            setPage(1);
-          });
-        }
+        if (value === "") setKeys(null);
+        else searchIndex.searchAsync(value, { limit: 3000 }).then((results: any) => { setKeys(results); setPage(1); });
       }, UPDATE_SEARCH_INDEX_WAIT_MS),
     []
   );
 
-  React.useEffect(() => {
-    updateSearchResults(query);
-    return () => {
-      updateSearchResults.clear();
-    };
-  }, [query, updateSearchResults]);
+  React.useEffect(() => { updateSearchResults(query); return () => { updateSearchResults.clear(); }; }, [query, updateSearchResults]);
 
   function paged<T>(array: Array<T>, p: number) {
     return array.slice((p - 1) * pageSize, p * pageSize);
@@ -179,16 +142,8 @@ export default function SearchIcons(props: Props) {
         <Form>
           <StyledRadioGroup>
             {["Filled", "Outlined", "Rounded", "Two tone", "Sharp"].map(
-              (currentTheme) => (<FormControlLabel
-                key={currentTheme}
-                control={
-                  <Radio
-                    checked={theme === currentTheme}
-                    onChange={() => setTheme(currentTheme)}
-                    value={currentTheme}
-                  />
-                }
-                label={currentTheme}
+              (currentTheme) => (<FormControlLabel key={currentTheme} label={currentTheme}
+                control={<Radio checked={theme === currentTheme} onChange={() => setTheme(currentTheme)} value={currentTheme} />}
               />)
             )}
           </StyledRadioGroup>
@@ -199,26 +154,13 @@ export default function SearchIcons(props: Props) {
           <IconButton sx={{ padding: "10px" }} aria-label="search">
             <Icon>search</Icon>
           </IconButton>
-          <Input
-            autoFocus
-            value={query}
-            onChange={(event) => setQuery(event.target.value)}
-            placeholder="Search icons…"
-            inputProps={{ "aria-label": "search icons" }}
-          />
+          <Input autoFocus value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search icons…" inputProps={{ "aria-label": "search icons" }} />
         </Paper>
-        <Typography
-          sx={{ mb: 1 }}
-        >{`${icons.length} matching results`}</Typography>
+        <Typography sx={{ mb: 1 }}>{`${icons.length} matching results`}</Typography>
         <Icons icons={paged(icons, page)} handleOpenClick={props.onSelect} />
       </Grid>
       <Stack spacing={2} sx={{ margin: "0 auto" }}>
-        <Pagination
-          count={pagesCount}
-          page={page}
-          onChange={(_, p) => setPage(p)}
-          size="small"
-        />
+        <Pagination count={pagesCount} page={page} onChange={(_, p) => setPage(p)} size="small" />
       </Stack>
     </Grid>
   );
