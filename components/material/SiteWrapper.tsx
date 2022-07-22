@@ -3,6 +3,7 @@ import { AppBar, Drawer, IconButton, styled, Toolbar, Icon, Typography, Box, Con
 import { UserHelper, AppearanceHelper, PersonHelper } from "../../helpers";
 import { UserMenu } from "./UserMenu";
 import { UserContextInterface } from "../../interfaces";
+import useMountedState from "../../hooks/useMountedState";
 
 interface Props {
   navContent: JSX.Element,
@@ -74,6 +75,7 @@ export const SiteWrapper: React.FC<Props> = props => {
   const [churchLogo, setChurchLogo] = React.useState<string>();
   const [open, setOpen] = React.useState(false);
   const toggleDrawer = () => { setOpen(!open); };
+  const isMounted = useMountedState();
 
   const CustomDrawer = (open) ? OpenDrawer : ClosedDrawer;
   const CustomAppBar = (open) ? OpenDrawerAppBar : ClosedDrawerAppBar;
@@ -85,7 +87,11 @@ export const SiteWrapper: React.FC<Props> = props => {
     }
   }
 
-  React.useEffect(() => { getChurchLogo(); }, []);
+  React.useEffect(() => {
+    if(!isMounted()) {
+      getChurchLogo();
+    }
+  }, [isMounted]);
 
   return <>
     <CustomAppBar position="absolute">
