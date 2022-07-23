@@ -124,10 +124,10 @@ export const ReportFilterField = (props: Props) => {
       }
     }
 
-    const result: JSX.Element[] = [];
-    options.forEach((o, i) => { result.push(<MenuItem key={i} value={o.value}>{o.text}</MenuItem>) });
-    return result;
+    return options;
   }
+
+  const options = getOptions();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement> | SelectChangeEvent<string>) => {
     const p = { ...props.parameter };
@@ -145,8 +145,8 @@ export const ReportFilterField = (props: Props) => {
       result = (
         <FormControl fullWidth>
           <InputLabel>{props.parameter.displayName}</InputLabel>
-          <Select value={props.parameter.value || ""} label={props.parameter.displayName} onChange={handleChange} name={props.parameter.keyName}>
-            {getOptions()}
+          <Select value={options.find(v => v.value === props.parameter.value)?.value || ""} label={props.parameter.displayName} onChange={handleChange} name={props.parameter.keyName}>
+            {options.map((o,i) => <MenuItem key={i} value={o.value}>{o.text}</MenuItem>)}
           </Select>
         </FormControl>
       );
