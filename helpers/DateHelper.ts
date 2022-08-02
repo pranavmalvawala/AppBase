@@ -2,8 +2,18 @@ import { format as dateFormat } from "date-fns"
 
 export class DateHelper {
 
-  static convertToDate(input: any) {
+  //Fixes timezone issues when you just need the date.
+  static toDate(input: any) {
+    return new Date(Date.parse(input.toString().replace("Z", "")));
+  }
+
+  static toDateTime(input: any) {
     return new Date(Date.parse(input.toString()));
+  }
+
+  //obsolete.  Do not use
+  static convertToDate(input: any) {
+    return this.toDateTime(input);
   }
 
   static addDays(date: Date, days: number) {
