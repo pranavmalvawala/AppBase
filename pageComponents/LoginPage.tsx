@@ -135,10 +135,6 @@ export const LoginPage: React.FC<Props> = (props) => {
       }
     }
 
-
-    console.log("login override?");
-    console.log(props.loginSuccessOverride)
-
     if (props.loginSuccessOverride !== undefined) props.loginSuccessOverride();
     else {
       props.context.setUser(UserHelper.user);
@@ -146,10 +142,11 @@ export const LoginPage: React.FC<Props> = (props) => {
       props.context.setChurch(UserHelper.currentChurch)
       try {
         const p = await ApiHelper.get(`/people/${UserHelper.currentChurch.personId}`, "MembershipApi");
-        props.context.setPerson(p);
+        if (p) props.context.setPerson(p);
       } catch {
         console.log("claiming person");
         const personClaim = await ApiHelper.get("/people/claim/" + UserHelper.currentChurch.id, "MembershipApi");
+        await ApiHelper.post("/userChurch/claim", { encodedPerson: personClaim.encodedPerson }, "AccessApi");
         props.context.setPerson(personClaim);
       }
     }
