@@ -86,9 +86,6 @@ export const LoginPage: React.FC<Props> = (props) => {
       selectedChurchId = decoded.churchId
     }
 
-    //Not needed - handled in continuedLoginProcess
-    //ApiHelper.patch(`/userChurch/${UserHelper.user.id}`, { churchId: selectedChurchId, appName: props.appName }, "AccessApi")
-
     const search = new URLSearchParams(location?.search);
     const churchIdInParams = search.get("churchId");
 
@@ -108,7 +105,7 @@ export const LoginPage: React.FC<Props> = (props) => {
         registeredChurch = null;
         login({ jwt: userJwt || userJwtBackup });
       });
-    } else continuedLoginProcess();
+    } else await continueLoginProcess();
   }
 
   const selectChurchByKeyName = async () => {
@@ -122,11 +119,11 @@ export const LoginPage: React.FC<Props> = (props) => {
       return;
     }
     await UserHelper.selectChurch(props.context, undefined, props.keyName);
-    continuedLoginProcess()
+    await continueLoginProcess()
     return;
   }
 
-  function continuedLoginProcess() {
+  async function continueLoginProcess() {
     if (UserHelper.currentChurch) {
       UserHelper.currentChurch.apis.forEach(api => {
         if (api.keyName === "AccessApi") setCookie("jwt", api.jwt, { path: "/" });
@@ -138,17 +135,29 @@ export const LoginPage: React.FC<Props> = (props) => {
       }
     }
 
-    const search = new URLSearchParams(location?.search);
-    const returnUrl = search.get("returnUrl") || props.returnUrl;
-    if (returnUrl) setRedirectTo(returnUrl);
+
+    console.log("login override?");
+    console.log(props.loginSuccessOverride)
 
     if (props.loginSuccessOverride !== undefined) props.loginSuccessOverride();
     else {
       props.context.setUser(UserHelper.user);
       props.context.setChurches(UserHelper.churches)
       props.context.setChurch(UserHelper.currentChurch)
-      ApiHelper.get(`/people/${UserHelper.currentChurch.personId}`, "MembershipApi").then(p => { props.context.setPerson(p); });
+      try {
+        const p = await ApiHelper.get(`/people/${UserHelper.currentChurch.personId}`, "MembershipApi");
+        props.context.setPerson(p);
+      } catch {
+        console.log("claiming person");
+        const personClaim = await ApiHelper.get("/people/claim/" + UserHelper.currentChurch.id, "MembershipApi");
+        props.context.setPerson(personClaim);
+      }
     }
+
+    const search = new URLSearchParams(location?.search);
+    const returnUrl = search.get("returnUrl") || props.returnUrl;
+    if (returnUrl) setRedirectTo(returnUrl);
+
   }
 
   async function selectChurch(churchId: string) {
@@ -161,13 +170,17 @@ export const LoginPage: React.FC<Props> = (props) => {
 
         //create/claim the person record and relogin
         const personClaim = await ApiHelper.get("/people/claim/" + churchId, "MembershipApi");
+        //*************************************************************************************not firing???
+        console.log("PERSON CLAIM")
+        console.log(personClaim);
+
         await ApiHelper.post("/userChurch/claim", { encodedPerson: personClaim.encodedPerson }, "AccessApi");
         login({ jwt: userJwt || userJwtBackup });
         return;
       }
 
       UserHelper.selectChurch(props.context, churchId, null).then(() => {
-        continuedLoginProcess()
+        continueLoginProcess()
       });
     } catch (err) {
       console.log("Error in selecting church: ", err)
@@ -261,13 +274,13 @@ export const LoginPage: React.FC<Props> = (props) => {
   const getLoginRegister = () => {
     if (showRegister) return (
       <Box id="loginBox" sx={{ backgroundColor: "#FFF", border: "1px solid #CCC", borderRadius: "5px", padding: "20px" }}>
-        <Typography component="h2" sx={{fontSize: "32px", fontWeight: 500, lineHeight: 1.2, margin: "0 0 8px 0"}}>Create an Account</Typography>
+        <Typography component="h2" sx={{ fontSize: "32px", fontWeight: 500, lineHeight: 1.2, margin: "0 0 8px 0" }}>Create an Account</Typography>
         <Register updateErrors={setErrors} appName={props.appName} appUrl={props.appUrl} loginCallback={handleLoginCallback} userRegisteredCallback={props.userRegisteredCallback} />
       </Box>
     );
     if (showForgot) return (
       <Box id="loginBox" sx={{ backgroundColor: "#FFF", border: "1px solid #CCC", borderRadius: "5px", padding: "20px" }}>
-        <Typography component="h2" sx={{fontSize: "32px", fontWeight: 500, lineHeight: 1.2, margin: "0 0 8px 0"}}>Reset Password</Typography>
+        <Typography component="h2" sx={{ fontSize: "32px", fontWeight: 500, lineHeight: 1.2, margin: "0 0 8px 0" }}>Reset Password</Typography>
         <Forgot registerCallback={handleRegisterCallback} loginCallback={handleLoginCallback} />
       </Box>
     );
@@ -282,7 +295,7 @@ export const LoginPage: React.FC<Props> = (props) => {
 
   if (redirectTo) return <Navigate to={redirectTo} />;
   else return (
-    <Box sx={{maxWidth: "382px"}} px="16px" mx="auto">
+    <Box sx={{ maxWidth: "382px" }} px="16px" mx="auto">
       <img src={props.logo || "/images/logo-login.png"} alt="logo" style={{ width: "100%", marginTop: 100, marginBottom: 60 }} />
       <ErrorMessages errors={errors} />
       {getWelcomeBack()}
