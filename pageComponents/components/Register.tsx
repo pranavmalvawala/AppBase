@@ -77,7 +77,7 @@ export const Register: React.FC<Props> = (props) => {
   const getForm = () => (<>
     <ErrorMessages errors={errors} />
     <form onSubmit={register}>
-      <TextField fullWidth autoFocus name="firstName" label="First Name" value={user.firstName} onChange={handleChange} />
+      <TextField fullWidth name="firstName" label="First Name" value={user.firstName} onChange={handleChange} />
       <TextField fullWidth name="lastName" label="Last Name" value={user.lastName} onChange={handleChange} />
       <TextField fullWidth type="email" name="email" label="Email" value={user.email} onChange={handleChange} />
       <br />
