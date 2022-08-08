@@ -31,6 +31,7 @@ export const Forgot: React.FC<Props> = props => {
   }
 
   const reset: FormEventHandler = (e) => {
+    e.preventDefault();
     if (validate()) {
       setIsSubmitting(true);
       let req: ResetPasswordRequestInterface = { userEmail: email };
@@ -49,7 +50,6 @@ export const Forgot: React.FC<Props> = props => {
         }
       }).finally(() => { setIsSubmitting(false); });
     }
-    e.preventDefault();
   }
 
   return (
@@ -61,7 +61,7 @@ export const Forgot: React.FC<Props> = props => {
         <>
           <TextField fullWidth autoFocus label="Email" aria-label="email" id="email" name="email" value={email} onChange={handleChange} placeholder="Email address" onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => e.key === "Enter" && reset} />
           <br />
-          <Box sx={{textAlign: "right", marginY: 1 }}>
+          <Box sx={{ textAlign: "right", marginY: 1 }}>
             <a href="about:blank" className="text-decoration" onClick={(e) => { e.preventDefault(); props.registerCallback(); }}>Register</a> &nbsp; | &nbsp;
             <a href="about:blank" className="text-decoration" onClick={(e) => { e.preventDefault(); props.loginCallback(); }}>Login</a>&nbsp;
           </Box>

@@ -50,6 +50,7 @@ export const Register: React.FC<Props> = (props) => {
   }
 
   const register: FormEventHandler = (e) => {
+    e.preventDefault();
     props.updateErrors([])
     if (validate()) {
       setIsSubmitting(true);
