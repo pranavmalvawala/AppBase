@@ -61,7 +61,8 @@ export const UserMenu: React.FC<Props> = (props) => {
 
   const getMainLinks = () => {
     let result: JSX.Element[] = [];
-    result.push(<NavItem url={CommonEnvironmentHelper.AccountsRoot + "/profile"} key="/profile" label="Profile" icon="person" external={true} router={props.router} />);
+    if (props.appName === "AccountsApp") result.push(<NavItem url={"/profile"} key="/profile" label="Profile" icon="person" router={props.router} />);
+    else result.push(<NavItem url={CommonEnvironmentHelper.AccountsRoot + "/profile"} key="/profile" label="Profile" icon="person" external={true} router={props.router} />);
     result.push(<NavItem url="/logout" label="Logout" icon="logout" key="/logout" router={props.router} />);
     result.push(<NavItem label="Support" key="Support" icon="help" onClick={() => { setShowSupport(true) }} />);
     return result;
