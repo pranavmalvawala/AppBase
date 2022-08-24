@@ -8,11 +8,11 @@ interface Props {
   contentType: string,
   contentId: string,
   formSubmissionId: string,
-  unRestrictedFormId: string,
+  unRestrictedFormId?: string,
   personId?: string,
   churchId?: string,
   updatedFunction: () => void,
-  cancelFunction: () => void
+  cancelFunction?: () => void
 }
 
 export const FormSubmissionEdit: React.FC<Props> = (props) => {
