@@ -25,7 +25,6 @@ export const SmallButton = React.forwardRef<HTMLDivElement, Props>((props, ref) 
     ? { backgroundColor: props.color, "& span": { marginRight: 1 } }
     : { minWidth: "auto", padding: "4px 4px" }
 
-
   if (redirectUrl) return <Navigate to={redirectUrl} />
   else return (
     <Tooltip title={props.toolTip || ""} arrow placement="top">
