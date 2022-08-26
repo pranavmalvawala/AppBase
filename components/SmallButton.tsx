@@ -1,6 +1,6 @@
 import React from "react";
 import { Button, Icon, Tooltip } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 
 interface Props {
   ariaLabel?: string;
@@ -13,14 +13,11 @@ interface Props {
 }
 
 export const SmallButton = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
-  let navigate: any = null;
-  try {
-    navigate = useNavigate()
-  } catch (e) { console.log(e) }
+  const [redirectUrl, setRedirectUrl] = React.useState("");
 
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    if (props.href) navigate(props.href);
+    if (props.href) setRedirectUrl(props.href);
     else props.onClick(e);
   }
 
@@ -29,7 +26,8 @@ export const SmallButton = React.forwardRef<HTMLDivElement, Props>((props, ref) 
     : { minWidth: "auto", padding: "4px 4px" }
 
 
-  return (
+  if (redirectUrl) return <Navigate to={redirectUrl} />
+  else return (
     <Tooltip title={props.toolTip || ""} arrow placement="top">
       <Button sx={style} variant={props.text ? "outlined" : "text"} color={props.color} aria-label={props.ariaLabel || "editButton"} onClick={handleClick} size="small">
         <Icon>{props.icon}</Icon>{(props.text) ? props.text : ""}

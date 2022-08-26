@@ -47,7 +47,6 @@ const Icons = React.memo(function Icons(props: { icons: any[]; handleOpenClick: 
   const handleIconClick = (name: string) => {
     const camel = name.substring(0, 1).toLocaleLowerCase() + name.substring(1, name.length);
     const underscored = camel.replace(/[A-Z]/g, m => "_" + m.toLowerCase());
-    console.log(underscored);
     handleOpenClick(underscored)
   }
 
@@ -134,7 +133,6 @@ export default function SearchIcons(props: Props) {
   );
 
   const pagesCount = Math.ceil(icons.length / pageSize);
-  console.log({ page, pagesCount });
 
   return (
     <Grid container sx={{ minHeight: 360, padding: "16px" }}>
