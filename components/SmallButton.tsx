@@ -13,7 +13,10 @@ interface Props {
 }
 
 export const SmallButton = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
-  const navigate = useNavigate()
+  let navigate: any = null;
+  try {
+    navigate = useNavigate()
+  } catch (e) { console.log(e) }
 
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -24,6 +27,7 @@ export const SmallButton = React.forwardRef<HTMLDivElement, Props>((props, ref) 
   const style = (props.text)
     ? { backgroundColor: props.color, "& span": { marginRight: 1 } }
     : { minWidth: "auto", padding: "4px 4px" }
+
 
   return (
     <Tooltip title={props.toolTip || ""} arrow placement="top">
