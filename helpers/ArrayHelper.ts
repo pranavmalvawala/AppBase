@@ -19,13 +19,13 @@ export class ArrayHelper {
   }
 
   static getOne(array: any[], propertyName: string, value: any) {
-    for (const item of array) if (ArrayHelper.compare(item, propertyName, value)) return item;
+    for (const item of array || []) if (ArrayHelper.compare(item, propertyName, value)) return item;
     return null
   }
 
   static getAll(array: any[], propertyName: string, value: any) {
     const result: any[] = []
-    for (const item of array) {
+    for (const item of array || []) {
       if (ArrayHelper.compare(item, propertyName, value)) result.push(item);
     }
     return result;
@@ -33,7 +33,7 @@ export class ArrayHelper {
 
   static getAllArray(array: any[], propertyName: string, values: any[]) {
     const result: any[] = []
-    for (const item of array) if (values.indexOf(item[propertyName]) > -1) result.push(item);
+    for (const item of array || []) if (values.indexOf(item[propertyName]) > -1) result.push(item);
     return result;
   }
 
