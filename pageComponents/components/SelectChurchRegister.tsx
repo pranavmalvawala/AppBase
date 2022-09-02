@@ -12,7 +12,12 @@ interface Props {
 }
 
 export const SelectChurchRegister: React.FC<Props> = (props) => {
-  const [church, setChurch] = React.useState<RegisterChurchRequestInterface>({ name: props.initialChurchName });
+  const suggestSubDomain = (name: string) => {
+    let result = name.toLowerCase().replaceAll("christian", "").replaceAll("church", "").replaceAll(" ", "");
+    return result;
+  }
+
+  const [church, setChurch] = React.useState<RegisterChurchRequestInterface>({ name: props.initialChurchName, appName: props.appName, subDomain: suggestSubDomain(props.initialChurchName) });
   const [errors, setErrors] = React.useState([]);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
 
