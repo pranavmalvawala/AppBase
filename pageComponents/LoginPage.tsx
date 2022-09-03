@@ -70,6 +70,7 @@ export const LoginPage: React.FC<Props> = (props) => {
   };
 
   const handleLoginSuccess = async (resp: LoginResponseInterface) => {
+    //console.log("Handle login success")
     userJwtBackup = resp.user.jwt;
     setUserJwt(userJwtBackup);
     ApiHelper.setDefaultPermissions(resp.user.jwt);
@@ -86,8 +87,13 @@ export const LoginPage: React.FC<Props> = (props) => {
       selectedChurchId = decoded.churchId
     }
 
+    //console.log("Selected church Id")
+    //console.log(selectedChurchId);
+    //console.log(props.keyName);
+
     const search = new URLSearchParams(location?.search);
     const churchIdInParams = search.get("churchId");
+
 
     if (props.keyName) selectChurchByKeyName();
     else if (selectedChurchId) selectChurchById();
@@ -99,6 +105,7 @@ export const LoginPage: React.FC<Props> = (props) => {
   }
 
   const selectChurchById = async () => {
+    //console.log("selectChurchById");
     await UserHelper.selectChurch(props.context, selectedChurchId, undefined);
     if (props.churchRegisteredCallback && registeredChurch) {
       props.churchRegisteredCallback(registeredChurch).then(() => {
@@ -151,9 +158,11 @@ export const LoginPage: React.FC<Props> = (props) => {
       }
     }
 
-    const search = new URLSearchParams(location?.search);
-    const returnUrl = search.get("returnUrl") || props.returnUrl;
-    if (returnUrl) setRedirectTo(returnUrl);
+    //console.log("Return url?");
+    //console.log(returnUrl);
+    //const search = new URLSearchParams(location?.search);
+    //const returnUrl = search.get("returnUrl") || props.returnUrl;
+    //if (returnUrl) setRedirectTo(returnUrl);
 
   }
 
@@ -213,6 +222,7 @@ export const LoginPage: React.FC<Props> = (props) => {
     setIsSubmitting(true);
     ApiHelper.postAnonymous("/users/login", data, "AccessApi")
       .then((resp: LoginResponseInterface) => {
+        console.log("login - success")
         setIsSubmitting(false);
         handleLoginSuccess(resp);
       })
