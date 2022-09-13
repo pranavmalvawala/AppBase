@@ -61,23 +61,21 @@ export function InputBox({
   if (className) classNames.push(className);
   return (
     <Paper id={id} sx={{ padding: 2, marginBottom: 4 }} data-cy={dataCy}>
-      <form>
-        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }} data-cy="header">
-          <Box sx={{ display: "flex", alignItems: "center" }}>
-            {headerIcon && <Icon sx={{ color: "#1976d2" }}>{headerIcon}</Icon>}
-            <Typography component="h2" sx={{ display: "inline-block", marginLeft: headerIcon ? 1 : 0 }} variant="h6" color="primary">
-              {headerText}
-            </Typography>
-          </Box>
-          <Box>
-            {headerActionContent}
-          </Box>
+      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }} data-cy="header">
+        <Box sx={{ display: "flex", alignItems: "center" }}>
+          {headerIcon && <Icon sx={{ color: "#1976d2" }}>{headerIcon}</Icon>}
+          <Typography component="h2" sx={{ display: "inline-block", marginLeft: headerIcon ? 1 : 0 }} variant="h6" color="primary">
+            {headerText}
+          </Typography>
         </Box>
-        <CustomContextBox>{children}</CustomContextBox>
-        <Stack direction="row" sx={{ marginTop: 1 }} spacing={1} justifyContent="end">
-          {buttons}
-        </Stack>
-      </form>
+        <Box>
+          {headerActionContent}
+        </Box>
+      </Box>
+      <CustomContextBox>{children}</CustomContextBox>
+      <Stack direction="row" sx={{ marginTop: 1 }} spacing={1} justifyContent="end">
+        {buttons}
+      </Stack>
     </Paper>
   );
 }

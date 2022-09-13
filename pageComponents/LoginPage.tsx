@@ -9,10 +9,13 @@ import { SelectChurchModal } from "./components/SelectChurchModal"
 import { Forgot } from "./components/Forgot";
 import { Alert, Box, Typography } from "@mui/material";
 import { Login } from "./components/Login";
+import { LoginSetPassword } from "./components/LoginSetPassword";
+import { ApprovalOutlined } from "@mui/icons-material";
 
 interface Props {
   context: UserContextInterface,
-  jwt: string, auth: string,
+  jwt: string,
+  auth: string,
   keyName?: string,
   logo?: string,
   appName?: string,
@@ -42,6 +45,16 @@ export const LoginPage: React.FC<Props> = (props) => {
   let registeredChurch: ChurchInterface = null;
   let userJwtBackup = ""; //use state copy for storing between page updates.  This copy for instant availability.
 
+
+  const cleanAppUrl = () => {
+    if (!props.appUrl) return null;
+    else {
+      const index = props.appUrl.indexOf("/", 9);
+      if (index === -1) return props.appUrl;
+      else return props.appUrl.substring(0, index);
+    }
+  }
+
   React.useEffect(() => {
     if (props.callbackErrors?.length > 0) {
       setErrors(props.callbackErrors)
@@ -54,9 +67,12 @@ export const LoginPage: React.FC<Props> = (props) => {
     if (action === "forgot") setShowForgot(true);
     else if (action === "register") setShowRegister(true);
     else {
+      /*
       if (props.auth) {
         login({ authGuid: props.auth });
-      } else if (props.jwt) {
+      } else 
+      */
+      if (props.jwt) {
         setWelcomeBackName(cookies.name);
         login({ jwt: props.jwt });
       } else {
@@ -197,10 +213,11 @@ export const LoginPage: React.FC<Props> = (props) => {
     if (showRegister) return (
       <Box id="loginBox" sx={{ backgroundColor: "#FFF", border: "1px solid #CCC", borderRadius: "5px", padding: "20px" }}>
         <Typography component="h2" sx={{ fontSize: "32px", fontWeight: 500, lineHeight: 1.2, margin: "0 0 8px 0" }}>Create an Account</Typography>
-        <Register updateErrors={setErrors} appName={props.appName} appUrl={props.appUrl} loginCallback={handleLoginCallback} userRegisteredCallback={props.userRegisteredCallback} />
+        <Register updateErrors={setErrors} appName={props.appName} appUrl={cleanAppUrl()} loginCallback={handleLoginCallback} userRegisteredCallback={props.userRegisteredCallback} />
       </Box>
     );
-    if (showForgot) return (<Forgot registerCallback={handleRegisterCallback} loginCallback={handleLoginCallback} />);
+    else if (showForgot) return (<Forgot registerCallback={handleRegisterCallback} loginCallback={handleLoginCallback} />);
+    else if (props.auth) return (<LoginSetPassword setErrors={setErrors} setShowForgot={setShowForgot} isSubmitting={isSubmitting} auth={props.auth} login={login} appName={props.appName} appUrl={cleanAppUrl()} />)
     else return <Login setShowRegister={setShowRegister} setShowForgot={setShowForgot} setErrors={setErrors} isSubmitting={isSubmitting} login={login} />;
   }
 
