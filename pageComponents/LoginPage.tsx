@@ -197,7 +197,7 @@ export const LoginPage: React.FC<Props> = (props) => {
   };
 
   const getWelcomeBack = () => { if (welcomeBackName !== "") return (<><Alert severity="info">Welcome back, <b>{welcomeBackName}</b>!  Please wait while we load your data.</Alert><Loading /></>); }
-  const getCheckEmail = () => { if (new URLSearchParams(location?.search).get("checkEmail") === "1") return <Alert severity="info"> Thank you for registering.  Please check your email for your temporary password.</Alert> }
+  const getCheckEmail = () => { if (new URLSearchParams(location?.search).get("checkEmail") === "1") return <Alert severity="info"> Thank you for registering.  Please check your email to continue.</Alert> }
   const handleRegisterCallback = () => { setShowForgot(false); setShowRegister(true); }
   const handleLoginCallback = () => { setShowForgot(false); setShowRegister(false); }
   const handleChurchRegistered = (church: ChurchInterface) => { registeredChurch = church; }

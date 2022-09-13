@@ -70,7 +70,7 @@ export const Register: React.FC<Props> = (props) => {
 
   const getThankYou = () => (
     <>
-      <p>Thank you for registering.  Please check your email for your temporary password in order to get started.</p>
+      <p>Thank you for registering.  Please check your email for your to continue.</p>
       <p><a href="/login">Return to login</a></p>
     </>
   )
