@@ -10,7 +10,6 @@ import { Forgot } from "./components/Forgot";
 import { Alert, Box, Typography } from "@mui/material";
 import { Login } from "./components/Login";
 import { LoginSetPassword } from "./components/LoginSetPassword";
-import { ApprovalOutlined } from "@mui/icons-material";
 
 interface Props {
   context: UserContextInterface,
@@ -45,7 +44,6 @@ export const LoginPage: React.FC<Props> = (props) => {
   let registeredChurch: ChurchInterface = null;
   let userJwtBackup = ""; //use state copy for storing between page updates.  This copy for instant availability.
 
-
   const cleanAppUrl = () => {
     if (!props.appUrl) return null;
     else {
@@ -67,11 +65,6 @@ export const LoginPage: React.FC<Props> = (props) => {
     if (action === "forgot") setShowForgot(true);
     else if (action === "register") setShowRegister(true);
     else {
-      /*
-      if (props.auth) {
-        login({ authGuid: props.auth });
-      } else 
-      */
       if (props.jwt) {
         setWelcomeBackName(cookies.name);
         login({ jwt: props.jwt });

@@ -49,7 +49,6 @@ export const LoginSetPassword: React.FC<Props> = props => {
     else props.setShowForgot(true);
   }
 
-
   React.useEffect(loadUser, []); //eslint-disable-line
 
   return (
