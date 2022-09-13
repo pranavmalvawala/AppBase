@@ -53,23 +53,27 @@ export const Forgot: React.FC<Props> = props => {
   }
 
   return (
-    <form onSubmit={reset}>
-      <p>Enter your email address to request a password reset.</p>
-      <ErrorMessages errors={errors} />
-      {successMessage}
-      {!successMessage && (
-        <>
-          <TextField fullWidth autoFocus label="Email" aria-label="email" id="email" name="email" value={email} onChange={handleChange} placeholder="Email address" onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => e.key === "Enter" && reset} />
-          <br />
-          <Box sx={{ textAlign: "right", marginY: 1 }}>
-            <a href="about:blank" className="text-decoration" onClick={(e) => { e.preventDefault(); props.registerCallback(); }}>Register</a> &nbsp; | &nbsp;
-            <a href="about:blank" className="text-decoration" onClick={(e) => { e.preventDefault(); props.loginCallback(); }}>Login</a>&nbsp;
-          </Box>
-          <Stack direction="row" sx={{ marginTop: 1.5 }} spacing={1} justifyContent="flex-end">
-            <LoadingButton loading={isSubmitting} variant="contained" type="submit" disabled={isSubmitting}>Reset</LoadingButton>
-          </Stack>
-        </>
-      )}
-    </form>
+    <Box id="loginBox" sx={{ backgroundColor: "#FFF", border: "1px solid #CCC", borderRadius: "5px", padding: "20px" }}>
+      <Typography component="h2" sx={{ fontSize: "32px", fontWeight: 500, lineHeight: 1.2, margin: "0 0 8px 0" }}>Reset Password</Typography>
+
+      <form onSubmit={reset}>
+        <p>Enter your email address to request a password reset.</p>
+        <ErrorMessages errors={errors} />
+        {successMessage}
+        {!successMessage && (
+          <>
+            <TextField fullWidth autoFocus label="Email" aria-label="email" id="email" name="email" value={email} onChange={handleChange} placeholder="Email address" onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => e.key === "Enter" && reset} />
+            <br />
+            <Box sx={{ textAlign: "right", marginY: 1 }}>
+              <a href="about:blank" className="text-decoration" onClick={(e) => { e.preventDefault(); props.registerCallback(); }}>Register</a> &nbsp; | &nbsp;
+              <a href="about:blank" className="text-decoration" onClick={(e) => { e.preventDefault(); props.loginCallback(); }}>Login</a>&nbsp;
+            </Box>
+            <Stack direction="row" sx={{ marginTop: 1.5 }} spacing={1} justifyContent="flex-end">
+              <LoadingButton loading={isSubmitting} variant="contained" type="submit" disabled={isSubmitting}>Reset</LoadingButton>
+            </Stack>
+          </>
+        )}
+      </form>
+    </Box>
   );
 }
