@@ -13,8 +13,18 @@ interface Props {
 }
 
 export const Register: React.FC<Props> = (props) => {
+
+  const cleanAppUrl = () => {
+    if (!props.appUrl) return null;
+    else {
+      const index = props.appUrl.indexOf("/", 9);
+      if (index === -1) return props.appUrl;
+      else return props.appUrl.substring(0, index);
+    }
+  }
+
   const [registered, setRegistered] = React.useState(false);
-  const [user, setUser] = React.useState<RegisterUserInterface>({ firstName: "", lastName: "", email: "", appName: props.appName, appUrl: props.appUrl });
+  const [user, setUser] = React.useState<RegisterUserInterface>({ firstName: "", lastName: "", email: "", appName: props.appName, appUrl: cleanAppUrl() });
   const [errors, setErrors] = React.useState([]);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
 
