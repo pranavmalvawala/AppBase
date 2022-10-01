@@ -3,22 +3,25 @@ import { ApiHelper } from "../helpers";
 import { PersonInterface } from "../interfaces"
 import { TextField, Button, Table, TableBody, TableRow, TableCell } from "@mui/material";
 import { SmallButton } from "./SmallButton";
+import { CreatePerson } from "./CreatePerson";
 
 interface Props {
-  addFunction: (person: PersonInterface) => void,
-  person?: PersonInterface,
-  getPhotoUrl: (person: PersonInterface) => string,
-  searchClicked?: () => void,
-  filterList?: string[]
-  includeEmail?: boolean
-  actionLabel?: string
+  addFunction: (person: PersonInterface) => void;
+  person?: PersonInterface;
+  getPhotoUrl: (person: PersonInterface) => string;
+  searchClicked?: () => void;
+  filterList?: string[];
+  includeEmail?: boolean;
+  actionLabel?: string;
+  showCreatePersonOnNotFound?: boolean;
 }
 
-export const PersonAdd: React.FC<Props> = ({ addFunction, getPhotoUrl, searchClicked, filterList = [], includeEmail = false, actionLabel }) => {
+export const PersonAdd: React.FC<Props> = ({ addFunction, getPhotoUrl, searchClicked, filterList = [], includeEmail = false, actionLabel, showCreatePersonOnNotFound = false }) => {
   const [searchResults, setSearchResults] = useState<PersonInterface[]>([]);
   const [searchText, setSearchText] = useState("");
+  const [hasSearched, setHasSearched] = useState<boolean>(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => { e.preventDefault(); setSearchText(e.currentTarget.value); }
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => { e.preventDefault(); setHasSearched(false); setSearchText(e.currentTarget.value); }
   const handleKeyDown = (e: React.KeyboardEvent<any>) => { if (e.key === "Enter") { e.preventDefault(); handleSearch(null); } }
 
   const handleSearch = (e: React.MouseEvent) => {
@@ -26,6 +29,7 @@ export const PersonAdd: React.FC<Props> = ({ addFunction, getPhotoUrl, searchCli
     let term = searchText.trim();
     ApiHelper.post("/people/search", { term: term }, "MembershipApi")
       .then((data: PersonInterface[]) => {
+        setHasSearched(true);
         const filteredResult = data.filter(s => !filterList.includes(s.id))
         setSearchResults(filteredResult);
         if (searchClicked) {
@@ -62,6 +66,9 @@ export const PersonAdd: React.FC<Props> = ({ addFunction, getPhotoUrl, searchCli
       <TextField fullWidth name="personAddText" label="Person" value={searchText} onChange={handleChange} onKeyDown={handleKeyDown}
         InputProps={{ endAdornment: <Button variant="contained" id="searchButton" data-cy="search-button" onClick={handleSearch}>Search</Button> }}
       />
+      {showCreatePersonOnNotFound && hasSearched && searchText && searchResults.length === 0 && (
+        <CreatePerson navigateOnCreate={false} onCreate={person => { setSearchText(""); setSearchResults([person]) }} />
+      )}
       <Table size="small" id="householdMemberAddTable"><TableBody>{rows}</TableBody></Table>
     </>
   );

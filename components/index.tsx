@@ -9,4 +9,5 @@ export { FormSubmissionEdit } from "./FormSubmissionEdit";
 export { SmallButton } from "./SmallButton";
 export { FloatingSupport } from "./FloatingSupport";
 export { ImageEditor } from "./ImageEditor";
+export { CreatePerson } from "./CreatePerson";
 export * from "./material";
