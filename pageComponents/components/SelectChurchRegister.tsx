@@ -66,20 +66,20 @@ export const SelectChurchRegister: React.FC<Props> = (props) => {
   return (
     <InputBox id="churchBox" saveFunction={handleSave} headerText="Register a New Church" headerIcon="church" isSubmitting={isSubmitting}>
       <ErrorMessages errors={errors} />
-      <TextField fullWidth name="name" label="Church Name" value={church.name} onChange={handleChange} />
-      <TextField fullWidth name="subDomain" label="Subdomain" id="subDomain" InputProps={{
+      <TextField required fullWidth name="name" label="Church Name" value={church.name} onChange={handleChange} />
+      <TextField required fullWidth name="subDomain" label="Subdomain" id="subDomain" InputProps={{
         endAdornment: <InputAdornment position="end">.churchapps.org</InputAdornment>
       }} value={church.subDomain} onChange={handleChange} />
       <TextField required fullWidth name="address1" label="Address Line 1" value={church.address1} onChange={handleChange} />
       <Grid container spacing={3}>
         <Grid item xs={6}><TextField fullWidth name="address2" label="Address Line 2" value={church.address2} onChange={handleChange} /></Grid>
-        <Grid item xs={6}><TextField fullWidth name="city" label="City" value={church.city} onChange={handleChange} /></Grid>
+        <Grid item xs={6}><TextField required fullWidth name="city" label="City" value={church.city} onChange={handleChange} /></Grid>
       </Grid>
       <Grid container spacing={3}>
-        <Grid item xs={6}><TextField fullWidth name="state" label="State / Province" value={church.state} onChange={handleChange} /></Grid>
-        <Grid item xs={6}><TextField fullWidth name="zip" label="Zip / Postal" value={church.zip} onChange={handleChange} /></Grid>
+        <Grid item xs={6}><TextField required fullWidth name="state" label="State / Province" value={church.state} onChange={handleChange} /></Grid>
+        <Grid item xs={6}><TextField required fullWidth name="zip" label="Zip / Postal" value={church.zip} onChange={handleChange} /></Grid>
       </Grid>
-      <TextField fullWidth name="country" label="Country" value={church.country} onChange={handleChange} />
+      <TextField required fullWidth name="country" label="Country" value={church.country} onChange={handleChange} />
     </InputBox>
   );
 };
