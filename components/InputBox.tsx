@@ -70,8 +70,8 @@ export function InputBox({
           <Typography component="h2" sx={{ display: "inline-block", marginLeft: headerIcon ? 1 : 0 }} variant="h6" color="primary">
             {headerText}
           </Typography>
-          {helpArticleUrl && 
-            <div style={{ position: "absolute", right: "0", color: "#1976d2" }}><SmallButton icon="help" aria-label={"help"} onClick={()=>window.open(helpArticleUrl, '_blank')} /></div>
+          {helpArticleUrl
+          && <div style={{ position: "absolute", right: "0", color: "#1976d2" }}><SmallButton icon="help" aria-label={"help"} onClick={()=>window.open(helpArticleUrl, "_blank")} /></div>
           }
         </Box>
         <Box>
