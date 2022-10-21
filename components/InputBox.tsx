@@ -1,11 +1,13 @@
 import React from "react";
 import { Paper, Box, Typography, Stack, styled, Button, Icon } from "@mui/material";
+import { SmallButton } from "./SmallButton";
 
 interface Props {
   id?: string;
   children?: React.ReactNode;
   headerIcon?: string;
   headerText: string;
+  helpArticleUrl?: string;
   saveText?: string;
   headerActionContent?: React.ReactNode;
   cancelFunction?: () => void;
@@ -40,6 +42,7 @@ export function InputBox({
   children,
   headerIcon,
   headerText,
+  helpArticleUrl,
   saveText = "Save",
   headerActionContent,
   "data-cy": dataCy,
@@ -61,12 +64,15 @@ export function InputBox({
   if (className) classNames.push(className);
   return (
     <Paper id={id} sx={{ padding: 2, marginBottom: 4 }} data-cy={dataCy}>
-      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }} data-cy="header">
+      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", position: "relative" }} data-cy="header">
         <Box sx={{ display: "flex", alignItems: "center" }}>
           {headerIcon && <Icon sx={{ color: "#1976d2" }}>{headerIcon}</Icon>}
           <Typography component="h2" sx={{ display: "inline-block", marginLeft: headerIcon ? 1 : 0 }} variant="h6" color="primary">
             {headerText}
           </Typography>
+          {helpArticleUrl && 
+            <div style={{ position: "absolute", right: "0", color: "#1976d2" }}><SmallButton icon="help" aria-label={"help"} onClick={()=>window.open(helpArticleUrl, '_blank')} /></div>
+          }
         </Box>
         <Box>
           {headerActionContent}
