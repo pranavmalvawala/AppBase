@@ -9,17 +9,19 @@ interface Props {
   aspectRatio: number;
   onUpdate: (dataUrl?: string) => void;
   onCancel: () => void;
+  outputWidth?: number;
+  outputHeight?: number;
 }
 
-export function ImageEditor({ title = "Crop", photoUrl, aspectRatio, onUpdate, onCancel }: Props) {
+export function ImageEditor(props: Props) {
   const [photoSrc, setPhotoSrc] = useState<string>("");
   const [croppedImageDataUrl, setCroppedImageDataUrl] = useState<string>("");
   const cropperRef = useRef<HTMLImageElement>(null);
   let timeout: any = null;
 
-  const handleSave = () => onUpdate(croppedImageDataUrl);
+  const handleSave = () => props.onUpdate(croppedImageDataUrl);
 
-  const handleDelete = () => onUpdate("");
+  const handleDelete = () => props.onUpdate("");
 
   const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -47,25 +49,23 @@ export function ImageEditor({ title = "Crop", photoUrl, aspectRatio, onUpdate, o
         const imageElement: any = cropperRef?.current;
         const cropper: any = imageElement?.cropper;
 
-        const url = cropper.getCroppedCanvas({ width: 400, height: 300 }).toDataURL();
+        const url = cropper.getCroppedCanvas({ width: props.outputWidth || 400, height: props.outputHeight || 300 }).toDataURL("image/png", 0.4);
         setCroppedImageDataUrl(url);
       }
     }, 200);
   };
 
-  useEffect(() => {
-    setPhotoSrc(photoUrl);
-  }, [photoUrl]);
+  useEffect(() => { setPhotoSrc(props.photoUrl); }, [props.photoUrl]);
 
   return (
     <InputBox
       id="cropperBox"
       headerIcon=""
-      headerText={title}
+      headerText={props.title}
       ariaLabelDelete="deletePhoto"
       saveText="Update"
       saveFunction={handleSave}
-      cancelFunction={onCancel}
+      cancelFunction={props.onCancel}
       deleteFunction={handleDelete}
       headerActionContent={
         <div>
@@ -84,7 +84,7 @@ export function ImageEditor({ title = "Crop", photoUrl, aspectRatio, onUpdate, o
         ref={cropperRef}
         src={photoSrc}
         style={{ height: 240, width: "100%" }}
-        aspectRatio={aspectRatio}
+        aspectRatio={props.aspectRatio}
         guides={false}
         crop={handleCrop}
       />
