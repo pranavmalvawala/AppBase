@@ -1,17 +1,18 @@
 import React from "react";
 import { Paper, Box, Typography, styled, Icon } from "@mui/material";
-import { SmallButton } from ".";
+import { HelpIcon, SmallButton } from ".";
 
 interface Props {
   id?: string,
   children: React.ReactNode,
   headerIcon?: string,
   headerText: string,
-  editFunction?: () => void
-  editContent?: React.ReactNode;
-  "data-cy"?: string;
-  ariaLabel?: string;
+  editFunction?: () => void,
+  editContent?: React.ReactNode,
+  "data-cy"?: string,
+  ariaLabel?: string,
   footerContent?: React.ReactNode,
+  help?: string
 }
 
 const CustomContextBox = styled(Box)({
@@ -44,12 +45,14 @@ export const DisplayBox = React.forwardRef<HTMLDivElement, Props>((props, ref) =
 
   return (
     <Paper sx={{ padding: 2, marginBottom: 4 }} id={props.id} data-cy={props["data-cy"] || ""}>
+      {props.help && <HelpIcon article={props.help} />}
       <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <Box sx={{ display: "flex", alignItems: "center" }}>
           {props.headerIcon && <Icon sx={{ color: "#1976d2" }}>{props.headerIcon}</Icon>}
           <Typography component="h2" sx={{ display: "inline-block", marginLeft: props.headerIcon ? 1 : 0 }} variant="h6" color="primary">
             {props.headerText}
           </Typography>
+
         </Box>
         <Box>
           {editContent}

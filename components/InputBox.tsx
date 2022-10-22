@@ -1,13 +1,13 @@
 import React from "react";
 import { Paper, Box, Typography, Stack, styled, Button, Icon } from "@mui/material";
-import { SmallButton } from "./SmallButton";
+import { HelpIcon } from "./HelpIcon";
 
 interface Props {
   id?: string;
   children?: React.ReactNode;
   headerIcon?: string;
   headerText: string;
-  helpArticleUrl?: string;
+  help?: string;
   saveText?: string;
   headerActionContent?: React.ReactNode;
   cancelFunction?: () => void;
@@ -37,48 +37,29 @@ const CustomContextBox = styled(Box)({
   }
 })
 
-export function InputBox({
-  id,
-  children,
-  headerIcon,
-  headerText,
-  helpArticleUrl,
-  saveText = "Save",
-  headerActionContent,
-  "data-cy": dataCy,
-  cancelFunction,
-  deleteFunction,
-  saveFunction,
-  className = "",
-  isSubmitting = false,
-  ariaLabelDelete = "",
-  ariaLabelSave = "",
-  saveButtonType = "button"
-}: Props) {
+export function InputBox(props: Props) {
   let buttons = [];
-  if (cancelFunction) buttons.push(<Button key="cancel" onClick={cancelFunction} color="warning" sx={{ "&:focus": { outline: "none" } }}>Cancel</Button>);
-  if (deleteFunction) buttons.push(<Button key="delete" id="delete" variant="outlined" aria-label={ariaLabelDelete} onClick={deleteFunction} color="error" sx={{ "&:focus": { outline: "none" } }}>Delete</Button>);
-  if (saveFunction) buttons.push(<Button key="save" type={saveButtonType} variant="contained" disableElevation aria-label={ariaLabelSave} onClick={saveFunction} disabled={isSubmitting} sx={{ "&:focus": { outline: "none" } }}>{saveText}</Button>);
+  if (props.cancelFunction) buttons.push(<Button key="cancel" onClick={props.cancelFunction} color="warning" sx={{ "&:focus": { outline: "none" } }}>Cancel</Button>);
+  if (props.deleteFunction) buttons.push(<Button key="delete" id="delete" variant="outlined" aria-label={props.ariaLabelDelete} onClick={props.deleteFunction} color="error" sx={{ "&:focus": { outline: "none" } }}>Delete</Button>);
+  if (props.saveFunction) buttons.push(<Button key="save" type={props.saveButtonType || "button"} variant="contained" disableElevation aria-label={props.ariaLabelSave} onClick={props.saveFunction} disabled={props.isSubmitting} sx={{ "&:focus": { outline: "none" } }}>{props.saveText || "save"}</Button>);
 
   let classNames = ["inputBox"];
-  if (className) classNames.push(className);
+  if (props.className) classNames.push(props.className);
   return (
-    <Paper id={id} sx={{ padding: 2, marginBottom: 4 }} data-cy={dataCy}>
+    <Paper id={props.id} sx={{ padding: 2, marginBottom: 4 }} data-cy={props["data-cy"]}>
+      {props.help && <HelpIcon article={props.help} />}
       <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", position: "relative" }} data-cy="header">
         <Box sx={{ display: "flex", alignItems: "center" }}>
-          {headerIcon && <Icon sx={{ color: "#1976d2" }}>{headerIcon}</Icon>}
-          <Typography component="h2" sx={{ display: "inline-block", marginLeft: headerIcon ? 1 : 0 }} variant="h6" color="primary">
-            {headerText}
+          {props.headerIcon && <Icon sx={{ color: "#1976d2" }}>{props.headerIcon}</Icon>}
+          <Typography component="h2" sx={{ display: "inline-block", marginLeft: props.headerIcon ? 1 : 0 }} variant="h6" color="primary">
+            {props.headerText}
           </Typography>
-          {helpArticleUrl
-          && <div style={{ position: "absolute", right: "0", color: "#1976d2" }}><SmallButton icon="help" aria-label={"help"} onClick={()=>window.open(helpArticleUrl, "_blank")} /></div>
-          }
         </Box>
         <Box>
-          {headerActionContent}
+          {props.headerActionContent}
         </Box>
       </Box>
-      <CustomContextBox>{children}</CustomContextBox>
+      <CustomContextBox>{props.children}</CustomContextBox>
       <Stack direction="row" sx={{ marginTop: 1 }} spacing={1} justifyContent="end">
         {buttons}
       </Stack>
