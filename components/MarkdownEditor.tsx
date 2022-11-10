@@ -12,7 +12,6 @@ type Props = {
 export function MarkdownEditor(props: Props) {
   const [showModal, setShowModal] = useState(false);
 
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     e.preventDefault();
     props.onChange(e.target.value);
@@ -47,12 +46,12 @@ export function MarkdownEditor(props: Props) {
             </ReactMarkdown>
           </div>
         </Grid>
-      </Grid >
+      </Grid>
     )
   }
 
   //const markdownLink = <a href="https://www.markdownguide.org/cheat-sheet/" target="_blank" rel="noopener noreferrer" style={{ float: "right" }}>Markdown Guide</a>
-  const markdownLink = <a href="about:blank" style={{ float: "right" }} onClick={(e) => { e.preventDefault(); setShowModal(true) }} >Markdown Editor</a>
+  const markdownLink = <a href="about:blank" style={{ float: "right" }} onClick={(e) => { e.preventDefault(); setShowModal(true) }}>Markdown Editor</a>
   return <>
     <TextField fullWidth multiline label={<>Content &nbsp; {markdownLink}</>} name="content" rows={8} value={props.value} onChange={handleChange} placeholder="" />
     {getModal()}
