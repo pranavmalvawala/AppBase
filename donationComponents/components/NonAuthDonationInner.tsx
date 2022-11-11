@@ -42,7 +42,7 @@ export const NonAuthDonationInner: React.FC<Props> = (props) => {
           const person = await ApiHelper.post("/people/loadOrCreate", personData, "MembershipApi")
           saveCard(userData, person)
         });
-    }  
+    }
   }
 
   const saveCard = async (user: UserInterface, person: PersonInterface) => {
