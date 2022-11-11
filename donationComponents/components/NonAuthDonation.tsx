@@ -2,11 +2,11 @@ import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe, Stripe } from "@stripe/stripe-js";
 import React from "react";
 import { ApiHelper } from "../../helpers";
-import { OneTimeDonationInner } from "./OneTimeDonationInner";
+import { NonAuthDonationInner } from "./NonAuthDonationInner";
 
 interface Props { churchId: string }
 
-export const OneTimeDonation: React.FC<Props> = (props) => {
+export const NonAuthDonation: React.FC<Props> = (props) => {
   const [stripePromise, setStripe] = React.useState<Promise<Stripe>>(null);
 
   const init = () => {
@@ -21,7 +21,7 @@ export const OneTimeDonation: React.FC<Props> = (props) => {
 
   return (
     <Elements stripe={stripePromise}>
-      <OneTimeDonationInner churchId={props.churchId} />
+      <NonAuthDonationInner churchId={props.churchId} />
     </Elements>
   );
 }
