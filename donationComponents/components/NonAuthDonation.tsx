@@ -20,9 +20,11 @@ export const NonAuthDonation: React.FC<Props> = (props) => {
   React.useEffect(init, []); //eslint-disable-line
 
   return (
-    <Elements stripe={stripePromise}>
-      <NonAuthDonationInner churchId={props.churchId} />
-    </Elements>
+    <>
+      <Elements stripe={stripePromise}>
+        <NonAuthDonationInner churchId={props.churchId} />
+      </Elements>
+    </>
   );
 }
 
