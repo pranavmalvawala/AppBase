@@ -1,6 +1,7 @@
 import React from "react";
 import { Paper, Box, Typography, styled, Icon } from "@mui/material";
-import { HelpIcon, SmallButton } from ".";
+import { HelpIcon } from "./HelpIcon";
+import { SmallButton } from "./SmallButton";
 
 interface Props {
   id?: string,
