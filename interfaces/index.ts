@@ -3,8 +3,9 @@ export * from "./Permissions";
 
 // API interfaces
 export * from "./Access";
-export * from "./Membership";
-export * from "./Donation";
 export * from "./Attendance";
-export * from "./Reporting";
+export * from "./Content";
 export * from "./Doing";
+export * from "./Donation";
+export * from "./Membership";
+export * from "./Reporting";
