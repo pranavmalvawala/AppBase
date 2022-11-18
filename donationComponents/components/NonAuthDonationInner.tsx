@@ -4,7 +4,7 @@ import { ErrorMessages, InputBox } from "../../components";
 import { ApiHelper } from "../../helpers";
 import { FundDonationInterface, FundInterface, PersonInterface, StripeDonationInterface, StripePaymentMethod, UserInterface } from "../../interfaces";
 import { FundDonations } from "./FundDonations";
-import { Grid, Alert, TextField, Button, FormControl, InputLabel, Select, MenuItem } from "@mui/material"
+import { Grid, Alert, TextField, Button, FormControl, InputLabel, Select, MenuItem, Typography, Box, Icon } from "@mui/material"
 
 interface Props { churchId: string }
 
@@ -24,6 +24,7 @@ export const NonAuthDonationInner: React.FC<Props> = (props) => {
   const [donationType, setDonationType] = useState<"once" | "recurring">("once");
   const [intervalNumber, setIntervalNumber] = useState<number>(1);
   const [intervalType, setIntervalType] = useState("month");
+  const [paymentMethodType, setPaymentMethodType] = useState<"card" | "bank">("card");
 
   const init = () => {
     ApiHelper.get("/funds/churchId/" + props.churchId, "GivingApi").then(data => {
@@ -140,7 +141,7 @@ export const NonAuthDonationInner: React.FC<Props> = (props) => {
 
   const getFundList = () => {
     if (funds) return (<>
-      <hr />
+      <hr style={{ marginTop: "24px" }} />
       <h4>Funds</h4>
       <FundDonations fundDonations={fundDonations} funds={funds} updatedFunction={handleFundDonationsChange} />
     </>);
@@ -173,9 +174,25 @@ export const NonAuthDonationInner: React.FC<Props> = (props) => {
           <TextField fullWidth label="Email" name="email" value={email} onChange={handleChange} />
         </Grid>
       </Grid>
-      <div style={{ padding: 10, border: "1px solid #CCC", borderRadius: 5, marginTop: 10 }}>
-        <CardElement options={formStyling} />
-      </div>
+      <Box marginTop={5} marginBottom={3}>
+        <Typography variant="h5">I'd like you give by</Typography>
+        <Box display="flex" marginTop={3} marginBottom={4}>
+          <Button aria-label="card" size="small" style={{ minHeight: "50px" }} variant={paymentMethodType === "card" ? "contained" : "outlined"} onClick={() => setPaymentMethodType("card")}><Icon sx={{mr: "10px"}}>credit_card</Icon>Card</Button>
+          <Button aria-label="bank" size="small" style={{ minHeight: "50px", marginLeft: "30px" }} variant={paymentMethodType === "bank" ? "contained" : "outlined"} onClick={() => setPaymentMethodType("bank")}><Icon sx={{mr: "10px"}}>account_balance</Icon>Bank</Button>
+        </Box>
+      </Box>
+      {
+        paymentMethodType === "card" && (
+          <div style={{ padding: 10, border: "1px solid #CCC", borderRadius: 5, marginTop: 10 }}>
+            <CardElement options={formStyling} />
+          </div>
+        )
+      }
+      {
+        paymentMethodType === "bank" && (
+          <Typography>Bank form</Typography>
+        )
+      }
       {donationType === "recurring"
         && <Grid container spacing={3}>
           <Grid item md={6} xs={12}>
