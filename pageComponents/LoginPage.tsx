@@ -24,9 +24,10 @@ interface Props {
   userRegisteredCallback?: (user: UserInterface) => Promise<void>;
   churchRegisteredCallback?: (church: ChurchInterface) => Promise<void>;
   callbackErrors?: string[];
+  showLogo?: boolean
 }
 
-export const LoginPage: React.FC<Props> = (props) => {
+export const LoginPage: React.FC<Props> = ({ showLogo = true, ...props}) => {
   const [welcomeBackName, setWelcomeBackName] = React.useState("");
   const [pendingAutoLogin, setPendingAutoLogin] = React.useState(false);
   const [errors, setErrors] = React.useState([]);
@@ -218,7 +219,7 @@ export const LoginPage: React.FC<Props> = (props) => {
 
   return (
     <Box sx={{ maxWidth: "382px" }} px="16px" mx="auto">
-      <img src={props.logo || "/images/logo-login.png"} alt="logo" style={{ width: "100%", marginTop: 100, marginBottom: 60 }} />
+      {showLogo && <img src={props.logo || "/images/logo-login.png"} alt="logo" style={{ width: "100%", marginTop: 100, marginBottom: 60 }} />}
       <ErrorMessages errors={errors} />
       {getWelcomeBack()}
       {getCheckEmail()}
