@@ -4,11 +4,11 @@ import { ErrorMessages, InputBox } from "../../components";
 import { ApiHelper } from "../../helpers";
 import { FundDonationInterface, FundInterface, PersonInterface, StripeDonationInterface, StripePaymentMethod, UserInterface } from "../../interfaces";
 import { FundDonations } from "./FundDonations";
-import { Grid, Alert, TextField, Button, FormControl, InputLabel, Select, MenuItem } from "@mui/material"
+import { Grid, Alert, TextField, Button, FormControl, InputLabel, Select, MenuItem, PaperProps } from "@mui/material"
 
-interface Props { churchId: string }
+interface Props { churchId: string, mainContainerCssProps?: PaperProps, showHeader?: boolean }
 
-export const NonAuthDonationInner: React.FC<Props> = (props) => {
+export const NonAuthDonationInner: React.FC<Props> = ({ mainContainerCssProps, showHeader = true, ...props }) => {
   const stripe = useStripe();
   const elements = useElements();
   const formStyling = { style: { base: { fontSize: "18px" } } };
@@ -150,7 +150,7 @@ export const NonAuthDonationInner: React.FC<Props> = (props) => {
 
   if (donationComplete) return <Alert severity="success">Thank you for your donation.</Alert>
   else return (
-    <InputBox headerIcon="volunteer_activism" headerText="Donate" saveFunction={handleSave} saveText="Donate" isSubmitting={processing}>
+    <InputBox headerIcon={showHeader ? "volunteer_activism" : ""} headerText={showHeader ? "Donate" : ""} saveFunction={handleSave} saveText="Donate" isSubmitting={processing} mainContainerCssProps={mainContainerCssProps}>
       <ErrorMessages errors={errors} />
       <Grid container spacing={3}>
         <Grid item md={6} xs={12}>
