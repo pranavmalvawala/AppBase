@@ -7,7 +7,7 @@ import jwt_decode from "jwt-decode"
 import { Register } from "./components/Register"
 import { SelectChurchModal } from "./components/SelectChurchModal"
 import { Forgot } from "./components/Forgot";
-import { Alert, Box, Typography } from "@mui/material";
+import { Alert, Box, PaperProps, Typography } from "@mui/material";
 import { Login } from "./components/Login";
 import { LoginSetPassword } from "./components/LoginSetPassword";
 
@@ -24,10 +24,11 @@ interface Props {
   userRegisteredCallback?: (user: UserInterface) => Promise<void>;
   churchRegisteredCallback?: (church: ChurchInterface) => Promise<void>;
   callbackErrors?: string[];
-  showLogo?: boolean
+  showLogo?: boolean;
+  loginContainerCssProps?: PaperProps;
 }
 
-export const LoginPage: React.FC<Props> = ({ showLogo = true, ...props}) => {
+export const LoginPage: React.FC<Props> = ({ showLogo = true, loginContainerCssProps, ...props}) => {
   const [welcomeBackName, setWelcomeBackName] = React.useState("");
   const [pendingAutoLogin, setPendingAutoLogin] = React.useState(false);
   const [errors, setErrors] = React.useState([]);
@@ -212,7 +213,7 @@ export const LoginPage: React.FC<Props> = ({ showLogo = true, ...props}) => {
     );
     else if (showForgot) return (<Forgot registerCallback={handleRegisterCallback} loginCallback={handleLoginCallback} />);
     else if (props.auth) return (<LoginSetPassword setErrors={setErrors} setShowForgot={setShowForgot} isSubmitting={isSubmitting} auth={props.auth} login={login} appName={props.appName} appUrl={cleanAppUrl()} />)
-    else return <Login setShowRegister={setShowRegister} setShowForgot={setShowForgot} setErrors={setErrors} isSubmitting={isSubmitting} login={login} />;
+    else return <Login setShowRegister={setShowRegister} setShowForgot={setShowForgot} setErrors={setErrors} isSubmitting={isSubmitting} login={login} mainContainerCssProps={loginContainerCssProps} />;
   }
 
   React.useEffect(init, []); //eslint-disable-line

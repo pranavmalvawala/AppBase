@@ -1,6 +1,6 @@
 import React from "react";
 import { InputBox } from "../../components";
-import { TextField, Box } from "@mui/material";
+import { TextField, Box, PaperProps } from "@mui/material";
 
 interface Props {
   //registerCallback: () => void,
@@ -9,10 +9,11 @@ interface Props {
   isSubmitting: boolean,
   setShowRegister: (showRegister: boolean) => void,
   setShowForgot: (showForgot: boolean) => void,
-  setErrors: (errors: string[]) => void
+  setErrors: (errors: string[]) => void;
+  mainContainerCssProps?: PaperProps;
 }
 
-export const Login: React.FC<Props> = props => {
+export const Login: React.FC<Props> = ({ mainContainerCssProps = {}, ...props }) => {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
 
@@ -41,7 +42,7 @@ export const Login: React.FC<Props> = props => {
   }
 
   return (
-    <InputBox headerText="Please Sign In" saveFunction={submitLogin} saveButtonType="submit" saveText={props.isSubmitting ? "Please wait..." : "Sign in"} isSubmitting={props.isSubmitting}>
+    <InputBox headerText="Please Sign In" saveFunction={submitLogin} saveButtonType="submit" saveText={props.isSubmitting ? "Please wait..." : "Sign in"} isSubmitting={props.isSubmitting} mainContainerCssProps={mainContainerCssProps}>
       <TextField fullWidth autoFocus name="email" type="email" label="Email" value={email} onChange={(e) => { e.preventDefault(); setEmail(e.target.value) }} />
       <TextField fullWidth name="email" type="password" label="Password" value={password} onChange={(e) => { e.preventDefault(); setPassword(e.target.value) }} />
       <Box sx={{ textAlign: "right", marginY: 1 }}>
