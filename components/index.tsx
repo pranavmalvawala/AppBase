@@ -8,6 +8,7 @@ export { HelpIcon } from "./HelpIcon";
 export { ImageEditor } from "./ImageEditor";
 export { InputBox } from "./InputBox";
 export { Loading } from "./Loading";
+export { Notes } from "./notes/Notes";
 export { MarkdownEditor } from "./MarkdownEditor";
 export { PersonAdd } from "./PersonAdd";
 export { QuestionEdit } from "./QuestionEdit";

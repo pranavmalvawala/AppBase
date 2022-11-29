@@ -18,5 +18,7 @@ export interface TaskInterface {
   assignedToId?: string,
   assignedToLabel?: string,
   title?: string,
-  status?: string
+  status?: string,
+  automationId?: string,
+  conversationId?: string
 }

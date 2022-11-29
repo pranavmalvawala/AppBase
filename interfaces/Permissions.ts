@@ -32,10 +32,6 @@ export class Permissions {
     },
     households: {
       edit: { api: "MembershipApi", contentType: "Households", action: "Edit" }
-    },
-    notes: {
-      edit: { api: "MembershipApi", contentType: "Notes", action: "Edit" },
-      view: { api: "MembershipApi", contentType: "Notes", action: "View" }
     }
   };
 

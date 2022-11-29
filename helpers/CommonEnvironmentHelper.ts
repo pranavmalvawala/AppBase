@@ -6,6 +6,7 @@ export class CommonEnvironmentHelper {
   public static GivingApi = "";
   public static MembershipApi = "";
   public static ReportingApi = "";
+  public static MessagingApi = "";
 
   static ContentRoot = "";
   static AccountsRoot = "";
@@ -30,6 +31,7 @@ export class CommonEnvironmentHelper {
     CommonEnvironmentHelper.GivingApi = process.env.REACT_APP_GIVING_API || CommonEnvironmentHelper.GivingApi;
     CommonEnvironmentHelper.MembershipApi = process.env.REACT_APP_MEMBERSHIP_API || CommonEnvironmentHelper.MembershipApi;
     CommonEnvironmentHelper.ReportingApi = process.env.REACT_APP_REPORTING_API || CommonEnvironmentHelper.ReportingApi;
+    CommonEnvironmentHelper.MessagingApi = process.env.REACT_APP_MESSAGING_API || CommonEnvironmentHelper.MessagingApi;
 
     CommonEnvironmentHelper.ContentRoot = process.env.REACT_APP_CONTENT_ROOT || CommonEnvironmentHelper.ContentRoot;
     CommonEnvironmentHelper.AccountsRoot = process.env.REACT_APP_ACCOUNTS_ROOT || CommonEnvironmentHelper.AccountsRoot;
@@ -47,6 +49,7 @@ export class CommonEnvironmentHelper {
     CommonEnvironmentHelper.GivingApi = "https://givingapi.staging.churchapps.org";
     CommonEnvironmentHelper.MembershipApi = "https://membershipapi.staging.churchapps.org";
     CommonEnvironmentHelper.ReportingApi = "https://reportingapi.staging.churchapps.org";
+    CommonEnvironmentHelper.MessagingApi = "https://messagingapi.staging.churchapps.org";
 
     CommonEnvironmentHelper.ContentRoot = "https://content.staging.churchapps.org";
     CommonEnvironmentHelper.AccountsRoot = "https://accounts.staging.churchapps.org";
@@ -64,6 +67,7 @@ export class CommonEnvironmentHelper {
     CommonEnvironmentHelper.GivingApi = "https://givingapi.churchapps.org";
     CommonEnvironmentHelper.MembershipApi = "https://membershipapi.churchapps.org";
     CommonEnvironmentHelper.ReportingApi = "https://reportingapi.churchapps.org";
+    CommonEnvironmentHelper.MessagingApi = "https://messagingapi.churchapps.org";
 
     CommonEnvironmentHelper.ContentRoot = "https://content.churchapps.org";
     CommonEnvironmentHelper.AccountsRoot = "https://accounts.churchapps.org";

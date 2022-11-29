@@ -9,7 +9,6 @@ export interface GroupServiceTimeInterface { id?: string, groupId?: string, serv
 export interface HouseholdInterface { id?: string, name?: string }
 export interface HouseholdMemberInterface { id?: string, householdId?: string, household?: HouseholdInterface, personId?: string, person?: PersonInterface, role?: string }
 export interface NameInterface { first?: string, middle?: string, last?: string, nick?: string, display?: string, title?: string, suffix?: string }
-export interface NoteInterface { id?: string, churchId?: string, contentType?: string, contentId?: string, noteType?: string, addedBy?: string, contents?: string, createdAt?: string, updatedAt?: string, person?: PersonInterface }
 export interface SearchCondition { field: string, operator: string, value: string }
 
 export interface PersonInterface {
@@ -39,7 +38,8 @@ export interface PersonInterface {
   checkInsUser?: boolean,
   registrationsUser?: boolean,
   givingUser?: boolean,
-  groupsUser?: boolean
+  groupsUser?: boolean,
+  conversationId?: string
 }
 export interface QuestionInterface { id?: string, formId?: string, title?: string, fieldType?: string, placeholder?: string, description?: string, required?: boolean, choices?: [{ value?: string, text?: string }] }
 export interface ServiceInterface { id?: string, campusId?: string, name?: string, campus?: CampusInterface }

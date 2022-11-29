@@ -8,4 +8,5 @@ export * from "./Content";
 export * from "./Doing";
 export * from "./Donation";
 export * from "./Membership";
+export * from "./Messaging";
 export * from "./Reporting";
