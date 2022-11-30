@@ -52,7 +52,7 @@ export class UserHelper {
   }
 
   static createAppUrl(appUrl: string, returnUrl: string) {
-    const jwt = ApiHelper.getConfig("AccessApi").jwt;
+    const jwt = ApiHelper.getConfig("MembershipApi").jwt;
 
     return `${appUrl}/login/?jwt=${jwt}&returnUrl=${returnUrl}`;
   }

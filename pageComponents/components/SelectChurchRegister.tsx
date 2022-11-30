@@ -52,7 +52,7 @@ export const SelectChurchRegister: React.FC<Props> = (props) => {
   const handleSave = () => {
     if (validate()) {
       setIsSubmitting(true);
-      ApiHelper.post("/churches/add", church, "AccessApi").then(async resp => {
+      ApiHelper.post("/churches/add", church, "MembershipApi").then(async resp => {
         setIsSubmitting(false);
         if (resp.errors !== undefined) setErrors(errors);
         else {

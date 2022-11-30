@@ -7,7 +7,7 @@ export class AppearanceHelper {
   static current: AppearanceInterface;
 
   public static async load(churchId: string) {
-    if (!AppearanceHelper.current) AppearanceHelper.current = await ApiHelper.getAnonymous("/settings/public/" + churchId, "AccessApi");
+    if (!AppearanceHelper.current) AppearanceHelper.current = await ApiHelper.getAnonymous("/settings/public/" + churchId, "MembershipApi");
     return this.current;
   }
 

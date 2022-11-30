@@ -8,7 +8,7 @@ import { ChurchInterface } from "../../interfaces";
 export interface Props { appName: string; currentChurch: ChurchInterface; router?: any; }
 
 export const AppList: React.FC<Props> = props => {
-  const jwt = ApiHelper.getConfig("AccessApi").jwt;
+  const jwt = ApiHelper.getConfig("MembershipApi").jwt;
   const churchId = UserHelper.currentChurch.id;
   return (
     <>

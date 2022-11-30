@@ -35,7 +35,7 @@ export const Forgot: React.FC<Props> = props => {
     if (validate()) {
       setIsSubmitting(true);
       let req: ResetPasswordRequestInterface = { userEmail: email };
-      ApiHelper.postAnonymous("/users/forgot", req, "AccessApi").then((resp: ResetPasswordResponseInterface) => {
+      ApiHelper.postAnonymous("/users/forgot", req, "MembershipApi").then((resp: ResetPasswordResponseInterface) => {
         if (resp.emailed) {
           setErrors([]);
           setSuccessMessage(

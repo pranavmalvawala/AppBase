@@ -1,6 +1,5 @@
 
 export class CommonEnvironmentHelper {
-  public static AccessApi = "";
   public static AttendanceApi = "";
   public static DoingApi = "";
   public static GivingApi = "";
@@ -25,7 +24,6 @@ export class CommonEnvironmentHelper {
 
   static initDev = () => {
     this.initStaging(); //Use staging values for anything not provided
-    CommonEnvironmentHelper.AccessApi = process.env.REACT_APP_ACCESS_API || CommonEnvironmentHelper.AccessApi;
     CommonEnvironmentHelper.AttendanceApi = process.env.REACT_APP_ATTENDANCE_API || CommonEnvironmentHelper.AttendanceApi;
     CommonEnvironmentHelper.DoingApi = process.env.REACT_APP_DOING_API || CommonEnvironmentHelper.DoingApi;
     CommonEnvironmentHelper.GivingApi = process.env.REACT_APP_GIVING_API || CommonEnvironmentHelper.GivingApi;
@@ -43,7 +41,6 @@ export class CommonEnvironmentHelper {
 
   //NOTE: None of these values are secret.
   static initStaging = () => {
-    CommonEnvironmentHelper.AccessApi = "https://accessapi.staging.churchapps.org";
     CommonEnvironmentHelper.AttendanceApi = "https://attendanceapi.staging.churchapps.org";
     CommonEnvironmentHelper.DoingApi = "https://doingapi.staging.churchapps.org";
     CommonEnvironmentHelper.GivingApi = "https://givingapi.staging.churchapps.org";
@@ -61,7 +58,6 @@ export class CommonEnvironmentHelper {
 
   //NOTE: None of these values are secret.
   static initProd = () => {
-    CommonEnvironmentHelper.AccessApi = "https://accessapi.churchapps.org";
     CommonEnvironmentHelper.AttendanceApi = "https://attendanceapi.churchapps.org";
     CommonEnvironmentHelper.DoingApi = "https://doingapi.churchapps.org";
     CommonEnvironmentHelper.GivingApi = "https://givingapi.churchapps.org";

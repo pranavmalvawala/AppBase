@@ -35,7 +35,7 @@ export const LoginSetPassword: React.FC<Props> = props => {
   }
 
   const loadUser = () => {
-    ApiHelper.postAnonymous("/users/login", { authGuid: props.auth }, "AccessApi").then((resp: LoginResponseInterface) => {
+    ApiHelper.postAnonymous("/users/login", { authGuid: props.auth }, "MembershipApi").then((resp: LoginResponseInterface) => {
       if (resp.user) setUser(resp.user);
       else props.setShowForgot(true);
     }).catch(() => {
@@ -44,7 +44,7 @@ export const LoginSetPassword: React.FC<Props> = props => {
   }
 
   const submit = async () => {
-    const resp = await ApiHelper.postAnonymous("/users/setPasswordGuid", { authGuid: props.auth, newPassword: password, appName: props.appName, appUrl: props.appUrl }, "AccessApi");
+    const resp = await ApiHelper.postAnonymous("/users/setPasswordGuid", { authGuid: props.auth, newPassword: password, appName: props.appName, appUrl: props.appUrl }, "MembershipApi");
     if (resp.success) props.login({ email: user.email, password });
     else props.setShowForgot(true);
   }

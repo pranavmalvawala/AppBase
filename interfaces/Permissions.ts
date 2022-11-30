@@ -14,6 +14,28 @@ export class Permissions {
   };
 
   static membershipApi = {
+    roles: {
+      view: { api: "MembershipApi", contentType: "Roles", action: "View" },
+      edit: { api: "MembershipApi", contentType: "Roles", action: "Edit" }
+    },
+    roleMembers: {
+      view: { api: "MembershipApi", contentType: "RoleMembers", action: "View" },
+      edit: { api: "MembershipApi", contentType: "RoleMembers", action: "Edit" }
+    },
+    rolePermissions: {
+      view: { api: "MembershipApi", contentType: "RolePermissions", action: "View" },
+      edit: { api: "MembershipApi", contentType: "RolePermissions", action: "Edit" }
+    },
+    users: {
+      view: { api: "MembershipApi", contentType: "Users", action: "View" },
+      edit: { api: "MembershipApi", contentType: "Users", action: "Edit" }
+    },
+    settings: {
+      edit: { api: "MembershipApi", contentType: "Settings", action: "Edit" }
+    },
+    server: {
+      admin: { api: "MembershipApi", contentType: "Server", action: "Admin" }
+    },
     forms: {
       admin: { api: "MembershipApi", contentType: "Forms", action: "Admin" },
       edit: { api: "MembershipApi", contentType: "Forms", action: "Edit" }
@@ -48,29 +70,4 @@ export class Permissions {
 
   }
 
-  static accessApi = {
-    roles: {
-      view: { api: "AccessApi", contentType: "Roles", action: "View" },
-      edit: { api: "AccessApi", contentType: "Roles", action: "Edit" }
-    },
-    roleMembers: {
-      view: { api: "AccessApi", contentType: "RoleMembers", action: "View" },
-      edit: { api: "AccessApi", contentType: "RoleMembers", action: "Edit" }
-    },
-    rolePermissions: {
-      view: { api: "AccessApi", contentType: "RolePermissions", action: "View" },
-      edit: { api: "AccessApi", contentType: "RolePermissions", action: "Edit" }
-    },
-    users: {
-      view: { api: "AccessApi", contentType: "Users", action: "View" },
-      edit: { api: "AccessApi", contentType: "Users", action: "Edit" }
-    },
-    settings: {
-      edit: { api: "AccessApi", contentType: "Settings", action: "Edit" }
-    },
-    server: {
-      admin: { api: "AccessApi", contentType: "Server", action: "Admin" }
-    }
-
-  }
 }

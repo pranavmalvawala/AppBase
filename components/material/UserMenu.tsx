@@ -62,7 +62,7 @@ export const UserMenu: React.FC<Props> = (props) => {
   };
 
   const getMainLinks = () => {
-    const jwt = ApiHelper.getConfig("AccessApi").jwt;
+    const jwt = ApiHelper.getConfig("MembershipApi").jwt;
     const churchId = UserHelper.currentChurch.id;
     let result: JSX.Element[] = [];
     if (props.appName === "AccountsApp") result.push(<NavItem url={"/profile"} key="/profile" label="Profile" icon="person" router={props.router} />);

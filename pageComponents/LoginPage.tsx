@@ -28,7 +28,7 @@ interface Props {
   loginContainerCssProps?: PaperProps;
 }
 
-export const LoginPage: React.FC<Props> = ({ showLogo = true, loginContainerCssProps, ...props}) => {
+export const LoginPage: React.FC<Props> = ({ showLogo = true, loginContainerCssProps, ...props }) => {
   const [welcomeBackName, setWelcomeBackName] = React.useState("");
   const [pendingAutoLogin, setPendingAutoLogin] = React.useState(false);
   const [errors, setErrors] = React.useState([]);
@@ -113,11 +113,11 @@ export const LoginPage: React.FC<Props> = ({ showLogo = true, loginContainerCssP
 
   const selectChurchByKeyName = async () => {
     if (!ArrayHelper.getOne(UserHelper.churches, "subDomain", props.keyName)) {
-      const church: ChurchInterface = await ApiHelper.post("/churches/select", { subDomain: props.keyName }, "AccessApi");
+      const church: ChurchInterface = await ApiHelper.post("/churches/select", { subDomain: props.keyName }, "MembershipApi");
       UserHelper.setupApiHelper(church);
       //create/claim the person record and relogin
       const personClaim = await ApiHelper.get("/people/claim/" + church.id, "MembershipApi");
-      await ApiHelper.post("/userChurch/claim", { encodedPerson: personClaim.encodedPerson }, "AccessApi");
+      await ApiHelper.post("/userChurch/claim", { encodedPerson: personClaim.encodedPerson }, "MembershipApi");
       login({ jwt: userJwt || userJwtBackup });
       return;
     }
@@ -129,10 +129,10 @@ export const LoginPage: React.FC<Props> = ({ showLogo = true, loginContainerCssP
   async function continueLoginProcess() {
     if (UserHelper.currentChurch) {
       UserHelper.currentChurch.apis.forEach(api => {
-        if (api.keyName === "AccessApi") setCookie("jwt", api.jwt, { path: "/" });
+        if (api.keyName === "MembershipApi") setCookie("jwt", api.jwt, { path: "/" });
       })
       try {
-        if (UserHelper.currentChurch.id) ApiHelper.patch(`/userChurch/${UserHelper.user.id}`, { churchId: UserHelper.currentChurch.id, appName: props.appName, lastAccessed: new Date() }, "AccessApi")
+        if (UserHelper.currentChurch.id) ApiHelper.patch(`/userChurch/${UserHelper.user.id}`, { churchId: UserHelper.currentChurch.id, appName: props.appName, lastAccessed: new Date() }, "MembershipApi")
       } catch (e) {
         console.log("Could not update user church accessed date")
       }
@@ -149,7 +149,7 @@ export const LoginPage: React.FC<Props> = ({ showLogo = true, loginContainerCssP
       } catch {
         console.log("claiming person");
         const personClaim = await ApiHelper.get("/people/claim/" + UserHelper.currentChurch.id, "MembershipApi");
-        await ApiHelper.post("/userChurch/claim", { encodedPerson: personClaim.encodedPerson }, "AccessApi");
+        await ApiHelper.post("/userChurch/claim", { encodedPerson: personClaim.encodedPerson }, "MembershipApi");
         props.context.setPerson(personClaim);
       }
     }
@@ -160,12 +160,12 @@ export const LoginPage: React.FC<Props> = ({ showLogo = true, loginContainerCssP
       setErrors([])
       selectedChurchId = churchId;
       if (!ArrayHelper.getOne(UserHelper.churches, "id", churchId)) {
-        const church: ChurchInterface = await ApiHelper.post("/churches/select", { churchId: churchId }, "AccessApi");
+        const church: ChurchInterface = await ApiHelper.post("/churches/select", { churchId: churchId }, "MembershipApi");
         UserHelper.setupApiHelper(church);
 
         //create/claim the person record and relogin
         const personClaim = await ApiHelper.get("/people/claim/" + churchId, "MembershipApi");
-        await ApiHelper.post("/userChurch/claim", { encodedPerson: personClaim.encodedPerson }, "AccessApi");
+        await ApiHelper.post("/userChurch/claim", { encodedPerson: personClaim.encodedPerson }, "MembershipApi");
         login({ jwt: userJwt || userJwtBackup });
         return;
       }
@@ -188,7 +188,7 @@ export const LoginPage: React.FC<Props> = ({ showLogo = true, loginContainerCssP
     setErrors([])
     setIsSubmitting(true);
     try {
-      const resp: LoginResponseInterface = await ApiHelper.postAnonymous("/users/login", data, "AccessApi");
+      const resp: LoginResponseInterface = await ApiHelper.postAnonymous("/users/login", data, "MembershipApi");
       setIsSubmitting(false);
       handleLoginSuccess(resp);
     } catch (e: any) {

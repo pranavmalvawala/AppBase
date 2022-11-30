@@ -64,7 +64,7 @@ export const Register: React.FC<Props> = (props) => {
     props.updateErrors([])
     if (validate()) {
       setIsSubmitting(true);
-      ApiHelper.postAnonymous("/users/register", user, "AccessApi")
+      ApiHelper.postAnonymous("/users/register", user, "MembershipApi")
         .then((resp: any) => {
           if (resp.errors) handleRegisterErrors(resp.errors);
           else handleRegisterSuccess(resp);

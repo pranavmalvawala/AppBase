@@ -35,7 +35,7 @@ export const NonAuthDonationInner: React.FC<Props> = ({ mainContainerCssProps, s
   const handleSave = async () => {
     if (validate()) {
       setProcessing(true);
-      ApiHelper.post("/users/loadOrCreate", { userEmail: email, firstName, lastName }, "AccessApi")
+      ApiHelper.post("/users/loadOrCreate", { userEmail: email, firstName, lastName }, "MembershipApi")
         .catch(ex => { setErrors([ex.toString()]); setProcessing(false); })
         .then(async userData => {
           const personData = { churchId: props.churchId, firstName, lastName, email };
