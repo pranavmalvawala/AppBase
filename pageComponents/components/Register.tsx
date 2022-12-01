@@ -2,7 +2,7 @@ import React, { FormEventHandler } from "react";
 import { LoginResponseInterface, RegisterUserInterface, UserInterface } from "../../interfaces";
 import { ApiHelper } from "../../helpers";
 import { ErrorMessages } from "../../components";
-import { Button, Stack, TextField } from "@mui/material";
+import { Button, Stack, TextField, Link } from "@mui/material";
 
 interface Props {
   appName?: string,
@@ -81,7 +81,7 @@ export const Register: React.FC<Props> = (props) => {
   const getThankYou = () => (
     <>
       <p>Thank you for registering.  Please check your email for your to continue.</p>
-      <p><a href="/login">Return to login</a></p>
+      <p><Link href="/login">Return to login</Link></p>
     </>
   )
 
