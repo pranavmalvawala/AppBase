@@ -51,7 +51,7 @@ export class CommonEnvironmentHelper {
     CommonEnvironmentHelper.ContentRoot = "https://content.staging.churchapps.org";
     CommonEnvironmentHelper.AccountsRoot = "https://accounts.staging.churchapps.org";
     CommonEnvironmentHelper.B1Root = "https://{key}.staging.b1.church";
-    CommonEnvironmentHelper.ChumsRoot = "https://staging.chums.org";
+    CommonEnvironmentHelper.ChumsRoot = "https://app.staging.chums.org";
     CommonEnvironmentHelper.StreamingLiveRoot = "https://{key}.staging.streaminglive.church";
     CommonEnvironmentHelper.LessonsRoot = "https://staging.lessons.church";
   }
@@ -68,7 +68,7 @@ export class CommonEnvironmentHelper {
     CommonEnvironmentHelper.ContentRoot = "https://content.churchapps.org";
     CommonEnvironmentHelper.AccountsRoot = "https://accounts.churchapps.org";
     CommonEnvironmentHelper.B1Root = "https://{key}.b1.church";
-    CommonEnvironmentHelper.ChumsRoot = "https://chums.org";
+    CommonEnvironmentHelper.ChumsRoot = "https://app.chums.org";
     CommonEnvironmentHelper.StreamingLiveRoot = "https://{key}.streaminglive.church";
     CommonEnvironmentHelper.LessonsRoot = "https://lessons.church";
   }
