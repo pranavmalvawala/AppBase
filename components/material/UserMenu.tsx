@@ -65,8 +65,8 @@ export const UserMenu: React.FC<Props> = (props) => {
     const jwt = ApiHelper.getConfig("MembershipApi").jwt;
     const churchId = UserHelper.currentChurch.id;
     let result: JSX.Element[] = [];
-    if (props.appName === "AccountsApp") result.push(<NavItem url={"/profile"} key="/profile" label="Profile" icon="person" router={props.router} />);
-    else result.push(<NavItem url={`${CommonEnvironmentHelper.AccountsRoot}/login?jwt=${jwt}&churchId=${churchId}&returnUrl=/profile`} key="/profile" label="Profile" icon="person" external={true} router={props.router} />);
+    if (props.appName === "CHUMS") result.push(<NavItem url={"/profile"} key="/profile" label="Profile" icon="person" router={props.router} />);
+    else result.push(<NavItem url={`${CommonEnvironmentHelper.ChumsRoot}/login?jwt=${jwt}&churchId=${churchId}&returnUrl=/profile`} key="/profile" label="Profile" icon="person" external={true} router={props.router} />);
     result.push(<NavItem url="/logout" label="Logout" icon="logout" key="/logout" router={props.router} />);
     result.push(<NavItem label="Support" key="Support" icon="help" onClick={() => { setShowSupport(true) }} />);
     return result;
