@@ -1,41 +1,41 @@
 import { ApiHelper } from "./ApiHelper"
-import { UserInterface, ChurchInterface, UserContextInterface, IPermission, PersonInterface } from "../interfaces";
+import { UserInterface, ChurchInterface, UserContextInterface, IPermission, PersonInterface, UserChurchInterface, LoginUserChurchInterface } from "../interfaces";
 
 export class UserHelper {
-  static currentChurch: ChurchInterface;
-  static churches: ChurchInterface[];
+  static currentUserChurch: LoginUserChurchInterface;
+  static userChurches: LoginUserChurchInterface[];
   static user: UserInterface;
   static churchChanged: boolean = false;
   static person: PersonInterface;
 
   static selectChurch = async (context?: UserContextInterface, churchId?: string, keyName?: string) => {
-    let church = null;
+    let userChurch = null;
 
     if (churchId) {
-      UserHelper.churches.forEach(c => {
-        if (c.id === churchId) church = c;
+      UserHelper.userChurches.forEach(uc => {
+        if (uc.church.id === churchId) userChurch = uc;
       });
     }
-    else if (keyName) UserHelper.churches.forEach(c => { if (c.subDomain === keyName) church = c; });
-    else church = UserHelper.churches[0];
-    if (!church) return;
+    else if (keyName) UserHelper.userChurches.forEach(uc => { if (uc.church.subDomain === keyName) userChurch = uc; });
+    else userChurch = UserHelper.userChurches[0];
+    if (!userChurch) return;
     else {
-      UserHelper.currentChurch = church;
-      UserHelper.setupApiHelper(UserHelper.currentChurch);
+      UserHelper.currentUserChurch = userChurch;
+      UserHelper.setupApiHelper(UserHelper.currentUserChurch);
       // TODO - remove context code from here and perform the logic in the component itself.
       if (context) {
-        if (context.church !== null) UserHelper.churchChanged = true;
-        context.setChurch(UserHelper.currentChurch);
+        if (context.userChurch !== null) UserHelper.churchChanged = true;
+        context.setUserChurch(UserHelper.currentUserChurch);
       }
     }
   }
 
-  static setupApiHelper(church: ChurchInterface) {
-    ApiHelper.setDefaultPermissions(church.jwt);
-    church.apis.forEach(api => { ApiHelper.setPermissions(api.keyName, api.jwt, api.permissions); });
+  static setupApiHelper(userChurch: LoginUserChurchInterface) {
+    ApiHelper.setDefaultPermissions(userChurch.jwt);
+    userChurch.apis.forEach(api => { ApiHelper.setPermissions(api.keyName, api.jwt, api.permissions); });
   }
 
-  static setupApiHelperNoChurch(user: UserInterface) {
+  static setupApiHelperNoChurch(user: LoginUserChurchInterface) {
     ApiHelper.setDefaultPermissions(user.jwt);
   }
 

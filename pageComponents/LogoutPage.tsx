@@ -15,8 +15,8 @@ export const LogoutPage: React.FC<Props> = (props) => {
   ApiHelper.clearPermissions();
   props.context?.setUser(null);
   props.context?.setPerson(null);
-  props.context?.setChurches(null);
-  props.context?.setChurch(null);
+  props.context?.setUserChurches(null);
+  props.context?.setUserChurch(null);
 
   setTimeout(() => {
     // a must check for Nextjs

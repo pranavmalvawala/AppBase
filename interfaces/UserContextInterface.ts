@@ -1,4 +1,4 @@
-import { ChurchInterface, UserInterface } from "./Access";
+import { ChurchInterface, LoginUserChurchInterface, UserInterface } from "./Access";
 import { PersonInterface } from "./Membership";
 
 export interface UserContextInterface {
@@ -6,8 +6,8 @@ export interface UserContextInterface {
   setUser: (user: UserInterface) => void,
   person: PersonInterface,
   setPerson: (person: PersonInterface) => void,
-  church: ChurchInterface,
-  setChurch: (church: ChurchInterface) => void,
-  churches: ChurchInterface[],
-  setChurches: (churches: ChurchInterface[]) => void,
+  userChurch: LoginUserChurchInterface,
+  setUserChurch: (userChurch: LoginUserChurchInterface) => void,
+  userChurches: LoginUserChurchInterface[],
+  setUserChurches: (userChurches: LoginUserChurchInterface[]) => void,
 }

@@ -1,6 +1,6 @@
 import * as React from "react";
 import { ErrorMessages, FloatingSupport, Loading } from "../components";
-import { LoginResponseInterface, UserContextInterface, ChurchInterface, UserInterface } from "../interfaces";
+import { LoginResponseInterface, UserContextInterface, ChurchInterface, UserInterface, LoginUserChurchInterface } from "../interfaces";
 import { ApiHelper, ArrayHelper, UserHelper } from "../helpers";
 import { useCookies } from "react-cookie"
 import jwt_decode from "jwt-decode"
@@ -81,8 +81,8 @@ export const LoginPage: React.FC<Props> = ({ showLogo = true, loginContainerCssP
     setUserJwt(userJwtBackup);
     ApiHelper.setDefaultPermissions(resp.user.jwt);
     setLoginResponse(resp)
-    resp.churches.forEach(church => { if (!church.apis) church.apis = []; });
-    UserHelper.churches = resp.churches;
+    resp.userChurches.forEach(uc => { if (!uc.apis) uc.apis = []; });
+    UserHelper.userChurches = resp.userChurches;
 
     setCookie("name", `${resp.user.firstName} ${resp.user.lastName}`, { path: "/" });
     setCookie("email", resp.user.email, { path: "/" });
@@ -112,11 +112,11 @@ export const LoginPage: React.FC<Props> = ({ showLogo = true, loginContainerCssP
   }
 
   const selectChurchByKeyName = async () => {
-    if (!ArrayHelper.getOne(UserHelper.churches, "subDomain", props.keyName)) {
-      const church: ChurchInterface = await ApiHelper.post("/churches/select", { subDomain: props.keyName }, "MembershipApi");
-      UserHelper.setupApiHelper(church);
+    if (!ArrayHelper.getOne(UserHelper.userChurches, "church.subDomain", props.keyName)) {
+      const userChurch: LoginUserChurchInterface = await ApiHelper.post("/churches/select", { subDomain: props.keyName }, "MembershipApi");
+      UserHelper.setupApiHelper(userChurch);
       //create/claim the person record and relogin
-      const personClaim = await ApiHelper.get("/people/claim/" + church.id, "MembershipApi");
+      const personClaim = await ApiHelper.get("/people/claim/" + userChurch.church.id, "MembershipApi");
       await ApiHelper.post("/userChurch/claim", { encodedPerson: personClaim.encodedPerson }, "MembershipApi");
       login({ jwt: userJwt || userJwtBackup });
       return;
@@ -127,12 +127,12 @@ export const LoginPage: React.FC<Props> = ({ showLogo = true, loginContainerCssP
   }
 
   async function continueLoginProcess() {
-    if (UserHelper.currentChurch) {
-      UserHelper.currentChurch.apis.forEach(api => {
+    if (UserHelper.currentUserChurch) {
+      UserHelper.currentUserChurch.apis.forEach(api => {
         if (api.keyName === "MembershipApi") setCookie("jwt", api.jwt, { path: "/" });
       })
       try {
-        if (UserHelper.currentChurch.id) ApiHelper.patch(`/userChurch/${UserHelper.user.id}`, { churchId: UserHelper.currentChurch.id, appName: props.appName, lastAccessed: new Date() }, "MembershipApi")
+        if (UserHelper.currentUserChurch.church.id) ApiHelper.patch(`/userChurch/${UserHelper.user.id}`, { churchId: UserHelper.currentUserChurch.church.id, appName: props.appName, lastAccessed: new Date() }, "MembershipApi")
       } catch (e) {
         console.log("Could not update user church accessed date")
       }
@@ -141,14 +141,14 @@ export const LoginPage: React.FC<Props> = ({ showLogo = true, loginContainerCssP
     if (props.loginSuccessOverride !== undefined) props.loginSuccessOverride();
     else {
       props.context.setUser(UserHelper.user);
-      props.context.setChurches(UserHelper.churches)
-      props.context.setChurch(UserHelper.currentChurch)
+      props.context.setUserChurches(UserHelper.userChurches)
+      props.context.setUserChurch(UserHelper.currentUserChurch)
       try {
-        const p = await ApiHelper.get(`/people/${UserHelper.currentChurch.personId}`, "MembershipApi");
+        const p = await ApiHelper.get(`/people/${UserHelper.currentUserChurch.person?.id}`, "MembershipApi");
         if (p) props.context.setPerson(p);
       } catch {
         console.log("claiming person");
-        const personClaim = await ApiHelper.get("/people/claim/" + UserHelper.currentChurch.id, "MembershipApi");
+        const personClaim = await ApiHelper.get("/people/claim/" + UserHelper.currentUserChurch.church.id, "MembershipApi");
         await ApiHelper.post("/userChurch/claim", { encodedPerson: personClaim.encodedPerson }, "MembershipApi");
         props.context.setPerson(personClaim);
       }
@@ -159,9 +159,9 @@ export const LoginPage: React.FC<Props> = ({ showLogo = true, loginContainerCssP
     try {
       setErrors([])
       selectedChurchId = churchId;
-      if (!ArrayHelper.getOne(UserHelper.churches, "id", churchId)) {
-        const church: ChurchInterface = await ApiHelper.post("/churches/select", { churchId: churchId }, "MembershipApi");
-        UserHelper.setupApiHelper(church);
+      if (!ArrayHelper.getOne(UserHelper.userChurches, "church.id", churchId)) {
+        const userChurch: LoginUserChurchInterface = await ApiHelper.post("/churches/select", { churchId: churchId }, "MembershipApi");
+        UserHelper.setupApiHelper(userChurch);
 
         //create/claim the person record and relogin
         const personClaim = await ApiHelper.get("/people/claim/" + churchId, "MembershipApi");
@@ -225,7 +225,7 @@ export const LoginPage: React.FC<Props> = ({ showLogo = true, loginContainerCssP
       {getWelcomeBack()}
       {getCheckEmail()}
       {pendingAutoLogin && getInputBox()}
-      <SelectChurchModal show={showSelectModal} churches={loginResponse?.churches} selectChurch={selectChurch} registeredChurchCallback={handleChurchRegistered} errors={errors} appName={props.appName} />
+      <SelectChurchModal show={showSelectModal} userChurches={loginResponse?.userChurches} selectChurch={selectChurch} registeredChurchCallback={handleChurchRegistered} errors={errors} appName={props.appName} />
       <FloatingSupport appName={props.appName} />
     </Box>
   );

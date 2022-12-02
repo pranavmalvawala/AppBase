@@ -3,7 +3,7 @@ import { ApiHelper } from "../../helpers/ApiHelper";
 import { UserHelper } from "../../helpers/UserHelper";
 import { Avatar, Menu, Typography, Icon, Button, Box, Tabs, Tab, styled } from "@mui/material";
 import { NavItem, AppList } from "./";
-import { ChurchInterface, UserContextInterface } from "../../interfaces";
+import { LoginUserChurchInterface, UserContextInterface } from "../../interfaces";
 import { ChurchList } from "./ChurchList";
 import { SupportModal } from "../SupportModal";
 import { CommonEnvironmentHelper } from "../../helpers/CommonEnvironmentHelper";
@@ -39,8 +39,8 @@ function TabPanel(props: TabPanelProps) {
 interface Props {
   userName: string;
   profilePicture: string;
-  churches: ChurchInterface[];
-  currentChurch: ChurchInterface;
+  userChurches: LoginUserChurchInterface[];
+  currentUserChurch: LoginUserChurchInterface;
   context: UserContextInterface;
   appName: string;
   router?: any;
@@ -63,7 +63,7 @@ export const UserMenu: React.FC<Props> = (props) => {
 
   const getMainLinks = () => {
     const jwt = ApiHelper.getConfig("MembershipApi").jwt;
-    const churchId = UserHelper.currentChurch.id;
+    const churchId = UserHelper.currentUserChurch.church.id;
     let result: JSX.Element[] = [];
     if (props.appName === "CHUMS") result.push(<NavItem url={"/profile"} key="/profile" label="Profile" icon="person" router={props.router} />);
     else result.push(<NavItem url={`${CommonEnvironmentHelper.ChumsRoot}/login?jwt=${jwt}&churchId=${churchId}&returnUrl=/profile`} key="/profile" label="Profile" icon="person" external={true} router={props.router} />);
@@ -102,17 +102,17 @@ export const UserMenu: React.FC<Props> = (props) => {
     <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
       <Tabs variant="fullWidth" value={tabIndex} onChange={handleChange}>
         <Tab label="User" />
-        {props.churches.length > 1 && <Tab label="Church" />}
+        {props.userChurches.length > 1 && <Tab label="Church" />}
         <Tab label="App" />
       </Tabs>
       <TabPanel value={tabIndex} index={0}>
         {getMainLinks()}
       </TabPanel>
-      {props.churches.length > 1 && <TabPanel value={tabIndex} index={1}>
-        <ChurchList churches={props.churches} currentChurch={props.currentChurch} context={props.context} />
+      {props.userChurches.length > 1 && <TabPanel value={tabIndex} index={1}>
+        <ChurchList userChurches={props.userChurches} currentUserChurch={props.currentUserChurch} context={props.context} />
       </TabPanel>}
-      <TabPanel value={tabIndex} index={(props.churches.length > 1) ? 2 : 1}>
-        <AppList currentChurch={props.currentChurch} appName={props.appName} />
+      <TabPanel value={tabIndex} index={(props.userChurches.length > 1) ? 2 : 1}>
+        <AppList currentUserChurch={props.currentUserChurch} appName={props.appName} />
       </TabPanel>
     </Box>
   );

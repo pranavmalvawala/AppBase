@@ -1,8 +1,12 @@
+import { PersonInterface } from "./Membership";
+
 export interface ApiInterface { name: string, keyName?: string, permissions: RolePermissionInterface[], jwt: string }
-export interface ChurchInterface { id?: string, name?: string, registrationDate?: Date, apis?: ApiInterface[], address1?: string, address2?: string, city?: string, state?: string, zip?: string, country?: string, subDomain?: string, personId?: string, jwt?: string, settings?: GenericSettingInterface[], archivedDate?: Date }
+export interface ChurchInterface { id?: string, name?: string, registrationDate?: Date, address1?: string, address2?: string, city?: string, state?: string, zip?: string, country?: string, subDomain?: string, settings?: GenericSettingInterface[], archivedDate?: Date }
 export interface RegisterChurchRequestInterface extends ChurchInterface { appName?: string }
 export interface LoadCreateUserRequestInterface { userEmail: string, fromEmail?: string, subject?: string, body?: string, firstName: string, lastName: string }
-export interface LoginResponseInterface { user: UserInterface, churches: ChurchInterface[], errors: string[] }
+export interface LoginResponseInterface { user: UserInterface, userChurches: LoginUserChurchInterface[], errors: string[] }
+export interface LoginUserChurchInterface { person: PersonInterface, church: ChurchInterface, apis: ApiInterface[], jwt: string, groups: { id: string, name: string }[] }
+
 export interface PermissionInterface { apiName?: string, section?: string, action?: string, displaySection?: string, displayAction?: string }
 export interface RegisterUserInterface { firstName?: string, lastName: string, email?: string, appName: string, appUrl: string }
 export interface RoleInterface { id?: string, churchId?: string, name?: string }

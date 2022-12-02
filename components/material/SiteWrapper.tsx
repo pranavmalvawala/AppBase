@@ -81,14 +81,14 @@ export const SiteWrapper: React.FC<Props> = props => {
   const CustomAppBar = (open) ? OpenDrawerAppBar : ClosedDrawerAppBar;
 
   const getChurchLogo = async () => {
-    if (UserHelper.currentChurch) {
-      const logos = await AppearanceHelper.load(UserHelper.currentChurch?.id);
+    if (UserHelper.currentUserChurch) {
+      const logos = await AppearanceHelper.load(UserHelper.currentUserChurch?.church?.id);
       setChurchLogo(logos.logoDark || "/images/logo-wrapper.png");
     }
   }
 
   React.useEffect(() => {
-    if(!isMounted()) {
+    if (!isMounted()) {
       getChurchLogo();
     }
   }, [isMounted]);
@@ -99,9 +99,9 @@ export const SiteWrapper: React.FC<Props> = props => {
         <IconButton edge="start" color="inherit" aria-label="open drawer" onClick={toggleDrawer} sx={{ marginRight: "36px", ...(open && { display: "none" }) }}>
           <Icon>menu</Icon>
         </IconButton>
-        <Typography variant="h6" noWrap>{UserHelper.currentChurch?.name || ""}</Typography>
+        <Typography variant="h6" noWrap>{UserHelper.currentUserChurch?.church?.name || ""}</Typography>
         <div style={{ flex: 1 }}></div>
-        {UserHelper.user && <UserMenu profilePicture={PersonHelper.getPhotoUrl(props.context?.person)} userName={`${UserHelper.user?.firstName} ${UserHelper.user?.lastName}`} churches={UserHelper.churches} currentChurch={UserHelper.currentChurch} context={props.context} appName={props.appName} router={props.router} />}
+        {UserHelper.user && <UserMenu profilePicture={PersonHelper.getPhotoUrl(props.context?.person)} userName={`${UserHelper.user?.firstName} ${UserHelper.user?.lastName}`} userChurches={UserHelper.userChurches} currentUserChurch={UserHelper.currentUserChurch} context={props.context} appName={props.appName} router={props.router} />}
         {!UserHelper.user && <Link href="/login" color="inherit" style={{ textDecoration: "none" }}>Login</Link>}
       </Toolbar>
     </CustomAppBar>
