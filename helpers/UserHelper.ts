@@ -1,5 +1,5 @@
 import { ApiHelper } from "./ApiHelper"
-import { UserInterface, ChurchInterface, UserContextInterface, IPermission, PersonInterface, UserChurchInterface, LoginUserChurchInterface } from "../interfaces";
+import { UserInterface, UserContextInterface, IPermission, PersonInterface, LoginUserChurchInterface } from "../interfaces";
 
 export class UserHelper {
   static currentUserChurch: LoginUserChurchInterface;

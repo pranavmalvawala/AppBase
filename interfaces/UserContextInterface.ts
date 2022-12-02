@@ -1,4 +1,4 @@
-import { ChurchInterface, LoginUserChurchInterface, UserInterface } from "./Access";
+import { LoginUserChurchInterface, UserInterface } from "./Access";
 import { PersonInterface } from "./Membership";
 
 export interface UserContextInterface {
