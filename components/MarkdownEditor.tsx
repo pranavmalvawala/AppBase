@@ -1,8 +1,10 @@
 import React from "react"
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField } from "@mui/material";
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField, Typography } from "@mui/material";
 import { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import rehypeAttrs from "rehype-attr";
+import rehypeRaw from "rehype-raw";
 
 type Props = {
   value: string;
@@ -41,7 +43,7 @@ export function MarkdownEditor(props: Props) {
         <Grid item xs={6}>
           <div style={{ border: "1px solid #BBB", borderRadius: 5, marginTop: 15, padding: 10, height: "80vh", overflowY: "scroll" }} id="markdownPreview">
             <div style={{ marginTop: -20, marginBottom: -10, position: "absolute" }}><span style={{ backgroundColor: "#FFFFFF", color: "#999", fontSize: 13 }}> &nbsp; Preview &nbsp; </span></div>
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+            <ReactMarkdown rehypePlugins={[rehypeRaw, [rehypeAttrs, { properties: "attr" }]]} remarkPlugins={[remarkGfm]}>
               {props.value}
             </ReactMarkdown>
           </div>
@@ -54,6 +56,9 @@ export function MarkdownEditor(props: Props) {
   const markdownLink = <a href="about:blank" style={{ float: "right" }} onClick={(e) => { e.preventDefault(); setShowModal(true) }}>Markdown Editor</a>
   return <>
     <TextField fullWidth multiline label={<>Content &nbsp; {markdownLink}</>} name="content" rows={8} value={props.value} onChange={handleChange} placeholder="" />
+    <Typography sx={{ fontStyle: "italic", fontSize: "13px" }}>You can add html attributes to elements using this format <b>{`<!--rehype:attribute=value;-->`}</b></Typography>
+    <Typography sx={{ fontStyle: "italic", fontSize: "13px" }}>eg: <b>{`<!--rehype:style=color:yellow;-->`}</b></Typography>
+    <Typography sx={{ fontStyle: "italic", fontSize: "13px" }}>Find more ways to style <a href="https://unifiedjs.com/explore/package/rehype-attr/#default-syntax" target="_blank" rel="noreferrer noopener">here</a></Typography>
     {getModal()}
   </>
 }
