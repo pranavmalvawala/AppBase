@@ -116,8 +116,7 @@ export const LoginPage: React.FC<Props> = ({ showLogo = true, loginContainerCssP
       const userChurch: LoginUserChurchInterface = await ApiHelper.post("/churches/select", { subDomain: props.keyName }, "MembershipApi");
       UserHelper.setupApiHelper(userChurch);
       //create/claim the person record and relogin
-      const personClaim = await ApiHelper.get("/people/claim/" + userChurch.church.id, "MembershipApi");
-      await ApiHelper.post("/userChurch/claim", { encodedPerson: personClaim.encodedPerson }, "MembershipApi");
+      await ApiHelper.get("/people/claim/" + userChurch.church.id, "MembershipApi");
       login({ jwt: userJwt || userJwtBackup });
       return;
     }
@@ -149,7 +148,6 @@ export const LoginPage: React.FC<Props> = ({ showLogo = true, loginContainerCssP
       } catch {
         console.log("claiming person");
         const personClaim = await ApiHelper.get("/people/claim/" + UserHelper.currentUserChurch.church.id, "MembershipApi");
-        await ApiHelper.post("/userChurch/claim", { encodedPerson: personClaim.encodedPerson }, "MembershipApi");
         props.context.setPerson(personClaim);
       }
     }
@@ -164,8 +162,7 @@ export const LoginPage: React.FC<Props> = ({ showLogo = true, loginContainerCssP
         UserHelper.setupApiHelper(userChurch);
 
         //create/claim the person record and relogin
-        const personClaim = await ApiHelper.get("/people/claim/" + churchId, "MembershipApi");
-        await ApiHelper.post("/userChurch/claim", { encodedPerson: personClaim.encodedPerson }, "MembershipApi");
+        await ApiHelper.get("/people/claim/" + churchId, "MembershipApi");
         login({ jwt: userJwt || userJwtBackup });
         return;
       }
