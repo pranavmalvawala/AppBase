@@ -1,10 +1,7 @@
 import React from "react"
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField, Typography } from "@mui/material";
 import { useState } from "react";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
-import rehypeAttrs from "rehype-attr";
-import rehypeRaw from "rehype-raw";
+import { Markdown } from "./markdown";
 
 type Props = {
   value: string;
@@ -43,9 +40,7 @@ export function MarkdownEditor(props: Props) {
         <Grid item xs={6}>
           <div style={{ border: "1px solid #BBB", borderRadius: 5, marginTop: 15, padding: 10, height: "80vh", overflowY: "scroll" }} id="markdownPreview">
             <div style={{ marginTop: -20, marginBottom: -10, position: "absolute" }}><span style={{ backgroundColor: "#FFFFFF", color: "#999", fontSize: 13 }}> &nbsp; Preview &nbsp; </span></div>
-            <ReactMarkdown rehypePlugins={[rehypeRaw, [rehypeAttrs, { properties: "attr" }]]} remarkPlugins={[remarkGfm]}>
-              {props.value}
-            </ReactMarkdown>
+            <Markdown value={props.value} />
           </div>
         </Grid>
       </Grid>
