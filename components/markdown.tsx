@@ -2,6 +2,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeAttrs from "rehype-attr";
 import rehypeRaw from "rehype-raw";
+import React from "react";
 
 interface Props {
   value: string;
