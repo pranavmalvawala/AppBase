@@ -1,7 +1,7 @@
 import React from "react"
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField, Typography } from "@mui/material";
 import { useState } from "react";
-import { Markdown } from "./Markdown";
+import { Markdown } from "./Markdown2";
 
 type Props = {
   value: string;
