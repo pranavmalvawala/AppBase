@@ -13,6 +13,6 @@ export { MarkdownEditor } from "./MarkdownEditor";
 export { PersonAdd } from "./PersonAdd";
 export { QuestionEdit } from "./QuestionEdit";
 export { SmallButton } from "./SmallButton";
-export { Markdown } from "./Markdown2";
+export { Markdown } from "./Markdown";
 
 export * from "./material";
