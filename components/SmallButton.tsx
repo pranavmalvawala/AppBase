@@ -10,6 +10,7 @@ interface Props {
   toolTip?: string;
   onClick?: (e: React.MouseEvent) => void;
   href?: string;
+  disabled?: boolean
 }
 
 export const SmallButton = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
@@ -28,7 +29,7 @@ export const SmallButton = React.forwardRef<HTMLDivElement, Props>((props, ref) 
   if (redirectUrl) return <Navigate to={redirectUrl} />
   else return (
     <Tooltip title={props.toolTip || ""} arrow placement="top">
-      <Button sx={style} variant={props.text ? "outlined" : "text"} color={props.color} aria-label={props.ariaLabel || "editButton"} onClick={handleClick} size="small">
+      <Button sx={style} disabled={props.disabled} variant={props.text ? "outlined" : "text"} color={props.color} aria-label={props.ariaLabel || "editButton"} onClick={handleClick} size="small">
         <Icon>{props.icon}</Icon>{(props.text) ? props.text : ""}
       </Button>
     </Tooltip>

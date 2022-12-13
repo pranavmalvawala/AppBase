@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { ApiHelper, PersonHelper } from "../../helpers"
 import { MessageInterface } from "../../interfaces"
-import { Avatar, Button, Icon, InputAdornment, Stack, TextField } from "@mui/material"
+import { Icon, Stack, TextField } from "@mui/material"
 import { ErrorMessages } from "../ErrorMessages"
 import UserContext from "../../../UserContext"
 import { SmallButton } from "../SmallButton"
@@ -78,13 +78,13 @@ export function AddNote(props: Props) {
       <Stack direction="row" spacing={1.5} style={{ marginTop: 15 }} justifyContent="end">
 
         {image ? <img src={image} alt="user" style={{ width: 60, height: 45, borderRadius: 5, marginLeft: 8 }} /> : <Icon>person</Icon>}
-        <Stack direction="column" spacing={2} style={{ width: "100%" }} justifyContent="end" >
+        <Stack direction="column" spacing={2} style={{ width: "100%" }} justifyContent="end">
           <div><b>{context?.person?.name?.display}</b></div>
           <TextField fullWidth name="noteText" aria-label={headerText} placeholder="Add a note" multiline style={{ marginTop: 0, border: "none" }} variant="standard" onChange={handleChange} value={message?.content} />
         </Stack>
-        <Stack direction="column" spacing={1} justifyContent="end" >
+        <Stack direction="column" spacing={1} justifyContent="end">
           <SmallButton icon="send" onClick={handleSave} />
-          {deleteFunction && <SmallButton icon="delete" onClick={deleteFunction} />}
+          {deleteFunction && <SmallButton icon="delete" onClick={deleteFunction} disabled={isSubmitting} />}
         </Stack>
       </Stack>
     </>
