@@ -1,9 +1,9 @@
 import dynamic from "next/dynamic";
-import { Box, BoxProps } from "@mui/material";
+import { Box } from "@mui/material";
 import "@uiw/react-md-editor/markdown-editor.css";
 import "@uiw/react-markdown-preview/markdown.css";
 
-const MDEditor = dynamic(() => import("@uiw/react-md-editor").then((mod) => mod.default), { ssr: false });
+const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
 
 interface Props {
   value: string;
