@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react"
-import { ApiHelper } from "../../helpers"
+import { ApiHelper, PersonHelper } from "../../helpers"
 import { MessageInterface } from "../../interfaces"
-import { Button, Stack, TextField } from "@mui/material"
+import { Avatar, Button, Icon, InputAdornment, Stack, TextField } from "@mui/material"
 import { ErrorMessages } from "../ErrorMessages"
+import UserContext from "../../../UserContext"
+import { SmallButton } from "../SmallButton"
 
 type Props = {
   messageId?: string;
@@ -16,6 +18,8 @@ export function AddNote(props: Props) {
   const [errors, setErrors] = React.useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const headerText = props.messageId ? "Edit note" : "Add a note"
+
+  const context = React.useContext(UserContext);
 
   useEffect(() => {
     if (props.messageId) ApiHelper.get(`/messages/${props.messageId}`, "MessagingApi").then(n => setMessage(n));
@@ -48,8 +52,13 @@ export function AddNote(props: Props) {
       const m = { ...message };
       m.conversationId = cId;
       ApiHelper.post("/messages", [m], "MessagingApi")
-        .then(() => { props.onUpdate() })
-        .finally(() => { setIsSubmitting(false) });
+        .then(() => {
+          props.onUpdate();
+          const m = { ...message } as MessageInterface;
+          m.content = "";
+          setMessage(m);
+        })
+        .finally(() => { setIsSubmitting(false); });
     }
   };
 
@@ -60,13 +69,23 @@ export function AddNote(props: Props) {
 
   const deleteFunction = props.messageId ? deleteNote : null;
 
+  const image = PersonHelper.getPhotoUrl(context?.person)
+
   return (
     <>
       <ErrorMessages errors={errors} />
-      <TextField fullWidth multiline name="noteText" aria-label={headerText} onChange={handleChange} value={message?.content} InputLabelProps={{ shrink: !!message?.content }} label="Add a note..." />
-      <Stack direction="row" spacing={1} justifyContent="end">
-        {deleteFunction && <Button key="delete" type="button" variant="outlined" color="error" disableElevation onClick={deleteFunction} disabled={isSubmitting} sx={{ "&:focus": { outline: "none" } }}>Delete Note</Button>}
-        <Button key="save" type="button" variant="contained" disableElevation onClick={handleSave} disabled={isSubmitting} sx={{ "&:focus": { outline: "none" } }}>{(props.messageId) ? "Save Changes" : "Add Note"}</Button>
+
+      <Stack direction="row" spacing={1.5} style={{ marginTop: 15 }} justifyContent="end">
+
+        {image ? <img src={image} alt="user" style={{ width: 60, height: 45, borderRadius: 5, marginLeft: 8 }} /> : <Icon>person</Icon>}
+        <Stack direction="column" spacing={2} style={{ width: "100%" }} justifyContent="end" >
+          <div><b>{context?.person?.name?.display}</b></div>
+          <TextField fullWidth name="noteText" aria-label={headerText} placeholder="Add a note" multiline style={{ marginTop: 0, border: "none" }} variant="standard" onChange={handleChange} value={message?.content} />
+        </Stack>
+        <Stack direction="column" spacing={1} justifyContent="end" >
+          <SmallButton icon="send" onClick={handleSave} />
+          {deleteFunction && <SmallButton icon="delete" onClick={deleteFunction} />}
+        </Stack>
       </Stack>
     </>
   );
