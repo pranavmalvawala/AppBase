@@ -9,10 +9,10 @@ export { ImageEditor } from "./ImageEditor";
 export { InputBox } from "./InputBox";
 export { Loading } from "./Loading";
 export { Notes } from "./notes/Notes";
-export { MarkdownEditor } from "./MarkdownEditor";
 export { PersonAdd } from "./PersonAdd";
 export { QuestionEdit } from "./QuestionEdit";
 export { SmallButton } from "./SmallButton";
-export { Markdown } from "./Markdown";
+export { MarkdownEditor } from "./markdownEditor/MarkdownEditor";
+export { MarkdownPreview } from "./markdownEditor/MarkdownPreview";
 
 export * from "./material";
