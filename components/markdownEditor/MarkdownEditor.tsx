@@ -10,7 +10,7 @@ import {
   quote,
   unorderedListCommand,
   orderedListCommand,
-  checkedListCommand,
+  checkedListCommand
 } from "@uiw/react-md-editor/lib/commands";
 import "@uiw/react-md-editor/markdown-editor.css";
 import "@uiw/react-markdown-preview/markdown.css";
@@ -40,7 +40,7 @@ export function MarkdownEditor({ value, onChange, editor: MDEditor }: Props) {
           divider,
           unorderedListCommand,
           orderedListCommand,
-          checkedListCommand,
+          checkedListCommand
         ]}
         preview="edit"
       />

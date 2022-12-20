@@ -8,7 +8,6 @@ export class CommonEnvironmentHelper {
   public static MessagingApi = "";
 
   static ContentRoot = "";
-  static AccountsRoot = "";
   static B1Root = "";
   static ChumsRoot = "";
   static StreamingLiveRoot = "";
@@ -32,7 +31,6 @@ export class CommonEnvironmentHelper {
     CommonEnvironmentHelper.MessagingApi = process.env.REACT_APP_MESSAGING_API || CommonEnvironmentHelper.MessagingApi;
 
     CommonEnvironmentHelper.ContentRoot = process.env.REACT_APP_CONTENT_ROOT || CommonEnvironmentHelper.ContentRoot;
-    CommonEnvironmentHelper.AccountsRoot = process.env.REACT_APP_ACCOUNTS_ROOT || CommonEnvironmentHelper.AccountsRoot;
     CommonEnvironmentHelper.B1Root = process.env.REACT_APP_B1_ROOT || CommonEnvironmentHelper.B1Root;
     CommonEnvironmentHelper.ChumsRoot = process.env.REACT_APP_CHUMS_ROOT || CommonEnvironmentHelper.ChumsRoot;
     CommonEnvironmentHelper.StreamingLiveRoot = process.env.REACT_APP_STREAMINGLIVE_ROOT || CommonEnvironmentHelper.StreamingLiveRoot;
@@ -49,7 +47,6 @@ export class CommonEnvironmentHelper {
     CommonEnvironmentHelper.MessagingApi = "https://messagingapi.staging.churchapps.org";
 
     CommonEnvironmentHelper.ContentRoot = "https://content.staging.churchapps.org";
-    CommonEnvironmentHelper.AccountsRoot = "https://accounts.staging.churchapps.org";
     CommonEnvironmentHelper.B1Root = "https://{key}.staging.b1.church";
     CommonEnvironmentHelper.ChumsRoot = "https://app.staging.chums.org";
     CommonEnvironmentHelper.StreamingLiveRoot = "https://{key}.staging.streaminglive.church";
@@ -66,7 +63,6 @@ export class CommonEnvironmentHelper {
     CommonEnvironmentHelper.MessagingApi = "https://messagingapi.churchapps.org";
 
     CommonEnvironmentHelper.ContentRoot = "https://content.churchapps.org";
-    CommonEnvironmentHelper.AccountsRoot = "https://accounts.churchapps.org";
     CommonEnvironmentHelper.B1Root = "https://{key}.b1.church";
     CommonEnvironmentHelper.ChumsRoot = "https://app.chums.org";
     CommonEnvironmentHelper.StreamingLiveRoot = "https://{key}.streaminglive.church";
