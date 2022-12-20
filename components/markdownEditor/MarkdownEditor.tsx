@@ -14,6 +14,7 @@ import {
 } from "@uiw/react-md-editor/lib/commands";
 import "@uiw/react-md-editor/markdown-editor.css";
 import "@uiw/react-markdown-preview/markdown.css";
+import React from "react";
 
 interface Props {
   value: string;
