@@ -7,6 +7,7 @@ import { LoginUserChurchInterface, UserContextInterface } from "../../interfaces
 import { ChurchList } from "./ChurchList";
 import { SupportModal } from "../SupportModal";
 import { CommonEnvironmentHelper } from "../../helpers/CommonEnvironmentHelper";
+import { PrivateMessages } from "./PrivateMessages";
 
 interface TabPanelProps { children?: React.ReactNode; index: number; value: number; }
 
@@ -84,7 +85,7 @@ export const UserMenu: React.FC<Props> = (props) => {
       filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
       mt: 1.5,
       "& .MuiAvatar-root": { width: 32, height: 32, ml: -0.5, mr: 1 },
-      minWidth: 350
+      minWidth: 450
     }
   };
 
@@ -101,17 +102,22 @@ export const UserMenu: React.FC<Props> = (props) => {
   const getTabs = () => (
     <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
       <Tabs variant="fullWidth" value={tabIndex} onChange={handleChange}>
+        <Tab label="Messages" />
         <Tab label="User" />
         {props.userChurches.length > 1 && <Tab label="Church" />}
         <Tab label="App" />
       </Tabs>
       <TabPanel value={tabIndex} index={0}>
+        <PrivateMessages context={props.context} />
+      </TabPanel>
+      <TabPanel value={tabIndex} index={1}>
         {getMainLinks()}
       </TabPanel>
-      {props.userChurches.length > 1 && <TabPanel value={tabIndex} index={1}>
+
+      {props.userChurches.length > 1 && <TabPanel value={tabIndex} index={2}>
         <ChurchList userChurches={props.userChurches} currentUserChurch={props.currentUserChurch} context={props.context} />
       </TabPanel>}
-      <TabPanel value={tabIndex} index={(props.userChurches.length > 1) ? 2 : 1}>
+      <TabPanel value={tabIndex} index={(props.userChurches.length > 1) ? 3 : 2}>
         <AppList currentUserChurch={props.currentUserChurch} appName={props.appName} />
       </TabPanel>
     </Box>
