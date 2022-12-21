@@ -16,7 +16,6 @@ export const NewPrivateMessage: React.FC<Props> = (props) => {
   const [searchText, setSearchText] = React.useState("");
   const [searchResults, setSearchResults] = React.useState([]);
   const [selectedPerson, setSelectedPerson] = React.useState<PersonInterface>(null);
-  const [privateMessage, setPrivateMessage] = React.useState<PrivateMessageInterface>(null);
 
   const handleSubmit = (e: React.MouseEvent) => {
     if (e !== null) e.preventDefault();
@@ -63,11 +62,8 @@ export const NewPrivateMessage: React.FC<Props> = (props) => {
       conversationId: result[0].id
     }
     const privateMessages: PrivateMessageInterface[] = await ApiHelper.post("/privateMessages", [pm], "MessagingApi");
-    setPrivateMessage(privateMessages[0]);
-
     return privateMessages[0].conversationId;
   }
-
 
   if (!selectedPerson) return (
     <div style={{ paddingLeft: 10, paddingRight: 10 }}>
