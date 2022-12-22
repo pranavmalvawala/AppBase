@@ -1,20 +1,8 @@
-import { Box } from "@mui/material";
-import {
-  bold,
-  italic,
-  strikethrough,
-  hr,
-  title,
-  divider,
-  link,
-  quote,
-  unorderedListCommand,
-  orderedListCommand,
-  checkedListCommand
-} from "@uiw/react-md-editor/lib/commands";
-import "@uiw/react-md-editor/markdown-editor.css";
-import "@uiw/react-markdown-preview/markdown.css";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { markdownToDraft } from "markdown-draft-js";
+import { convertToRaw, EditorState, convertFromRaw } from "draft-js";
+import { draftToMarkdown } from "markdown-draft-js";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
 interface Props {
   value: string;
@@ -22,28 +10,29 @@ interface Props {
   editor: any;
 }
 
-export function MarkdownEditor({ value, onChange, editor: MDEditor }: Props) {
-  return (
-    <Box sx={{ border: "1px solid currentColor", borderRadius: 2 }}>
-      <MDEditor
-        value={value}
-        onChange={onChange}
-        commands={[
-          bold,
-          italic,
-          strikethrough,
-          hr,
-          title,
-          divider,
-          link,
-          quote,
-          divider,
-          unorderedListCommand,
-          orderedListCommand,
-          checkedListCommand
-        ]}
-        preview="edit"
-      />
-    </Box>
-  );
+export function MarkdownEditor({ value: markdownString, onChange, editor: Editor }: Props) {
+  const [hasActed, setHasActed] = useState<boolean>(false);
+  const [editorState, setEditorState] = useState(EditorState.createEmpty());
+
+  useEffect(() => {
+    if (markdownString && !hasActed) {
+      setHasActed(true)
+      const rawData = markdownToDraft(markdownString);
+      const contentState = convertFromRaw(rawData);
+      const editorState = EditorState.createWithContent(contentState);
+      setEditorState(editorState)
+    }
+  }, [markdownString]);
+
+  const handleChange = (editorState) => {
+    setEditorState(editorState)
+    if (editorState?.getCurrentContent) {
+      const content = editorState.getCurrentContent();
+      const rawObject = convertToRaw(content);
+      const markdownString = draftToMarkdown(rawObject);
+      onChange(markdownString);
+    }
+  };
+
+  return <Editor onEditorStateChange={handleChange} editorState={editorState} />;
 }
