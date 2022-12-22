@@ -74,8 +74,7 @@ export const UserMenu: React.FC<Props> = (props) => {
   }
 
   const getProfilePic = () => {
-    if (props.profilePicture) return <img src={props.profilePicture} alt="user" style={{ maxHeight: 32 }} />
-    else return <Icon>person</Icon>
+    if (props.profilePicture) return props.profilePicture;
   }
 
   const paperProps = {
@@ -127,7 +126,7 @@ export const UserMenu: React.FC<Props> = (props) => {
     <>
       {showSupport && <SupportModal onClose={() => setShowSupport(false)} appName={props.appName} />}
       <Button onClick={handleClick} color="inherit" aria-controls={open ? "account-menu" : undefined} aria-haspopup="true" aria-expanded={open ? "true" : undefined} style={{ textTransform: "none" }} endIcon={<Icon>expand_more</Icon>}>
-        <Avatar sx={{ width: 32, height: 32, marginRight: 1 }}>{getProfilePic()}</Avatar>
+        <Avatar src={getProfilePic()} sx={{ width: 32, height: 32, marginRight: 1 }}></Avatar>
         <Typography color="inherit" noWrap>{userName}</Typography>
       </Button>
 
