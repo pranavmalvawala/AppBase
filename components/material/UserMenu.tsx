@@ -74,7 +74,8 @@ export const UserMenu: React.FC<Props> = (props) => {
   }
 
   const getProfilePic = () => {
-    if (props.profilePicture) return props.profilePicture;
+    if (props.profilePicture) return props.profilePicture
+    else return "/images/sample-profile.png";
   }
 
   const paperProps = {
