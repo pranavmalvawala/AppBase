@@ -8,9 +8,10 @@ interface Props {
   photoUrl: string;
   aspectRatio: number;
   onUpdate: (dataUrl?: string) => void;
-  onCancel: () => void;
+  onCancel?: () => void;
   outputWidth?: number;
   outputHeight?: number;
+  hideDelete?: boolean;
 }
 
 export function ImageEditor(props: Props) {
@@ -66,7 +67,7 @@ export function ImageEditor(props: Props) {
       saveText="Update"
       saveFunction={handleSave}
       cancelFunction={props.onCancel}
-      deleteFunction={handleDelete}
+      deleteFunction={(!props.hideDelete) && handleDelete}
       headerActionContent={
         <div>
           <input type="file" onChange={handleUpload} id="fileUpload" accept="image/*" style={{ display: "none" }} />
