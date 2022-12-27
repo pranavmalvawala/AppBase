@@ -24,7 +24,7 @@ export function MarkdownEditor({ value: markdownString, onChange, editor: Editor
     }
   }, [markdownString]);
 
-  const handleChange = (editorState) => {
+  const handleChange = (editorState: any) => {
     setEditorState(editorState)
     if (editorState?.getCurrentContent) {
       const content = editorState.getCurrentContent();

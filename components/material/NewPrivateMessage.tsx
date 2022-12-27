@@ -23,10 +23,15 @@ export const NewPrivateMessage: React.FC<Props> = (props) => {
     ApiHelper.get("/people/search?term=" + term, "MembershipApi").then(data => setSearchResults(data));
   }
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => setSearchText(e.currentTarget.value);
-
-  const handleKeyDown = (e: React.KeyboardEvent<any>) => { if (e.key === "Enter") { e.preventDefault(); handleSubmit(null); } }
-
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(e.currentTarget.value);
+    setSearchText(e.currentTarget.value);
+  }
+  /*
+    const handleKeyDown = (e: React.KeyboardEvent<any>) => {
+      //if (e.key === "Enter") { e.preventDefault(); handleSubmit(null); } 
+    }
+  */
   const handlePersonSelected = async (person: PersonInterface) => {
     const existing: PrivateMessageInterface = await ApiHelper.get("/privateMessages/existing/" + person.id, "MessagingApi");
     if (existing.id) {
@@ -73,7 +78,7 @@ export const NewPrivateMessage: React.FC<Props> = (props) => {
       <b>New Private Message</b>
       <div>Search for a person</div>
 
-      <TextField fullWidth label="Name" id="searchText" data-cy="search-input" name="searchText" type="text" placeholder="Name" value={searchText} onChange={handleChange} onKeyDown={handleKeyDown}
+      <TextField fullWidth label="Name" id="searchText" data-cy="search-input" name="searchText" type="text" placeholder="Name" value={searchText} onChange={handleChange}
         InputProps={{ endAdornment: <Button variant="contained" id="searchButton" data-cy="search-button" onClick={handleSubmit}>Search</Button> }}
       />
       <br />

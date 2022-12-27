@@ -1,5 +1,6 @@
-import { FileHelper } from "@/appBase/helpers";
-import { ApiHelper, EnvironmentHelper } from "@/helpers";
+import { FileHelper, ApiHelper } from "../../helpers";
+import { CommonEnvironmentHelper } from "../../helpers/CommonEnvironmentHelper";
+import { } from "../../helpers";
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, Grid, InputLabel, MenuItem, Select, Tab, Tabs } from "@mui/material";
 import React, { useState } from "react";
 import { ImageEditor } from "../ImageEditor";
@@ -42,8 +43,8 @@ export const GalleryModal: React.FC<Props> = (props: Props) => {
     let result: JSX.Element[] = [];
     images.forEach(img => {
       result.push(<Grid item md={4} xs={12}>
-        <a href="about:blank" onClick={(e) => { e.preventDefault(); props.onSelect(EnvironmentHelper.Common.ContentRoot + "/" + img) }}>
-          <img src={EnvironmentHelper.Common.ContentRoot + "/" + img} className="img-fluid" />
+        <a href="about:blank" onClick={(e) => { e.preventDefault(); props.onSelect(CommonEnvironmentHelper.ContentRoot + "/" + img) }}>
+          <img src={CommonEnvironmentHelper.ContentRoot + "/" + img} className="img-fluid" />
         </a>
       </Grid>);
     })
