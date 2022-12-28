@@ -6,6 +6,7 @@ export class CommonEnvironmentHelper {
   public static MembershipApi = "";
   public static ReportingApi = "";
   public static MessagingApi = "";
+  public static ContentApi = "";
 
   static ContentRoot = "";
   static B1Root = "";
@@ -29,6 +30,7 @@ export class CommonEnvironmentHelper {
     CommonEnvironmentHelper.MembershipApi = process.env.REACT_APP_MEMBERSHIP_API || CommonEnvironmentHelper.MembershipApi;
     CommonEnvironmentHelper.ReportingApi = process.env.REACT_APP_REPORTING_API || CommonEnvironmentHelper.ReportingApi;
     CommonEnvironmentHelper.MessagingApi = process.env.REACT_APP_MESSAGING_API || CommonEnvironmentHelper.MessagingApi;
+    CommonEnvironmentHelper.ContentApi = process.env.REACT_APP_CONTENT_API || CommonEnvironmentHelper.ContentApi;
 
     CommonEnvironmentHelper.ContentRoot = process.env.REACT_APP_CONTENT_ROOT || CommonEnvironmentHelper.ContentRoot;
     CommonEnvironmentHelper.B1Root = process.env.REACT_APP_B1_ROOT || CommonEnvironmentHelper.B1Root;
@@ -45,6 +47,7 @@ export class CommonEnvironmentHelper {
     CommonEnvironmentHelper.MembershipApi = "https://membershipapi.staging.churchapps.org";
     CommonEnvironmentHelper.ReportingApi = "https://reportingapi.staging.churchapps.org";
     CommonEnvironmentHelper.MessagingApi = "https://messagingapi.staging.churchapps.org";
+    CommonEnvironmentHelper.ContentApi = "https://contentapi.staging.churchapps.org";
 
     CommonEnvironmentHelper.ContentRoot = "https://content.staging.churchapps.org";
     CommonEnvironmentHelper.B1Root = "https://{key}.staging.b1.church";
@@ -61,6 +64,7 @@ export class CommonEnvironmentHelper {
     CommonEnvironmentHelper.MembershipApi = "https://membershipapi.churchapps.org";
     CommonEnvironmentHelper.ReportingApi = "https://reportingapi.churchapps.org";
     CommonEnvironmentHelper.MessagingApi = "https://messagingapi.churchapps.org";
+    CommonEnvironmentHelper.ContentApi = "https://contentapi.churchapps.org";
 
     CommonEnvironmentHelper.ContentRoot = "https://content.churchapps.org";
     CommonEnvironmentHelper.B1Root = "https://{key}.b1.church";
