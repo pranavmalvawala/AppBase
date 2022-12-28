@@ -8,7 +8,7 @@ interface Props {
   isPreview?: boolean;
 }
 
-export function ControlledEditorPlugin({ value, isPreview = false }: Props) {
+export function ControlledEditorPlugin({ value, isPreview = false }: Props): any {
   const [editor] = useLexicalComposerContext();
   const [hasInit, setHasInit] = useState<boolean>(false);
 

@@ -31,15 +31,15 @@ interface Props {
   mode?: "interactive" | "preview";
 }
 
-export function Editor({ value, onChange = () => {}, mode = "interactive" }: Props) {
-  const handleChange = (editorState) => {
+export function Editor({ value, onChange = () => { }, mode = "interactive" }: Props) {
+  const handleChange = (editorState: any) => {
     editorState.read(() => {
       const markdown = $convertToMarkdownString(PLAYGROUND_TRANSFORMERS);
       onChange(markdown)
     });
   };
 
-  const onError = (error) => {
+  const onError = (error: any) => {
     console.error(error);
   };
 
@@ -72,7 +72,7 @@ export function Editor({ value, onChange = () => {}, mode = "interactive" }: Pro
             contentEditable={<ContentEditable className="editor-input" style={{ minHeight: mode === "preview" ? "auto" : "150px" }} />}
             placeholder={mode !== "preview" ? <div className="editor-placeholder">Enter some text...</div> : null}
             ErrorBoundary={LexicalErrorBoundary}
-            
+
           />
           <OnChangePlugin onChange={handleChange} />
           <AutoFocusPlugin />

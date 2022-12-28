@@ -9,7 +9,7 @@ import {
 } from "lexical";
 import { useEffect } from "react";
 
-function getElementNodesInSelection(selection) {
+function getElementNodesInSelection(selection: any) {
   const nodesInSelection = selection.getNodes();
 
   if (nodesInSelection.length === 0) {
@@ -20,11 +20,11 @@ function getElementNodesInSelection(selection) {
   }
 
   return new Set(
-    nodesInSelection.map((n) => ($isElementNode(n) ? n : n.getParentOrThrow()))
+    nodesInSelection.map((n: any) => ($isElementNode(n) ? n : n.getParentOrThrow()))
   );
 }
 
-function isIndentPermitted(maxDepth) {
+function isIndentPermitted(maxDepth: any) {
   const selection = $getSelection();
 
   if (!$isRangeSelection(selection)) {
@@ -53,16 +53,16 @@ function isIndentPermitted(maxDepth) {
   return totalDepth <= maxDepth;
 }
 
-export function ListMaxIndentLevelPlugin({ maxDepth }) {
+export function ListMaxIndentLevelPlugin(data: any): any {
   const [editor] = useLexicalComposerContext();
 
   useEffect(() => {
     return editor.registerCommand(
       INDENT_CONTENT_COMMAND,
-      () => !isIndentPermitted(maxDepth ?? 7),
+      () => !isIndentPermitted(data.maxDepth ?? 7),
       COMMAND_PRIORITY_HIGH
     );
-  }, [editor, maxDepth]);
+  }, [editor, data.maxDepth]);
 
   return null;
 }
