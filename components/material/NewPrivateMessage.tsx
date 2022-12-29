@@ -27,11 +27,13 @@ export const NewPrivateMessage: React.FC<Props> = (props) => {
     console.log(e.currentTarget.value);
     setSearchText(e.currentTarget.value);
   }
+
   /*
     const handleKeyDown = (e: React.KeyboardEvent<any>) => {
-      //if (e.key === "Enter") { e.preventDefault(); handleSubmit(null); } 
+      //if (e.key === "Enter") { e.preventDefault(); handleSubmit(null); }
     }
   */
+
   const handlePersonSelected = async (person: PersonInterface) => {
     const existing: PrivateMessageInterface = await ApiHelper.get("/privateMessages/existing/" + person.id, "MessagingApi");
     if (existing.id) {
