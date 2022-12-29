@@ -5,6 +5,7 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl,
 import React, { useState } from "react";
 import { ImageEditor } from "../ImageEditor";
 import { TabPanel } from "../TabPanel";
+import { StockPhotos } from "./StockPhotos";
 
 interface Props {
   aspectRatio: number,
@@ -20,7 +21,6 @@ export const GalleryModal: React.FC<Props> = (props: Props) => {
   const handleTabChange = (el: any, newValue: any) => { setTabIndex(newValue); }
 
   const loadData = () => { ApiHelper.get("/gallery/" + aspectRatio.toString(), "ContentApi").then(data => setImages(data.images)); }
-
 
   const handleImageUpdated = async (dataUrl: string) => {
     const fileName = Math.floor(Date.now() / 1000).toString() + ".jpg"
@@ -44,22 +44,22 @@ export const GalleryModal: React.FC<Props> = (props: Props) => {
     images.forEach(img => {
       result.push(<Grid item md={4} xs={12}>
         <a href="about:blank" onClick={(e) => { e.preventDefault(); props.onSelect(CommonEnvironmentHelper.ContentRoot + "/" + img) }}>
-          <img src={CommonEnvironmentHelper.ContentRoot + "/" + img} className="img-fluid" />
+          <img src={CommonEnvironmentHelper.ContentRoot + "/" + img} className="img-fluid" alt="custom" />
         </a>
       </Grid>);
     })
     return result;
   }
 
-
   return (<>
     <Dialog open={true} onClose={props.onClose}>
       <DialogTitle>Select a Photo</DialogTitle>
-      <DialogContent style={{ minWidth: 400 }}>
+      <DialogContent style={{ minWidth: 600 }}>
 
         <Tabs variant="fullWidth" value={tabIndex} onChange={handleTabChange}>
           <Tab label="Gallery" />
           <Tab label="Upload" />
+          <Tab label="Stock Photos" />
         </Tabs>
         <TabPanel value={tabIndex} index={0}>
           {(props.aspectRatio === 0) && (
@@ -84,7 +84,9 @@ export const GalleryModal: React.FC<Props> = (props: Props) => {
         <TabPanel value={tabIndex} index={1}>
           <ImageEditor onUpdate={handleImageUpdated} photoUrl="" aspectRatio={aspectRatio} outputWidth={1280} outputHeight={768} hideDelete={true} />
         </TabPanel>
-
+        <TabPanel value={tabIndex} index={2}>
+          <StockPhotos aspectRatio={aspectRatio} onSelect={props.onSelect} />
+        </TabPanel>
       </DialogContent>
       <DialogActions sx={{ paddingX: "16px", paddingBottom: "12px" }}>
         <Button variant="outlined" onClick={props.onClose}>Close</Button>

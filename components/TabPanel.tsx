@@ -31,5 +31,4 @@ export const TabPanel: React.FC<Props> = (props: Props) => {
       )}
     </div>
   );
-
 }
