@@ -39,7 +39,6 @@ export function Conversations(props: Props) {
   };
 
   const getConversations = () => {
-    if (!conversations) return <Loading />
     if (conversations.length === 0) return <></>
     else {
       let noteArray: React.ReactNode[] = [];
@@ -50,11 +49,11 @@ export function Conversations(props: Props) {
 
   React.useEffect(() => { loadConversations() }, [props.contentId]); //eslint-disable-line
 
-  return (
+  if (!conversations) return <Loading />
+  else return (
     <>
       <NewConversation contentType={props.contentType} contentId={props.contentId} onUpdate={loadConversations} groupId={props.groupId} visibility="public" />
       {getConversations()}
-
     </>
   );
 };
