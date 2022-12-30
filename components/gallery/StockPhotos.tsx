@@ -41,7 +41,8 @@ export const StockPhotos: React.FC<Props> = (props: Props) => {
           <img src={p.thumbnail} className="img-fluid" alt="stock" />
         </a>
         <div>
-          <i style={{ fontSize: 12 }}><a href={p.url} target="_blank">Photo</a> by: <a href={p.photographerUrl} target="_blank">{p.photographer}</a></i>
+          <i style={{ fontSize: 12 }}>
+            <a href={p.url} target="_blank" rel="noreferrer noopener">Photo</a> by: <a href={p.photographerUrl} target="_blank" rel="noreferrer noopener">{p.photographer}</a></i>
         </div>
       </Grid>);
     })

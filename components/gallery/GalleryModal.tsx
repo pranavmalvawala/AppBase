@@ -16,7 +16,7 @@ interface Props {
 export const GalleryModal: React.FC<Props> = (props: Props) => {
   const [images, setImages] = useState<string[]>([]);
   const [tabIndex, setTabIndex] = React.useState(0);
-  const [aspectRatio, setAspectRatio] = React.useState(0);
+  const [aspectRatio, setAspectRatio] = React.useState(props.aspectRatio);
   const [editorPhotoUrl, setEditorPhotoUrl] = React.useState("");
 
   const handleTabChange = (el: any, newValue: any) => { setTabIndex(newValue); }
