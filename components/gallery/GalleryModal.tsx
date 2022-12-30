@@ -17,6 +17,7 @@ export const GalleryModal: React.FC<Props> = (props: Props) => {
   const [images, setImages] = useState<string[]>([]);
   const [tabIndex, setTabIndex] = React.useState(0);
   const [aspectRatio, setAspectRatio] = React.useState(0);
+  const [editorPhotoUrl, setEditorPhotoUrl] = React.useState("");
 
   const handleTabChange = (el: any, newValue: any) => { setTabIndex(newValue); }
 
@@ -51,6 +52,11 @@ export const GalleryModal: React.FC<Props> = (props: Props) => {
     return result;
   }
 
+  const handleStockSelect = (url: string) => {
+    setEditorPhotoUrl(url);
+    setTabIndex(1);
+  }
+
   return (<>
     <Dialog open={true} onClose={props.onClose}>
       <DialogTitle>Select a Photo</DialogTitle>
@@ -82,10 +88,10 @@ export const GalleryModal: React.FC<Props> = (props: Props) => {
           </Grid>
         </TabPanel>
         <TabPanel value={tabIndex} index={1}>
-          <ImageEditor onUpdate={handleImageUpdated} photoUrl="" aspectRatio={aspectRatio} outputWidth={1280} outputHeight={768} hideDelete={true} />
+          <ImageEditor onUpdate={handleImageUpdated} photoUrl={editorPhotoUrl} aspectRatio={aspectRatio} outputWidth={1280} outputHeight={768} hideDelete={true} />
         </TabPanel>
         <TabPanel value={tabIndex} index={2}>
-          <StockPhotos aspectRatio={aspectRatio} onSelect={props.onSelect} />
+          <StockPhotos aspectRatio={aspectRatio} onSelect={props.onSelect} onStockSelect={handleStockSelect} />
         </TabPanel>
       </DialogContent>
       <DialogActions sx={{ paddingX: "16px", paddingBottom: "12px" }}>
