@@ -1,9 +1,9 @@
 import { $getSelection, $isRangeSelection, SELECTION_CHANGE_COMMAND } from "lexical";
 import { useRef, useState, useCallback, useEffect, KeyboardEventHandler } from "react";
-import { $isLinkNode, TOGGLE_LINK_COMMAND } from "@lexical/link";
 import { $wrapNodes, $isAtNodeEnd } from "@lexical/selection";
 import { $getNearestNodeOfType, mergeRegister } from "@lexical/utils";
 import { FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
+import { $isLinkNode, TOGGLE_LINK_COMMAND } from "./LexicalLink";
 
 const LowPriority = 1;
 
@@ -49,12 +49,16 @@ export function FloatingLinkEditor({ editor }: { editor: any }) {
     if ($isRangeSelection(selection)) {
       const node = getSelectedNode(selection);
       const parent = node.getParent();
+
       if ($isLinkNode(parent)) {
         setLinkUrl(parent.getURL());
+        setLinkClass(parent.getClassName());
       } else if ($isLinkNode(node)) {
         setLinkUrl(node.getURL());
+        setLinkClass(node.getClassName());
       } else {
         setLinkUrl("");
+        setLinkClass("");
       }
     }
     const editorElem = editorRef.current;

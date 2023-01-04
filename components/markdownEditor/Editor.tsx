@@ -27,7 +27,6 @@ interface Props {
 
 export function Editor({ value, onChange = () => { }, mode = "interactive" }: Props) {
   const editorStateRef: any = useRef();
-
   const [fullScreen, setFullScreen] = React.useState(false);
 
   const handleChange = (editorState: any) => {
