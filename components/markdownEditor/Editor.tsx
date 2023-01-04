@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef } from "react";
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
@@ -26,10 +26,12 @@ interface Props {
 }
 
 export function Editor({ value, onChange = () => { }, mode = "interactive" }: Props) {
+  const editorStateRef: any = useRef();
 
   const [fullScreen, setFullScreen] = React.useState(false);
 
   const handleChange = (editorState: any) => {
+    editorStateRef.current = editorState;
     editorState.read(() => {
       const markdown = $convertToMarkdownString(PLAYGROUND_TRANSFORMERS);
       onChange(markdown)
@@ -61,6 +63,19 @@ export function Editor({ value, onChange = () => { }, mode = "interactive" }: Pr
   };
 
   const handleCloseFullScreen = (newValue: string) => {
+    if (editorStateRef?.current) {
+      console.log("Made it?")
+      console.log(editorStateRef.current)
+
+      /*
+      editorStateRef.current.update(() => {
+        const json = $convertFromMarkdownString(value, PLAYGROUND_TRANSFORMERS);
+        console.log(json);
+      })*/
+
+      //const es = editorStateRef.current.parseEditorState(json)
+      //editorStateRef.current.setEditorState(es);
+    }
     onChange(newValue)
     setFullScreen(false);
   }
