@@ -45,7 +45,7 @@ export function Editor({ value, onChange = () => { }, mode = "interactive" }: Pr
   };
 
   const initialConfig = {
-    editorState: () => $convertFromMarkdownString(value, TRANSFORMERS),
+    editorState: () => $convertFromMarkdownString(value, PLAYGROUND_TRANSFORMERS),
     namespace: "editor",
     theme,
     onError,

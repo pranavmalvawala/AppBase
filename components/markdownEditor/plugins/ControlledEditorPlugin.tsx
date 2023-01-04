@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react"
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext"
 import { TRANSFORMERS, $convertFromMarkdownString } from "@lexical/markdown";
+import { PLAYGROUND_TRANSFORMERS } from "./MarkdownTransformers";
 
 interface Props {
   value: string
@@ -15,7 +16,7 @@ export function ControlledEditorPlugin({ value, isPreview = false }: Props): any
     if (!hasInit || isPreview) {
       setHasInit(true)
       editor.update(() => {
-        $convertFromMarkdownString(value, TRANSFORMERS);
+        $convertFromMarkdownString(value, PLAYGROUND_TRANSFORMERS);
       })
     }
   }, [value]) //eslint-disable-line

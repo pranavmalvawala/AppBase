@@ -90,9 +90,11 @@ export const UNDERLINE: TextMatchTransformer = {
 };
 */
 export const PLAYGROUND_TRANSFORMERS: Array<Transformer> = [
-  UNDERLINE,
+
   HR,
   ...ELEMENT_TRANSFORMERS,
   ...TEXT_FORMAT_TRANSFORMERS,
-  ...TEXT_MATCH_TRANSFORMERS
+  ...TEXT_MATCH_TRANSFORMERS,
+  UNDERLINE
+
 ];
