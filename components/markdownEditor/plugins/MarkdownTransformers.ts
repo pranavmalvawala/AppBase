@@ -1,5 +1,5 @@
 import type { ElementTransformer, Transformer } from "@lexical/markdown";
-import type { ElementNode, Klass, LexicalNode, TextFormatType, TextNode } from "lexical";
+import type { LexicalNode, TextFormatType } from "lexical";
 
 import {
   ELEMENT_TRANSFORMERS,
