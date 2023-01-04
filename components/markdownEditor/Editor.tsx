@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
@@ -16,15 +16,8 @@ import { TableCellNode, TableNode, TableRowNode } from "@lexical/table";
 import { AutoLinkNode, LinkNode } from "@lexical/link";
 import { CodeHighlightNode, CodeNode } from "@lexical/code";
 import { theme } from "./theme";
-import {
-  ToolbarPlugin,
-  CustomAutoLinkPlugin,
-  ListMaxIndentLevelPlugin,
-  PLAYGROUND_TRANSFORMERS,
-  ReadOnlyPlugin,
-  ControlledEditorPlugin
-} from "./plugins";
-
+import { ToolbarPlugin, CustomAutoLinkPlugin, ListMaxIndentLevelPlugin, PLAYGROUND_TRANSFORMERS, ReadOnlyPlugin, ControlledEditorPlugin } from "./plugins";
+import { MarkdownModal } from "./MarkdownModal";
 
 interface Props {
   value: string;
@@ -33,6 +26,9 @@ interface Props {
 }
 
 export function Editor({ value, onChange = () => { }, mode = "interactive" }: Props) {
+
+  const [fullScreen, setFullScreen] = React.useState(false);
+
   const handleChange = (editorState: any) => {
     editorState.read(() => {
       const markdown = $convertToMarkdownString(PLAYGROUND_TRANSFORMERS);
@@ -64,29 +60,41 @@ export function Editor({ value, onChange = () => { }, mode = "interactive" }: Pr
     ]
   };
 
-  return (
-    <LexicalComposer initialConfig={initialConfig}>
-      <div className="editor-container" style={{ border: mode === "preview" ? "none" : "1px solid lightgray" }}>
-        {mode !== "preview" && <ToolbarPlugin />}
-        <div className="editor-inner">
-          <RichTextPlugin
-            contentEditable={<ContentEditable className="editor-input" style={{ minHeight: mode === "preview" ? "auto" : "150px" }} />}
-            placeholder={mode !== "preview" ? <div className="editor-placeholder">Enter some text...</div> : null}
-            ErrorBoundary={LexicalErrorBoundary}
+  const handleCloseFullScreen = (newValue: string) => {
+    onChange(newValue)
+    setFullScreen(false);
+  }
 
-          />
-          <OnChangePlugin onChange={handleChange} />
-          <AutoFocusPlugin />
-          <HistoryPlugin />
-          <ListPlugin />
-          <LinkPlugin />
-          <CustomAutoLinkPlugin />
-          <ListMaxIndentLevelPlugin maxDepth={7} />
-          <ReadOnlyPlugin isDisabled={mode === "preview"} />
-          <ControlledEditorPlugin value={value} isPreview={mode === "preview"} />
-          <MarkdownShortcutPlugin transformers={TRANSFORMERS} />
+  const getFullScreenModal = () => {
+    if (fullScreen) return (<MarkdownModal value={value} hideModal={handleCloseFullScreen} />);
+  }
+
+  return (
+    <>
+      <LexicalComposer initialConfig={initialConfig}>
+        <div className="editor-container" style={{ border: mode === "preview" ? "none" : "1px solid lightgray" }}>
+          {mode !== "preview" && <ToolbarPlugin goFullScreen={() => { setFullScreen(true) }} />}
+          <div className="editor-inner">
+            <RichTextPlugin
+              contentEditable={<ContentEditable className="editor-input" style={{ minHeight: mode === "preview" ? "auto" : "150px" }} />}
+              placeholder={mode !== "preview" ? <div className="editor-placeholder">Enter some text...</div> : null}
+              ErrorBoundary={LexicalErrorBoundary}
+
+            />
+            <OnChangePlugin onChange={handleChange} />
+            <AutoFocusPlugin />
+            <HistoryPlugin />
+            <ListPlugin />
+            <LinkPlugin />
+            <CustomAutoLinkPlugin />
+            <ListMaxIndentLevelPlugin maxDepth={7} />
+            <ReadOnlyPlugin isDisabled={mode === "preview"} />
+            <ControlledEditorPlugin value={value} isPreview={mode === "preview"} />
+            <MarkdownShortcutPlugin transformers={TRANSFORMERS} />
+          </div>
         </div>
-      </div>
-    </LexicalComposer>
+      </LexicalComposer>
+      {getFullScreenModal()}
+    </>
   );
 }

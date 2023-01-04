@@ -1,27 +1,17 @@
 import React from "react"
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import {
-  SELECTION_CHANGE_COMMAND,
-  FORMAT_TEXT_COMMAND,
-  $getSelection,
-  $isRangeSelection,
-  $createParagraphNode,
-  $getNodeByKey
-} from "lexical";
+import { SELECTION_CHANGE_COMMAND, FORMAT_TEXT_COMMAND, $getSelection, $isRangeSelection, $createParagraphNode, $getNodeByKey } from "lexical";
 import { $isLinkNode, TOGGLE_LINK_COMMAND } from "@lexical/link";
 import { $wrapNodes, $isAtNodeEnd } from "@lexical/selection";
 import { $getNearestNodeOfType, mergeRegister } from "@lexical/utils";
-import {
-  INSERT_ORDERED_LIST_COMMAND,
-  INSERT_UNORDERED_LIST_COMMAND,
-  REMOVE_LIST_COMMAND,
-  $isListNode,
-  ListNode
-} from "@lexical/list";
+import { INSERT_ORDERED_LIST_COMMAND, INSERT_UNORDERED_LIST_COMMAND, REMOVE_LIST_COMMAND, $isListNode, ListNode } from "@lexical/list";
 import { createPortal } from "react-dom";
 import { $createHeadingNode, $createQuoteNode, $isHeadingNode } from "@lexical/rich-text";
 import { $isCodeNode, getDefaultCodeLanguage, getCodeLanguages } from "@lexical/code";
+import { Icon } from "@mui/material";
+import { MarkdownModal } from "../MarkdownModal";
+
 
 const LowPriority = 1;
 
@@ -364,7 +354,11 @@ function BlockOptionsDropdownList({ editor, blockType, toolbarRef, setShowBlockO
   );
 }
 
-export function ToolbarPlugin() {
+interface Props {
+  goFullScreen: () => void
+}
+
+export function ToolbarPlugin(props: Props) {
   const [editor] = useLexicalComposerContext();
   const toolbarRef = useRef(null);
   const [blockType, setBlockType] = useState("paragraph");
@@ -503,6 +497,10 @@ export function ToolbarPlugin() {
           </button>
           {isLink && createPortal(<FloatingLinkEditor editor={editor} />, document.body)}
         </>)}
+      <Divider />
+      <button onClick={() => { props.goFullScreen() }} className="toolbar-item spaced" aria-label="Full Screen">
+        <Icon>fullscreen</Icon>
+      </button>
     </div>
   );
 }
