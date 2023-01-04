@@ -17,7 +17,7 @@ export const PrivateMessageDetails: React.FC<Props> = (props) => (
       </span>
       Chat with {props.privateMessage.person.name.display}
     </div>
-    <Notes conversationId={props.privateMessage.conversationId} noDisplayBox={true} />
+    <Notes context={props.context} conversationId={props.privateMessage.conversationId} noDisplayBox={true} />
   </>
 );
 

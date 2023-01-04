@@ -1,8 +1,7 @@
 import { Icon, Paper, Stack, TextField } from "@mui/material";
 import React from "react";
-import UserContext from "../../../UserContext";
 import { ApiHelper, PersonHelper } from "../../helpers";
-import { ConversationInterface, MessageInterface } from "../../interfaces";
+import { ConversationInterface, MessageInterface, UserContextInterface } from "../../interfaces";
 import { ErrorMessages } from "../ErrorMessages";
 import { SmallButton } from "../SmallButton";
 
@@ -11,15 +10,14 @@ interface Props {
   contentId: string;
   groupId: string;
   visibility: "public" | "hidden";
+  context: UserContextInterface;
   onUpdate: () => void;
 }
 
-export function NewConversation(props: Props) {
+export function NewConversation({ context, ...props }: Props) {
   const [message, setMessage] = React.useState<MessageInterface>({})
   const [errors, setErrors] = React.useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
-
-  const context = React.useContext(UserContext);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     setErrors([]);

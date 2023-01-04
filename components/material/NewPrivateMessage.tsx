@@ -97,7 +97,7 @@ export const NewPrivateMessage: React.FC<Props> = (props) => {
         </span>
         <b>New Private Message</b>
         <div>To: {selectedPerson.name.display}</div>
-        <AddNote conversationId={null} onUpdate={handleNoteAdded} createConversation={createConversation} />
+        <AddNote context={props.context} conversationId={null} onUpdate={handleNoteAdded} createConversation={createConversation} />
       </div>
     )
   }
