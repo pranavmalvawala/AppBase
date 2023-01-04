@@ -25,6 +25,7 @@ import {
   ControlledEditorPlugin
 } from "./plugins";
 
+
 interface Props {
   value: string;
   onChange?: (value: string) => void;
