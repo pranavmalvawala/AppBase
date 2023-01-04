@@ -3,13 +3,14 @@ import { Note } from "./Note";
 import { AddNote } from "./AddNote";
 import { DisplayBox, Loading } from "../";
 import { ApiHelper, ArrayHelper } from "../../helpers";
-import { MessageInterface } from "../../interfaces";
+import { MessageInterface, UserContextInterface } from "../../interfaces";
 
 interface Props {
   //showEditNote: (messageId?: string) => void;
   conversationId: string;
   createConversation?: () => Promise<string>;
   noDisplayBox?: boolean;
+  context: UserContextInterface;
 }
 
 export function Notes(props: Props) {
@@ -44,7 +45,7 @@ export function Notes(props: Props) {
 
   let result = <>
     {getNotes()}
-    {messages && (<AddNote conversationId={props.conversationId} onUpdate={loadNotes} createConversation={props.createConversation} messageId={editMessageId} />)}
+    {messages && (<AddNote context={props.context} conversationId={props.conversationId} onUpdate={loadNotes} createConversation={props.createConversation} messageId={editMessageId} />)}
   </>
   if (props.noDisplayBox) return result;
   else return (<DisplayBox id="notesBox" data-cy="notes-box" headerIcon="sticky_note_2" headerText="Notes">{result}</DisplayBox>);

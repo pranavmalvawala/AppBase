@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react"
 import { ApiHelper, PersonHelper } from "../../helpers"
-import { MessageInterface } from "../../interfaces"
+import { MessageInterface, UserContextInterface } from "../../interfaces"
 import { Icon, Stack, TextField } from "@mui/material"
 import { ErrorMessages } from "../ErrorMessages"
-import UserContext from "../../../UserContext"
 import { SmallButton } from "../SmallButton"
 
 type Props = {
@@ -11,15 +10,14 @@ type Props = {
   onUpdate: () => void;
   createConversation: () => Promise<string>;
   conversationId?: string;
+  context: UserContextInterface
 };
 
-export function AddNote(props: Props) {
+export function AddNote({ context, ...props }: Props) {
   const [message, setMessage] = useState<MessageInterface>()
   const [errors, setErrors] = React.useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const headerText = props.messageId ? "Edit note" : "Add a note"
-
-  const context = React.useContext(UserContext);
 
   useEffect(() => {
     if (props.messageId) ApiHelper.get(`/messages/${props.messageId}`, "MessagingApi").then(n => setMessage(n));

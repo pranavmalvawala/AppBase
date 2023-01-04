@@ -1,12 +1,13 @@
 import { Box, Paper, Stack } from "@mui/material";
 import React from "react";
 import { ApiHelper, ArrayHelper, DateHelper, PersonHelper } from "../../helpers";
-import { ConversationInterface, MessageInterface } from "../../interfaces";
+import { ConversationInterface, MessageInterface, UserContextInterface } from "../../interfaces";
 import { AddNote } from "./AddNote";
 import { Note } from "./Note";
 
 interface Props {
   conversation: ConversationInterface;
+  context: UserContextInterface;
 }
 
 export function Conversation(props: Props) {
@@ -67,7 +68,7 @@ export function Conversation(props: Props) {
         </div>
         <div className="messages">
           {getNotes()}
-          <AddNote conversationId={props.conversation.id} onUpdate={loadNotes} createConversation={async () => (props.conversation.id)} messageId={editMessageId} />
+          <AddNote context={props.context} conversationId={props.conversation.id} onUpdate={loadNotes} createConversation={async () => (props.conversation.id)} messageId={editMessageId} />
         </div>
 
       </Paper>

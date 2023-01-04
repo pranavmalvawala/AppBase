@@ -1,7 +1,7 @@
 import React from "react";
 import { Loading } from "../";
 import { ApiHelper, ArrayHelper } from "../../helpers";
-import { ConversationInterface } from "../../interfaces";
+import { ConversationInterface, UserContextInterface } from "../../interfaces";
 import { Conversation } from "./Conversation";
 import { NewConversation } from "./NewConversation";
 
@@ -9,6 +9,7 @@ interface Props {
   contentType: string;
   contentId: string;
   groupId: string;
+  context: UserContextInterface;
 }
 
 export function Conversations(props: Props) {
@@ -42,7 +43,7 @@ export function Conversations(props: Props) {
     if (conversations.length === 0) return <></>
     else {
       let noteArray: React.ReactNode[] = [];
-      for (let i = 0; i < conversations.length; i++) noteArray.push(<Conversation conversation={conversations[i]} key={conversations[i].id} />);
+      for (let i = 0; i < conversations.length; i++) noteArray.push(<Conversation context={props.context} conversation={conversations[i]} key={conversations[i].id} />);
       return noteArray;
     }
   }
@@ -52,7 +53,7 @@ export function Conversations(props: Props) {
   if (!conversations) return <Loading />
   else return (
     <>
-      <NewConversation contentType={props.contentType} contentId={props.contentId} onUpdate={loadConversations} groupId={props.groupId} visibility="public" />
+      <NewConversation context={props.context} contentType={props.contentType} contentId={props.contentId} onUpdate={loadConversations} groupId={props.groupId} visibility="public" />
       {getConversations()}
     </>
   );
