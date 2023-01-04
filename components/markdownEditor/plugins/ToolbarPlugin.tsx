@@ -374,8 +374,8 @@ export function ToolbarPlugin() {
   const [isLink, setIsLink] = useState(false);
   const [isBold, setIsBold] = useState(false);
   const [isItalic, setIsItalic] = useState(false);
-  //const [isUnderline, setIsUnderline] = useState(false);
-  const [isStrikethrough, setIsStrikethrough] = useState(false);
+  const [isUnderline, setIsUnderline] = useState(false);
+  //const [isStrikethrough, setIsStrikethrough] = useState(false);
 
   const updateToolbar = useCallback(() => {
     const selection = $getSelection();
@@ -401,8 +401,8 @@ export function ToolbarPlugin() {
       // Update text format
       setIsBold(selection.hasFormat("bold"));
       setIsItalic(selection.hasFormat("italic"));
-      //setIsUnderline(selection.hasFormat("underline"));
-      setIsStrikethrough(selection.hasFormat("strikethrough"));
+      setIsUnderline(selection.hasFormat("underline"));
+      //setIsStrikethrough(selection.hasFormat("strikethrough"));
 
       // Update links
       const node = getSelectedNode(selection);
@@ -485,47 +485,20 @@ export function ToolbarPlugin() {
       )}
       {blockType === "code"
         ? (<>
-          <Select
-            className="toolbar-item code-language"
-            onChange={onCodeLanguageSelect}
-            options={codeLanguges}
-            value={codeLanguage}
-          />
+          <Select className="toolbar-item code-language" onChange={onCodeLanguageSelect} options={codeLanguges} value={codeLanguage} />
           <i className="chevron-down inside" />
         </>)
         : (<>
-          <button
-            onClick={() => {
-              editor.dispatchCommand(FORMAT_TEXT_COMMAND, "bold");
-            }}
-            className={"toolbar-item spaced " + (isBold ? "active" : "")}
-            aria-label="Format Bold"
-          >
+          <button onClick={() => { editor.dispatchCommand(FORMAT_TEXT_COMMAND, "bold"); }} className={"toolbar-item spaced " + (isBold ? "active" : "")} aria-label="Format Bold">
             <i className="format bold" />
           </button>
-          <button
-            onClick={() => {
-              editor.dispatchCommand(FORMAT_TEXT_COMMAND, "italic");
-            }}
-            className={"toolbar-item spaced " + (isItalic ? "active" : "")}
-            aria-label="Format Italics"
-          >
+          <button onClick={() => { editor.dispatchCommand(FORMAT_TEXT_COMMAND, "italic"); }} className={"toolbar-item spaced " + (isItalic ? "active" : "")} aria-label="Format Italics">
             <i className="format italic" />
           </button>
-          <button
-            onClick={() => {
-              editor.dispatchCommand(FORMAT_TEXT_COMMAND, "strikethrough");
-            }}
-            className={"toolbar-item spaced " + (isStrikethrough ? "active" : "")}
-            aria-label="Format Strikethrough"
-          >
-            <i className="format strikethrough" />
+          <button onClick={() => { editor.dispatchCommand(FORMAT_TEXT_COMMAND, "underline"); }} className={"toolbar-item spaced " + (isUnderline ? "active" : "")} aria-label="Format Underline">
+            <i className="format underline" />
           </button>
-          <button
-            onClick={insertLink}
-            className={"toolbar-item spaced " + (isLink ? "active" : "")}
-            aria-label="Insert Link"
-          >
+          <button onClick={insertLink} className={"toolbar-item spaced " + (isLink ? "active" : "")} aria-label="Insert Link">
             <i className="format link" />
           </button>
           {isLink && createPortal(<FloatingLinkEditor editor={editor} />, document.body)}
