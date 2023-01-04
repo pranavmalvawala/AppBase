@@ -2,35 +2,32 @@ import React from "react"
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
-  CAN_REDO_COMMAND,
-  CAN_UNDO_COMMAND,
   SELECTION_CHANGE_COMMAND,
   FORMAT_TEXT_COMMAND,
-  FORMAT_ELEMENT_COMMAND,
   $getSelection,
   $isRangeSelection,
   $createParagraphNode,
-  $getNodeByKey,
+  $getNodeByKey
 } from "lexical";
 import { $isLinkNode, TOGGLE_LINK_COMMAND } from "@lexical/link";
-import { $isParentElementRTL, $wrapNodes, $isAtNodeEnd } from "@lexical/selection";
+import { $wrapNodes, $isAtNodeEnd } from "@lexical/selection";
 import { $getNearestNodeOfType, mergeRegister } from "@lexical/utils";
 import {
   INSERT_ORDERED_LIST_COMMAND,
   INSERT_UNORDERED_LIST_COMMAND,
   REMOVE_LIST_COMMAND,
   $isListNode,
-  ListNode,
+  ListNode
 } from "@lexical/list";
 import { createPortal } from "react-dom";
 import { $createHeadingNode, $createQuoteNode, $isHeadingNode } from "@lexical/rich-text";
-import { $createCodeNode, $isCodeNode, getDefaultCodeLanguage, getCodeLanguages } from "@lexical/code";
+import { $isCodeNode, getDefaultCodeLanguage, getCodeLanguages } from "@lexical/code";
 
 const LowPriority = 1;
 
 const supportedBlockTypes = new Set(["paragraph", "quote", "code", "h1", "h2", "ul", "ol"]);
 
-const blockTypeToBlockName = {
+const blockTypeToBlockName: any = {
   code: "Code Block",
   h1: "Large Heading",
   h2: "Small Heading",
@@ -40,14 +37,14 @@ const blockTypeToBlockName = {
   ol: "Numbered List",
   paragraph: "Normal",
   quote: "Quote",
-  ul: "Bulleted List",
+  ul: "Bulleted List"
 };
 
 function Divider() {
   return <div className="divider" />;
 }
 
-function positionEditorElement(editor, rect) {
+function positionEditorElement(editor: any, rect: any) {
   if (rect === null) {
     editor.style.opacity = "0";
     editor.style.top = "-1000px";
@@ -59,7 +56,7 @@ function positionEditorElement(editor, rect) {
   }
 }
 
-function FloatingLinkEditor({ editor }) {
+function FloatingLinkEditor({ editor }: { editor: any }) {
   const editorRef = useRef(null);
   const inputRef = useRef(null);
   const mouseDownRef = useRef(false);
@@ -90,10 +87,10 @@ function FloatingLinkEditor({ editor }) {
 
     const rootElement = editor.getRootElement();
     if (
-      selection !== null &&
-      !nativeSelection.isCollapsed &&
-      rootElement !== null &&
-      rootElement.contains(nativeSelection.anchorNode)
+      selection !== null
+      && !nativeSelection.isCollapsed
+      && rootElement !== null
+      && rootElement.contains(nativeSelection.anchorNode)
     ) {
       const domRange = nativeSelection.getRangeAt(0);
       let rect;
@@ -121,9 +118,9 @@ function FloatingLinkEditor({ editor }) {
     return true;
   }, [editor]);
 
-  useEffect(() => {
-    return mergeRegister(
-      editor.registerUpdateListener(({ editorState }) => {
+  useEffect(() =>
+    mergeRegister(
+      editor.registerUpdateListener(({ editorState }: { editorState: any }) => {
         editorState.read(() => {
           updateLinkEditor();
         });
@@ -137,8 +134,7 @@ function FloatingLinkEditor({ editor }) {
         },
         LowPriority
       )
-    );
-  }, [editor, updateLinkEditor]);
+    ), [editor, updateLinkEditor]);
 
   useEffect(() => {
     editor.getEditorState().read(() => {
@@ -154,8 +150,8 @@ function FloatingLinkEditor({ editor }) {
 
   return (
     <div ref={editorRef} className="link-editor">
-      {isEditMode ? (
-        <input
+      {isEditMode
+        ? (<input
           ref={inputRef}
           className="link-input"
           value={linkUrl}
@@ -176,34 +172,34 @@ function FloatingLinkEditor({ editor }) {
               setEditMode(false);
             }
           }}
-        />
-      ) : (
-        <>
-          <div className="link-input">
-            <a href={linkUrl} target="_blank" rel="noopener noreferrer">
-              {linkUrl}
-            </a>
-            <div
-              className="link-edit"
-              role="button"
-              tabIndex={0}
-              onMouseDown={(event) => event.preventDefault()}
-              onClick={() => {
-                setEditMode(true);
-              }}
-            />
-          </div>
-        </>
-      )}
+        />)
+        : (
+          <>
+            <div className="link-input">
+              <a href={linkUrl} target="_blank" rel="noopener noreferrer">
+                {linkUrl}
+              </a>
+              <div
+                className="link-edit"
+                role="button"
+                tabIndex={0}
+                onMouseDown={(event) => event.preventDefault()}
+                onClick={() => {
+                  setEditMode(true);
+                }}
+              />
+            </div>
+          </>
+        )}
     </div>
   );
 }
 
-function Select({ onChange, className, options, value }) {
+function Select({ onChange, className, options, value }: { onChange: any, className: any, options: any, value: any }) {
   return (
     <select className={className} onChange={onChange} value={value}>
       <option hidden={true} value="" />
-      {options.map((option) => (
+      {options.map((option: any) => (
         <option key={option} value={option}>
           {option}
         </option>
@@ -212,7 +208,7 @@ function Select({ onChange, className, options, value }) {
   );
 }
 
-function getSelectedNode(selection) {
+function getSelectedNode(selection: any) {
   const anchor = selection.anchor;
   const focus = selection.focus;
   const anchorNode = selection.anchor.getNode();
@@ -228,7 +224,7 @@ function getSelectedNode(selection) {
   }
 }
 
-function BlockOptionsDropdownList({ editor, blockType, toolbarRef, setShowBlockOptionsDropDown }) {
+function BlockOptionsDropdownList({ editor, blockType, toolbarRef, setShowBlockOptionsDropDown }: { editor: any, blockType: any, toolbarRef: any, setShowBlockOptionsDropDown: any }) {
   const dropDownRef = useRef(null);
 
   useEffect(() => {
@@ -247,7 +243,7 @@ function BlockOptionsDropdownList({ editor, blockType, toolbarRef, setShowBlockO
     const toolbar = toolbarRef.current;
 
     if (dropDown !== null && toolbar !== null) {
-      const handle = (event) => {
+      const handle = (event: any) => {
         const target = event.target;
 
         if (!dropDown.contains(target) && !toolbar.contains(target)) {
@@ -378,7 +374,7 @@ export function ToolbarPlugin() {
   const [isLink, setIsLink] = useState(false);
   const [isBold, setIsBold] = useState(false);
   const [isItalic, setIsItalic] = useState(false);
-  const [isUnderline, setIsUnderline] = useState(false);
+  //const [isUnderline, setIsUnderline] = useState(false);
   const [isStrikethrough, setIsStrikethrough] = useState(false);
 
   const updateToolbar = useCallback(() => {
@@ -405,7 +401,7 @@ export function ToolbarPlugin() {
       // Update text format
       setIsBold(selection.hasFormat("bold"));
       setIsItalic(selection.hasFormat("italic"));
-      setIsUnderline(selection.hasFormat("underline"));
+      //setIsUnderline(selection.hasFormat("underline"));
       setIsStrikethrough(selection.hasFormat("strikethrough"));
 
       // Update links
@@ -419,8 +415,8 @@ export function ToolbarPlugin() {
     }
   }, [editor]);
 
-  useEffect(() => {
-    return mergeRegister(
+  useEffect(() =>
+    mergeRegister(
       editor.registerUpdateListener(({ editorState }) => {
         editorState.read(() => {
           updateToolbar();
@@ -433,13 +429,12 @@ export function ToolbarPlugin() {
           return false;
         },
         LowPriority
-      ),
-    );
-  }, [editor, updateToolbar]);
+      )
+    ), [editor, updateToolbar]);
 
   const codeLanguges = useMemo(() => getCodeLanguages(), []);
   const onCodeLanguageSelect = useCallback(
-    (e) => {
+    (e: any) => {
       editor.update(() => {
         if (selectedElementKey !== null) {
           const node = $getNodeByKey(selectedElementKey);
@@ -470,11 +465,13 @@ export function ToolbarPlugin() {
             aria-label="Formatting Options"
           >
             <span className={"icon block-type " + blockType} />
-            <span className="text">{blockTypeToBlockName[blockType]}</span>
+            <span className="text">{
+              blockTypeToBlockName[blockType]
+            }</span>
             <i className="chevron-down" />
           </button>
-          {showBlockOptionsDropDown &&
-            createPortal(
+          {showBlockOptionsDropDown
+            && createPortal(
               <BlockOptionsDropdownList
                 editor={editor}
                 blockType={blockType}
@@ -486,8 +483,8 @@ export function ToolbarPlugin() {
           <Divider />
         </>
       )}
-      {blockType === "code" ? (
-        <>
+      {blockType === "code"
+        ? (<>
           <Select
             className="toolbar-item code-language"
             onChange={onCodeLanguageSelect}
@@ -495,9 +492,8 @@ export function ToolbarPlugin() {
             value={codeLanguage}
           />
           <i className="chevron-down inside" />
-        </>
-      ) : (
-        <>
+        </>)
+        : (<>
           <button
             onClick={() => {
               editor.dispatchCommand(FORMAT_TEXT_COMMAND, "bold");
@@ -533,8 +529,7 @@ export function ToolbarPlugin() {
             <i className="format link" />
           </button>
           {isLink && createPortal(<FloatingLinkEditor editor={editor} />, document.body)}
-        </>
-      )}
+        </>)}
     </div>
   );
 }

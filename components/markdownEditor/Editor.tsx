@@ -60,7 +60,7 @@ export function Editor({ value, onChange = () => { }, mode = "interactive" }: Pr
       TableRowNode,
       AutoLinkNode,
       LinkNode
-    ],
+    ]
   };
 
   return (

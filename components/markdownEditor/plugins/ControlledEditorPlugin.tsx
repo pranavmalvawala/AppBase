@@ -2,7 +2,6 @@ import { useState, useEffect } from "react"
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext"
 import { TRANSFORMERS, $convertFromMarkdownString } from "@lexical/markdown";
 
-
 interface Props {
   value: string
   isPreview?: boolean;
@@ -19,7 +18,7 @@ export function ControlledEditorPlugin({ value, isPreview = false }: Props): any
         $convertFromMarkdownString(value, TRANSFORMERS);
       })
     }
-  }, [value])
+  }, [value]) //eslint-disable-line
 
   return null;
 }

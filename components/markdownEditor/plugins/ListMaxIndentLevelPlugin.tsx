@@ -56,13 +56,13 @@ function isIndentPermitted(maxDepth: any) {
 export function ListMaxIndentLevelPlugin(data: any): any {
   const [editor] = useLexicalComposerContext();
 
-  useEffect(() => {
-    return editor.registerCommand(
+  useEffect(() => (
+    editor.registerCommand(
       INDENT_CONTENT_COMMAND,
       () => !isIndentPermitted(data.maxDepth ?? 7),
       COMMAND_PRIORITY_HIGH
-    );
-  }, [editor, data.maxDepth]);
+    )
+  ), [editor, data.maxDepth]);
 
   return null;
 }
