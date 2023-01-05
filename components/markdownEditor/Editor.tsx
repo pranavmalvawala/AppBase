@@ -106,7 +106,7 @@ export function Editor({ value, onChange = () => { }, mode = "interactive" }: Pr
             <ReadOnlyPlugin isDisabled={mode === "preview"} />
             <ControlledEditorPlugin value={value} isPreview={mode === "preview"} />
             <MarkdownShortcutPlugin transformers={TRANSFORMERS} />
-            <FullScreenPlugin editorState={editorStateRef.current} value={value} />
+            <FullScreenPlugin value={value} />
           </div>
         </div>
       </LexicalComposer>
