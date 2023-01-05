@@ -12,6 +12,7 @@ import {
   HorizontalRuleNode
 } from "@lexical/react/LexicalHorizontalRuleNode";
 import { $createLinkNode, $isLinkNode, LinkNode } from "./LexicalLink";
+//import { $createLinkNode, $isLinkNode, LinkNode } from "@lexical/link";
 
 export const CustomLink: ElementTransformer = {
   dependencies: [LinkNode],
