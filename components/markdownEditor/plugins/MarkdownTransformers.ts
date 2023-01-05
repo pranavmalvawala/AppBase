@@ -11,6 +11,27 @@ import {
   $isHorizontalRuleNode,
   HorizontalRuleNode
 } from "@lexical/react/LexicalHorizontalRuleNode";
+import { $createLinkNode, $isLinkNode, LinkNode } from "./LexicalLink";
+
+export const CustomLink: ElementTransformer = {
+  dependencies: [LinkNode],
+  export: (node: LexicalNode) => ($isLinkNode(node) ? "***" : null),
+  regExp: /^(\[[^\]]])\([^\s)]*\)({\.[^\s}]*})?$/,
+  replace: (parentNode, _1, _2, isImport) => {
+    console.log("CUSTOM LINK", parentNode, _1, _2, isImport);
+    const link = $createLinkNode("about:blank");
+
+    // TODO: Get rid of isImport flag
+    if (isImport || parentNode.getNextSibling() != null) {
+      parentNode.replace(link);
+    } else {
+      parentNode.insertBefore(link);
+    }
+
+    link.selectNext();
+  },
+  type: "element"
+};
 
 export const HR: ElementTransformer = {
   dependencies: [HorizontalRuleNode],
@@ -61,6 +82,7 @@ export const UNDERLINE: TextFormatTransformer = {
   tag: '_',
   type: 'text-format',
 };
+
 /*
 export const UNDERLINE: TextMatchTransformer = {
   dependencies: [],
@@ -95,6 +117,8 @@ export const PLAYGROUND_TRANSFORMERS: Array<Transformer> = [
   ...ELEMENT_TRANSFORMERS,
   ...TEXT_FORMAT_TRANSFORMERS,
   ...TEXT_MATCH_TRANSFORMERS,
-  UNDERLINE
+  UNDERLINE,
+
 
 ];
+//CustomLink

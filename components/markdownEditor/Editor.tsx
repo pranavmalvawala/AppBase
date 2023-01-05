@@ -18,6 +18,7 @@ import { CodeHighlightNode, CodeNode } from "@lexical/code";
 import { theme } from "./theme";
 import { ToolbarPlugin, CustomAutoLinkPlugin, ListMaxIndentLevelPlugin, PLAYGROUND_TRANSFORMERS, ReadOnlyPlugin, ControlledEditorPlugin } from "./plugins";
 import { MarkdownModal } from "./MarkdownModal";
+import { FullScreenPlugin } from "./plugins/FullScreenPlugin";
 
 interface Props {
   value: string;
@@ -105,6 +106,7 @@ export function Editor({ value, onChange = () => { }, mode = "interactive" }: Pr
             <ReadOnlyPlugin isDisabled={mode === "preview"} />
             <ControlledEditorPlugin value={value} isPreview={mode === "preview"} />
             <MarkdownShortcutPlugin transformers={TRANSFORMERS} />
+            <FullScreenPlugin editorState={editorStateRef.current} value={value} />
           </div>
         </div>
       </LexicalComposer>
