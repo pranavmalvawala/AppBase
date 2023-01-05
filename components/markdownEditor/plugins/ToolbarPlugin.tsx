@@ -188,12 +188,12 @@ function BlockOptionsDropdownList({ editor, blockType, toolbarRef, setShowBlockO
         {blockType === "h2" && <span className="active" />}
       </button>
       <button className="item" onClick={formatHeading3}>
-        <Icon>format_h3</Icon>
+        <span className="icon h3" />
         <span className="text">Heading 3</span>
         {blockType === "h4" && <span className="active" />}
       </button>
       <button className="item" onClick={formatHeading4}>
-        <Icon>format_h4</Icon>
+        <span className="icon h4" />
         <span className="text">Heading 4</span>
         {blockType === "h4" && <span className="active" />}
       </button>
