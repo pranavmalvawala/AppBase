@@ -1,5 +1,5 @@
 import type { ElementTransformer, Transformer } from "@lexical/markdown";
-import type { ElementNode, Klass, LexicalNode, TextFormatType, TextNode } from "lexical";
+import type { LexicalNode, TextFormatType } from "lexical";
 
 import {
   ELEMENT_TRANSFORMERS,
@@ -35,7 +35,7 @@ export type TextFormatTransformer = Readonly<{
   format: ReadonlyArray<TextFormatType>;
   tag: string;
   intraword?: boolean;
-  type: 'text-format';
+  type: "text-format";
 }>;
 /*
 export type TextMatchTransformer = Readonly<{
@@ -56,10 +56,10 @@ export type TextMatchTransformer = Readonly<{
 */
 
 export const UNDERLINE: TextFormatTransformer = {
-  format: ['underline'],
+  format: ["underline"],
   intraword: false,
-  tag: '_',
-  type: 'text-format',
+  tag: "_",
+  type: "text-format"
 };
 /*
 export const UNDERLINE: TextMatchTransformer = {

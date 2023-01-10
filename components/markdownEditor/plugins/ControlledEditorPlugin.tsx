@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext"
-import { TRANSFORMERS, $convertFromMarkdownString } from "@lexical/markdown";
+import { $convertFromMarkdownString } from "@lexical/markdown";
 import { PLAYGROUND_TRANSFORMERS } from "./MarkdownTransformers";
 
 interface Props {

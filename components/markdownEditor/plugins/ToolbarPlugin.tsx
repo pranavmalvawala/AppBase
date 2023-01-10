@@ -10,8 +10,6 @@ import { createPortal } from "react-dom";
 import { $createHeadingNode, $createQuoteNode, $isHeadingNode } from "@lexical/rich-text";
 import { $isCodeNode, getDefaultCodeLanguage, getCodeLanguages } from "@lexical/code";
 import { Icon } from "@mui/material";
-import { MarkdownModal } from "../MarkdownModal";
-
 
 const LowPriority = 1;
 
