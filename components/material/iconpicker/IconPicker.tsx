@@ -1,12 +1,13 @@
 import * as React from "react";
 import { styled, Icon, InputBase, Typography, debounce, Grid, IconButton, FormControlLabel, RadioGroup, Radio, SvgIcon, Pagination, Stack } from "@mui/material";
 import MuiPaper from "@mui/material/Paper";
-import { Id, Index as FlexSearchIndex } from "flexsearch";
+
 import synonyms from "./synonyms";
 import * as mui from "@mui/icons-material";
 
 const UPDATE_SEARCH_INDEX_WAIT_MS = 220;
 
+const FlexSearch = require("flexsearch");
 const StyledIcon = styled("span")(({ theme }) => ({
   display: "inline-flex",
   flexDirection: "column",
@@ -75,7 +76,7 @@ const Paper = styled(MuiPaper)(({ theme }) => ({ padding: "2px 4px", display: "f
 
 const Input = styled(InputBase)({ marginLeft: 8, flex: 1 });
 
-const searchIndex = new FlexSearchIndex({ tokenize: "full" });
+const searchIndex = new FlexSearch.Index({ tokenize: "full" });
 
 const allIconsMap: any = {};
 const allIcons = Object.keys(mui)
@@ -104,7 +105,7 @@ type Props = {
 
 export default function SearchIcons(props: Props) {
   const pageSize = 21;
-  const [keys, setKeys] = React.useState<Id[] | null>(null);
+  const [keys, setKeys] = React.useState<any[] | null>(null);
   const [theme, setTheme] = React.useState("Filled");
   const [query, setQuery] = React.useState("");
   const [page, setPage] = React.useState(1);
