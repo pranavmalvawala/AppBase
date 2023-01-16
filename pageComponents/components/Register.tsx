@@ -80,7 +80,7 @@ export const Register: React.FC<Props> = (props) => {
 
   const getThankYou = () => (
     <>
-      <p>Thank you for registering.  Please check your email for your to continue.</p>
+      <p>Thank you for registering. Please check your email to continue.</p>
       <p><Link href="/login">Return to login</Link></p>
     </>
   )
