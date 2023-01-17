@@ -82,7 +82,7 @@ export function Editor({ value, onChange = () => { }, mode = "interactive" }: Pr
 
             />
             <OnChangePlugin onChange={handleChange} />
-            <AutoFocusPlugin />
+            {mode !== "preview" && <AutoFocusPlugin />}
             <HistoryPlugin />
             <ListPlugin />
             <LinkPlugin />
