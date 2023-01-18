@@ -1,6 +1,6 @@
 import React from "react";
 import { AppBar, Drawer, IconButton, styled, Toolbar, Icon, Typography, Box, Container, Link } from "@mui/material";
-import { UserHelper, AppearanceHelper, PersonHelper } from "../../helpers";
+import { UserHelper, AppearanceHelper, PersonHelper, AppearanceInterface } from "../../helpers";
 import { UserMenu } from "./UserMenu";
 import { UserContextInterface } from "../../interfaces";
 import useMountedState from "../../hooks/useMountedState";
@@ -10,7 +10,8 @@ interface Props {
   context: UserContextInterface,
   children: React.ReactNode,
   appName: string,
-  router?: any
+  router?: any,
+  appearance: AppearanceInterface
 }
 
 const OpenDrawer = styled(Drawer)(
@@ -82,8 +83,7 @@ export const SiteWrapper: React.FC<Props> = props => {
 
   const getChurchLogo = async () => {
     if (UserHelper.currentUserChurch) {
-      const logos = await AppearanceHelper.load(UserHelper.currentUserChurch?.church?.id);
-      setChurchLogo(logos.logoDark || "/images/logo-wrapper.png");
+      setChurchLogo(AppearanceHelper.getLogoDark(props.appearance, "/images/logo-wrapper.png"));
     }
   }
 
