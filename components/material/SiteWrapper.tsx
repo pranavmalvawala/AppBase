@@ -81,17 +81,17 @@ export const SiteWrapper: React.FC<Props> = props => {
   const CustomDrawer = (open) ? OpenDrawer : ClosedDrawer;
   const CustomAppBar = (open) ? OpenDrawerAppBar : ClosedDrawerAppBar;
 
-  const getChurchLogo = async () => {
-    if (UserHelper.currentUserChurch) {
-      setChurchLogo(AppearanceHelper.getLogoDark(props.appearance, "/images/logo-wrapper.png"));
-    }
-  }
-
   React.useEffect(() => {
+    const getChurchLogo = async () => {
+      if (UserHelper.currentUserChurch) {
+        setChurchLogo(AppearanceHelper.getLogoDark(props.appearance, "/images/logo-wrapper.png"));
+      }
+    }
+
     if (!isMounted()) {
       getChurchLogo();
     }
-  }, [isMounted]);
+  }, [isMounted, props.appearance]);
 
   return <>
     <CustomAppBar position="absolute">
