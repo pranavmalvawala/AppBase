@@ -23,9 +23,10 @@ interface Props {
   value: string;
   onChange?: (value: string) => void;
   mode?: "interactive" | "preview";
+  style?: any
 }
 
-export function Editor({ value, onChange = () => { }, mode = "interactive" }: Props) {
+export function Editor({ value, onChange = () => { }, mode = "interactive", style }: Props) {
 
   const [fullScreen, setFullScreen] = React.useState(false);
 
@@ -72,7 +73,7 @@ export function Editor({ value, onChange = () => { }, mode = "interactive" }: Pr
   return (
     <>
       <LexicalComposer initialConfig={initialConfig}>
-        <div className="editor-container" style={{ border: mode === "preview" ? "none" : "1px solid lightgray" }}>
+        <div className="editor-container" style={style && { border: mode === "preview" ? "none" : "1px solid lightgray" }}>
           {mode !== "preview" && <ToolbarPlugin goFullScreen={() => { setFullScreen(true) }} />}
           <div className="editor-inner">
             <RichTextPlugin
