@@ -669,6 +669,14 @@ i.redo {
   background-image: url(./images/icons/type-h2.svg);
 }
 
+.icon.h3 {
+  background-image: url(./images/icons/type-h3.svg);
+}
+
+.icon.h4 {
+  background-image: url(./images/icons/type-h4.svg);
+}
+
 .icon.bullet-list,
 .icon.ul {
   background-image: url(./images/icons/list-ul.svg);

@@ -13,7 +13,7 @@ import { Icon } from "@mui/material";
 
 const LowPriority = 1;
 
-const supportedBlockTypes = new Set(["paragraph", "quote", "code", "h1", "h2", "ul", "ol"]);
+const supportedBlockTypes = new Set(["paragraph", "quote", "code", "h1", "h2", "h3", "h4", "ul", "ol"]);
 
 const blockTypeToBlockName: any = {
   code: "Code Block",
@@ -285,6 +285,26 @@ function BlockOptionsDropdownList({ editor, blockType, toolbarRef, setShowBlockO
     setShowBlockOptionsDropDown(false);
   };
 
+  const formatHeading3 = () => {
+    if (blockType !== "h3") {
+      editor.update(() => {
+        const selection = $getSelection();
+        if ($isRangeSelection(selection)) { $wrapNodes(selection, () => $createHeadingNode("h3")); }
+      });
+    }
+    setShowBlockOptionsDropDown(false);
+  };
+
+  const formatHeading4 = () => {
+    if (blockType !== "h4") {
+      editor.update(() => {
+        const selection = $getSelection();
+        if ($isRangeSelection(selection)) { $wrapNodes(selection, () => $createHeadingNode("h4")); }
+      });
+    }
+    setShowBlockOptionsDropDown(false);
+  };
+
   const formatBulletList = () => {
     if (blockType !== "ul") {
       editor.dispatchCommand(INSERT_UNORDERED_LIST_COMMAND);
@@ -332,6 +352,16 @@ function BlockOptionsDropdownList({ editor, blockType, toolbarRef, setShowBlockO
         <span className="icon small-heading" />
         <span className="text">Small Heading</span>
         {blockType === "h2" && <span className="active" />}
+      </button>
+      <button className="item" onClick={formatHeading3}>
+        <span className="icon h3" />
+        <span className="text">Heading 3</span>
+        {blockType === "h4" && <span className="active" />}
+      </button>
+      <button className="item" onClick={formatHeading4}>
+        <span className="icon h4" />
+        <span className="text">Heading 4</span>
+        {blockType === "h4" && <span className="active" />}
       </button>
       <button className="item" onClick={formatBulletList}>
         <span className="icon bullet-list" />
