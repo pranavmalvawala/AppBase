@@ -16,10 +16,10 @@ interface Props {
   help?: string
 }
 
+/* "& p": { color: "#666" }, */
 const CustomContextBox = styled(Box)({
   marginTop: 10,
   overflowX: "hidden",
-  "& p": { color: "#666" },
   "& label": { color: "#999" },
   "& ul": { paddingLeft: 0 },
   "& li": {
