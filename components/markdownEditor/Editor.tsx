@@ -27,7 +27,6 @@ interface Props {
 }
 
 export function Editor({ value, onChange = () => { }, mode = "interactive", style }: Props) {
-
   const [fullScreen, setFullScreen] = React.useState(false);
 
   const handleChange = (editorState: any) => {
@@ -73,7 +72,7 @@ export function Editor({ value, onChange = () => { }, mode = "interactive", styl
   return (
     <>
       <LexicalComposer initialConfig={initialConfig}>
-        <div className="editor-container" style={style && { border: mode === "preview" ? "none" : "1px solid lightgray" }}>
+        <div className="editor-container" style={Object.assign({ border: mode === "preview" ? "none" : "1px solid lightgray" }, style)}>
           {mode !== "preview" && <ToolbarPlugin goFullScreen={() => { setFullScreen(true) }} />}
           <div className="editor-inner">
             <RichTextPlugin
