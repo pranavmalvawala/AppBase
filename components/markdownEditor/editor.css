@@ -33,7 +33,7 @@
 }
 
 .editor-container {
-  margin: 20px auto 20px auto;
+  /*margin: 20px auto 20px auto;*/
   border-radius: 2px;
   /*color: #000;*/
   position: relative;
@@ -57,6 +57,10 @@
   outline: 0;
   padding: 15px 10px;
   caret-color: #444;
+}
+
+.editor-container.preview .editor-input {
+  padding: 0px 0px;
 }
 
 .editor-placeholder {
