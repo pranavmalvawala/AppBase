@@ -8,4 +8,5 @@ export { PersonHelper } from "./PersonHelper"
 export { Themes } from "./Themes"
 export { UserHelper } from "./UserHelper";
 export { UniqueIdHelper } from "./UniqueIdHelper";
+export { createEmotionCache } from "./createEmotionCache";
 export * from "./AppearanceHelper";

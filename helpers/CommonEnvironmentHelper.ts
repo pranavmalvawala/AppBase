@@ -24,19 +24,19 @@ export class CommonEnvironmentHelper {
 
   static initDev = () => {
     this.initStaging(); //Use staging values for anything not provided
-    CommonEnvironmentHelper.AttendanceApi = process.env.REACT_APP_ATTENDANCE_API || CommonEnvironmentHelper.AttendanceApi;
-    CommonEnvironmentHelper.DoingApi = process.env.REACT_APP_DOING_API || CommonEnvironmentHelper.DoingApi;
-    CommonEnvironmentHelper.GivingApi = process.env.REACT_APP_GIVING_API || CommonEnvironmentHelper.GivingApi;
-    CommonEnvironmentHelper.MembershipApi = process.env.REACT_APP_MEMBERSHIP_API || CommonEnvironmentHelper.MembershipApi;
-    CommonEnvironmentHelper.ReportingApi = process.env.REACT_APP_REPORTING_API || CommonEnvironmentHelper.ReportingApi;
-    CommonEnvironmentHelper.MessagingApi = process.env.REACT_APP_MESSAGING_API || CommonEnvironmentHelper.MessagingApi;
-    CommonEnvironmentHelper.ContentApi = process.env.REACT_APP_CONTENT_API || CommonEnvironmentHelper.ContentApi;
+    CommonEnvironmentHelper.AttendanceApi = process.env.REACT_APP_ATTENDANCE_API || process.env.NEXT_PUBLIC_ATTENDANCE_API || CommonEnvironmentHelper.AttendanceApi;
+    CommonEnvironmentHelper.DoingApi = process.env.REACT_APP_DOING_API || process.env.NEXT_PUBLIC_DOING_API || CommonEnvironmentHelper.DoingApi;
+    CommonEnvironmentHelper.GivingApi = process.env.REACT_APP_GIVING_API || process.env.NEXT_PUBLIC_GIVING_API || CommonEnvironmentHelper.GivingApi;
+    CommonEnvironmentHelper.MembershipApi = process.env.REACT_APP_MEMBERSHIP_API || process.env.NEXT_PUBLIC_MEMBERSHIP_API || CommonEnvironmentHelper.MembershipApi;
+    CommonEnvironmentHelper.ReportingApi = process.env.REACT_APP_REPORTING_API || process.env.NEXT_PUBLIC_REPORTING_API || CommonEnvironmentHelper.ReportingApi;
+    CommonEnvironmentHelper.MessagingApi = process.env.REACT_APP_MESSAGING_API || process.env.NEXT_PUBLIC_MESSAGING_API || CommonEnvironmentHelper.MessagingApi;
+    CommonEnvironmentHelper.ContentApi = process.env.REACT_APP_CONTENT_API || process.env.NEXT_PUBLIC_CONTENT_API || CommonEnvironmentHelper.ContentApi;
 
-    CommonEnvironmentHelper.ContentRoot = process.env.REACT_APP_CONTENT_ROOT || CommonEnvironmentHelper.ContentRoot;
-    CommonEnvironmentHelper.B1Root = process.env.REACT_APP_B1_ROOT || CommonEnvironmentHelper.B1Root;
-    CommonEnvironmentHelper.ChumsRoot = process.env.REACT_APP_CHUMS_ROOT || CommonEnvironmentHelper.ChumsRoot;
-    CommonEnvironmentHelper.StreamingLiveRoot = process.env.REACT_APP_STREAMINGLIVE_ROOT || CommonEnvironmentHelper.StreamingLiveRoot;
-    CommonEnvironmentHelper.LessonsRoot = process.env.REACT_APP_LESSONS_ROOT || CommonEnvironmentHelper.LessonsRoot;
+    CommonEnvironmentHelper.ContentRoot = process.env.REACT_APP_CONTENT_ROOT || process.env.NEXT_PUBLIC_CONTENT_ROOT || CommonEnvironmentHelper.ContentRoot;
+    CommonEnvironmentHelper.B1Root = process.env.REACT_APP_B1_ROOT || process.env.NEXT_PUBLIC_B1_ROOT || CommonEnvironmentHelper.B1Root;
+    CommonEnvironmentHelper.ChumsRoot = process.env.REACT_APP_CHUMS_ROOT || process.env.NEXT_PUBLIC_CHUMS_ROOT || CommonEnvironmentHelper.ChumsRoot;
+    CommonEnvironmentHelper.StreamingLiveRoot = process.env.REACT_APP_STREAMINGLIVE_ROOT || process.env.NEXT_PUBLIC_STREAMINGLIVE_ROOT || CommonEnvironmentHelper.StreamingLiveRoot;
+    CommonEnvironmentHelper.LessonsRoot = process.env.REACT_APP_LESSONS_ROOT || process.env.NEXT_PUBLIC_LESSONS_ROOT || CommonEnvironmentHelper.LessonsRoot;
   }
 
   //NOTE: None of these values are secret.

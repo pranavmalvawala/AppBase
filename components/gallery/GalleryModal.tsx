@@ -16,7 +16,7 @@ interface Props {
 export const GalleryModal: React.FC<Props> = (props: Props) => {
   const [images, setImages] = useState<string[]>([]);
   const [tabIndex, setTabIndex] = React.useState(0);
-  const [aspectRatio, setAspectRatio] = React.useState(props.aspectRatio);
+  const [aspectRatio, setAspectRatio] = React.useState(Math.round(props.aspectRatio * 100) / 100);
   const [editorPhotoUrl, setEditorPhotoUrl] = React.useState("");
 
   const handleTabChange = (el: any, newValue: any) => { setTabIndex(newValue); }
@@ -37,7 +37,7 @@ export const GalleryModal: React.FC<Props> = (props: Props) => {
     loadData();
   };
 
-  React.useEffect(() => { if (aspectRatio !== props.aspectRatio) setAspectRatio(props.aspectRatio) }, [props.aspectRatio]); //eslint-disable-line
+  React.useEffect(() => { if (aspectRatio !== props.aspectRatio) setAspectRatio(Math.round(props.aspectRatio * 100) / 100) }, [props.aspectRatio]); //eslint-disable-line
   React.useEffect(loadData, [aspectRatio]); //eslint-disable-line
 
   const getImages = () => {

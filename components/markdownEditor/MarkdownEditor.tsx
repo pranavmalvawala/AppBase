@@ -4,8 +4,9 @@ import { Editor } from "./Editor"
 interface Props {
   value: string;
   onChange?: (newValue: string) => void;
+  style?: any
 }
 
-export function MarkdownEditor({ value: markdownString = "", onChange }: Props) {
-  return <Editor value={markdownString} onChange={onChange} />;
+export function MarkdownEditor({ value: markdownString = "", onChange, style }: Props) {
+  return <Editor value={markdownString} onChange={onChange} style={style} />;
 }

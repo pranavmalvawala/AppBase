@@ -32,7 +32,7 @@ export const SelectChurchModal: React.FC<Props> = (props) => {
   return (
     <Dialog open={props.show} onClose={handleClose}>
       <DialogTitle>Select Church</DialogTitle>
-      <DialogContent sx={{ width: 500 }}>
+      <DialogContent sx={{ width: 500, maxWidth: "100%" }}>
         <ErrorMessages errors={props.errors} />
         {getContents()}
       </DialogContent>
