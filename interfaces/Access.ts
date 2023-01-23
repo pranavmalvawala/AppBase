@@ -2,6 +2,7 @@ import { PersonInterface } from "./Membership";
 
 export interface ApiInterface { name: string, keyName?: string, permissions: RolePermissionInterface[], jwt: string }
 export interface ChurchInterface { id?: string, name?: string, registrationDate?: Date, address1?: string, address2?: string, city?: string, state?: string, zip?: string, country?: string, subDomain?: string, settings?: GenericSettingInterface[], archivedDate?: Date }
+export interface DomainInterface { id?: string, domainName?: string }
 export interface RegisterChurchRequestInterface extends ChurchInterface { appName?: string }
 export interface LoadCreateUserRequestInterface { userEmail: string, fromEmail?: string, subject?: string, body?: string, firstName: string, lastName: string }
 export interface LoginResponseInterface { user: UserInterface, userChurches: LoginUserChurchInterface[], errors: string[] }
