@@ -72,7 +72,7 @@ export function Editor({ value, onChange = () => { }, mode = "interactive", styl
   return (
     <>
       <LexicalComposer initialConfig={initialConfig}>
-        <div className="editor-container" style={Object.assign({ border: mode === "preview" ? "none" : "1px solid lightgray" }, style)}>
+        <div className={(mode === "preview") ? "editor-container preview" : "editor-container"} style={Object.assign({ border: mode === "preview" ? "none" : "1px solid lightgray" }, style)}>
           {mode !== "preview" && <ToolbarPlugin goFullScreen={() => { setFullScreen(true) }} />}
           <div className="editor-inner">
             <RichTextPlugin
