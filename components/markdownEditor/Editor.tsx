@@ -24,9 +24,10 @@ interface Props {
   onChange?: (value: string) => void;
   mode?: "interactive" | "preview";
   style?: any
+  textAlign?: "left" | "center" | "right"
 }
 
-export function Editor({ value, onChange = () => { }, mode = "interactive", style }: Props) {
+export function Editor({ value, onChange = () => { }, mode = "interactive", textAlign = "left", style }: Props) {
   const [fullScreen, setFullScreen] = React.useState(false);
 
   const handleChange = (editorState: any) => {
@@ -60,6 +61,20 @@ export function Editor({ value, onChange = () => { }, mode = "interactive", styl
     ]
   };
 
+  let textAlignClass = ""
+  switch (textAlign) {
+    case "center":
+        textAlignClass = "text-center"
+      break;
+    case "right":
+        textAlignClass = "text-right"
+      break;
+    case "left":
+    default:
+        textAlignClass = "text-left"
+      break;
+  }
+
   const handleCloseFullScreen = (newValue: string) => {
     onChange(newValue)
     setFullScreen(false);
@@ -72,7 +87,7 @@ export function Editor({ value, onChange = () => { }, mode = "interactive", styl
   return (
     <>
       <LexicalComposer initialConfig={initialConfig}>
-        <div className={(mode === "preview") ? "editor-container preview" : "editor-container"} style={Object.assign({ border: mode === "preview" ? "none" : "1px solid lightgray" }, style)}>
+        <div className={(mode === "preview") ? `editor-container preview ${textAlignClass}` : `editor-container ${textAlignClass}`} style={Object.assign({ border: mode === "preview" ? "none" : "1px solid lightgray" }, style)}>
           {mode !== "preview" && <ToolbarPlugin goFullScreen={() => { setFullScreen(true) }} />}
           <div className="editor-inner">
             <RichTextPlugin

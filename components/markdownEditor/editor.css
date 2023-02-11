@@ -24,12 +24,16 @@
   list-style-type: disc !important;
 }
 
-.ltr {
+.text-left {
   text-align: left;
 }
 
-.rtl {
+.text-right {
   text-align: right;
+}
+
+.text-center {
+  text-align: center;
 }
 
 .editor-container {
@@ -39,7 +43,6 @@
   position: relative;
   line-height: 20px;
   font-weight: 400;
-  text-align: left;
   border-radius: 5px;
 }
 
