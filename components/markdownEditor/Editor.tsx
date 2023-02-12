@@ -64,14 +64,14 @@ export function Editor({ value, onChange = () => { }, mode = "interactive", text
   let textAlignClass = ""
   switch (textAlign) {
     case "center":
-        textAlignClass = "text-center"
+      textAlignClass = "text-center"
       break;
     case "right":
-        textAlignClass = "text-right"
+      textAlignClass = "text-right"
       break;
     case "left":
     default:
-        textAlignClass = "text-left"
+      textAlignClass = "text-left"
       break;
   }
 
