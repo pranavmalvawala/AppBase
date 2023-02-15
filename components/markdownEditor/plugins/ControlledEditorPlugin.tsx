@@ -13,7 +13,7 @@ export function ControlledEditorPlugin({ value, isPreview = false }: Props): any
   const [hasInit, setHasInit] = useState<boolean>(false);
 
   useEffect(() => {
-    if (!hasInit || isPreview) {
+    if (!hasInit || isPreview || !value) {
       setHasInit(true)
       editor.update(() => {
         $convertFromMarkdownString(value, PLAYGROUND_TRANSFORMERS);
