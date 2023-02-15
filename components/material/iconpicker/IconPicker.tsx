@@ -1,5 +1,5 @@
 import * as React from "react";
-import { styled, Icon, InputBase, Typography, debounce, Grid, IconButton, FormControlLabel, RadioGroup, Radio, SvgIcon, Pagination, Stack } from "@mui/material";
+import { styled, Icon, InputBase, Typography, debounce, Grid, IconButton, Pagination, Stack } from "@mui/material";
 import MuiPaper from "@mui/material/Paper";
 import { iconNamesList } from "./iconNamesList"
 import synonyms from "./synonyms";
@@ -79,12 +79,12 @@ function createSearchIndex() {
       }
       return s
     })
-    return { 
+    return {
       iconName: icon,
-      componentName: capitalizedSplit.join("") 
+      componentName: capitalizedSplit.join("")
     };
   })
-  
+
   // create search index
   iconsAndComponentNames.forEach(icon => {
     let searchTerm = icon.iconName + " " + icon.componentName;

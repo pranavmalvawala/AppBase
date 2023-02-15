@@ -2233,5 +2233,5 @@ export const iconNamesList = [
   "zoom_in",
   "zoom_in_map",
   "zoom_out",
-  "zoom_out_map",
+  "zoom_out_map"
 ];
