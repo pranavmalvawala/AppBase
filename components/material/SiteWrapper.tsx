@@ -11,7 +11,7 @@ interface Props {
   children: React.ReactNode,
   appName: string,
   router?: any,
-  appearance: AppearanceInterface
+  appearance?: AppearanceInterface
 }
 
 const OpenDrawer = styled(Drawer)(
