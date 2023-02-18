@@ -6,6 +6,7 @@ export class CommonEnvironmentHelper {
   public static MembershipApi = "";
   public static ReportingApi = "";
   public static MessagingApi = "";
+  public static MessagingApiSocket = "";
   public static ContentApi = "";
 
   static ContentRoot = "";
@@ -30,6 +31,7 @@ export class CommonEnvironmentHelper {
     CommonEnvironmentHelper.MembershipApi = process.env.REACT_APP_MEMBERSHIP_API || process.env.NEXT_PUBLIC_MEMBERSHIP_API || CommonEnvironmentHelper.MembershipApi;
     CommonEnvironmentHelper.ReportingApi = process.env.REACT_APP_REPORTING_API || process.env.NEXT_PUBLIC_REPORTING_API || CommonEnvironmentHelper.ReportingApi;
     CommonEnvironmentHelper.MessagingApi = process.env.REACT_APP_MESSAGING_API || process.env.NEXT_PUBLIC_MESSAGING_API || CommonEnvironmentHelper.MessagingApi;
+    CommonEnvironmentHelper.MessagingApiSocket = process.env.REACT_APP_MESSAGING_API_SOCKET || process.env.NEXT_PUBLIC_MESSAGING_API_SOCKET || CommonEnvironmentHelper.MessagingApiSocket;
     CommonEnvironmentHelper.ContentApi = process.env.REACT_APP_CONTENT_API || process.env.NEXT_PUBLIC_CONTENT_API || CommonEnvironmentHelper.ContentApi;
 
     CommonEnvironmentHelper.ContentRoot = process.env.REACT_APP_CONTENT_ROOT || process.env.NEXT_PUBLIC_CONTENT_ROOT || CommonEnvironmentHelper.ContentRoot;
@@ -47,6 +49,7 @@ export class CommonEnvironmentHelper {
     CommonEnvironmentHelper.MembershipApi = "https://membershipapi.staging.churchapps.org";
     CommonEnvironmentHelper.ReportingApi = "https://reportingapi.staging.churchapps.org";
     CommonEnvironmentHelper.MessagingApi = "https://messagingapi.staging.churchapps.org";
+    CommonEnvironmentHelper.MessagingApiSocket = "wss://socket.staging.churchapps.org";
     CommonEnvironmentHelper.ContentApi = "https://contentapi.staging.churchapps.org";
 
     CommonEnvironmentHelper.ContentRoot = "https://content.staging.churchapps.org";
@@ -64,6 +67,7 @@ export class CommonEnvironmentHelper {
     CommonEnvironmentHelper.MembershipApi = "https://membershipapi.churchapps.org";
     CommonEnvironmentHelper.ReportingApi = "https://reportingapi.churchapps.org";
     CommonEnvironmentHelper.MessagingApi = "https://messagingapi.churchapps.org";
+    CommonEnvironmentHelper.MessagingApiSocket = "wss://socket.churchapps.org";
     CommonEnvironmentHelper.ContentApi = "https://contentapi.churchapps.org";
 
     CommonEnvironmentHelper.ContentRoot = "https://content.churchapps.org";
