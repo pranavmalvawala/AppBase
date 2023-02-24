@@ -8,6 +8,7 @@ import { AutoFocusPlugin } from "@lexical/react/LexicalAutoFocusPlugin";
 import LexicalErrorBoundary from "@lexical/react/LexicalErrorBoundary";
 import { ListPlugin } from "@lexical/react/LexicalListPlugin";
 import { LinkPlugin } from "@lexical/react/LexicalLinkPlugin";
+import { LexicalNode } from "lexical";
 import { MarkdownShortcutPlugin } from "@lexical/react/LexicalMarkdownShortcutPlugin";
 import { TRANSFORMERS, $convertToMarkdownString, $convertFromMarkdownString } from "@lexical/markdown";
 import { HeadingNode, QuoteNode } from "@lexical/rich-text";
@@ -18,6 +19,8 @@ import { CodeHighlightNode, CodeNode } from "@lexical/code";
 import { theme } from "./theme";
 import { ToolbarPlugin, CustomAutoLinkPlugin, ListMaxIndentLevelPlugin, PLAYGROUND_TRANSFORMERS, ReadOnlyPlugin, ControlledEditorPlugin } from "./plugins";
 import { MarkdownModal } from "./MarkdownModal";
+import CustomLinkNodePlugin from "./plugins/customLink/CustomLinkNodePlugin";
+import { CustomLinkNode } from "./plugins/customLink/CustomLinkNode";
 
 interface Props {
   value: string;
@@ -57,7 +60,14 @@ export function Editor({ value, onChange = () => { }, mode = "interactive", text
       TableCellNode,
       TableRowNode,
       AutoLinkNode,
-      LinkNode
+      LinkNode,
+      CustomLinkNode,
+      {
+        replace: LinkNode,
+        with: (node: LexicalNode) => {
+          return new CustomLinkNode(node.__url, node.__target, []);
+        },
+      },
     ]
   };
 
@@ -96,12 +106,13 @@ export function Editor({ value, onChange = () => { }, mode = "interactive", text
               ErrorBoundary={LexicalErrorBoundary}
 
             />
+            <CustomLinkNodePlugin />
             <OnChangePlugin onChange={handleChange} />
             {mode !== "preview" && <AutoFocusPlugin />}
             <HistoryPlugin />
             <ListPlugin />
-            <LinkPlugin />
             <CustomAutoLinkPlugin />
+
             <ListMaxIndentLevelPlugin maxDepth={7} />
             <ReadOnlyPlugin isDisabled={mode === "preview"} />
             <ControlledEditorPlugin value={value} isPreview={mode === "preview"} />
