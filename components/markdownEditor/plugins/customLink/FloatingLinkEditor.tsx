@@ -1,18 +1,8 @@
-import React, {
-  useCallback,
-  useRef,
-  FC,
-  useEffect,
-} from "react";
+import React, { useCallback, useRef, FC, useEffect } from "react";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { mergeRegister } from "@lexical/utils";
 import { $isCustomLinkNode } from "./CustomLinkNode";
-import {
-  $getSelection,
-  SELECTION_CHANGE_COMMAND,
-  $isRangeSelection,
-  $getNodeByKey
-} from "lexical";
+import { $getSelection, SELECTION_CHANGE_COMMAND, $isRangeSelection, $getNodeByKey } from "lexical";
 import { TOGGLE_CUSTOM_LINK_NODE_COMMAND } from "./CustomLinkNode";
 import { FloatingLinkEditorProps } from "./FloatingLinkEditor.types";
 import { getSelectedNode } from "../ToolbarPlugin";

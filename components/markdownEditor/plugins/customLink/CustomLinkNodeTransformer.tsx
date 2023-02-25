@@ -39,7 +39,7 @@ const replaceCustomLinkNode = (textNode:any, match:any) => {
     if (CUSTOM_LINK_NODE_MARKDOWN_REGEX.test(otherText)) {
       console.log(otherText);
 
-      const blankNode = $createTextNode('');
+      const blankNode = $createTextNode("");
 
       linkNode.getParent().append(blankNode);
 
