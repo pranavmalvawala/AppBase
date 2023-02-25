@@ -4,8 +4,7 @@ import type { LexicalNode, TextFormatType } from "lexical";
 import {
   ELEMENT_TRANSFORMERS,
   TEXT_FORMAT_TRANSFORMERS,
-  TEXT_MATCH_TRANSFORMERS,
-  TRANSFORMERS,
+  TRANSFORMERS
 } from "@lexical/markdown";
 import {
   $createHorizontalRuleNode,
@@ -98,5 +97,5 @@ export const PLAYGROUND_TRANSFORMERS: Array<Transformer> = [
   ...ELEMENT_TRANSFORMERS,
   UNDERLINE,
   ...TRANSFORMERS.splice(0, 13),
-  CUSTOM_LINK_NODE_TRANSFORMER,
+  CUSTOM_LINK_NODE_TRANSFORMER
 ];

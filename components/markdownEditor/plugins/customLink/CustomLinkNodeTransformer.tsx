@@ -1,10 +1,10 @@
 import type { TextMatchTransformer } from "@lexical/markdown";
-import { $createTextNode, LexicalNode, $isTextNode } from "lexical";
+import { $createTextNode, $isTextNode } from "lexical";
 
 import {
   $isCustomLinkNode,
   CustomLinkNode,
-  $createCustomLinkNode,
+  $createCustomLinkNode
 } from "./CustomLinkNode";
 
 const CUSTOM_LINK_NODE_MARKDOWN_REGEX_QUERY = /(?:\[([^[]+)\])(?:\(([^(]+)\))(?:({([^}]*)})?)(?:(.*))$/;
@@ -15,17 +15,17 @@ const replaceCustomLinkNode = (textNode:any, match:any) => {
   const linkUrl = match[2],
     linkText = match[1];
 
-    const otherText = match[5];
-    console.log(otherText);
+  const otherText = match[5];
+  console.log(otherText);
 
   const linkNode = $createCustomLinkNode(
     linkUrl,
     match[4] ? (match[4].includes("_self") ? "_self" : "_blank") : "_blank",
     match[4]
       ? match[4]
-          .split(" ")
-          .filter((word: string) => word[0] === ".")
-          .map((word: string) => word.replace(".", ""))
+        .split(" ")
+        .filter((word: string) => word[0] === ".")
+        .map((word: string) => word.replace(".", ""))
       : []
   );
 
@@ -75,6 +75,6 @@ export const CUSTOM_LINK_NODE_TRANSFORMER: TextMatchTransformer = {
   importRegExp: CUSTOM_LINK_NODE_MARKDOWN_REGEX,
   regExp: CUSTOM_LINK_NODE_MARKDOWN_REGEX,
   replace: replaceCustomLinkNode,
-  trigger: '}',
-  type: 'text-match',
+  trigger: "}",
+  type: "text-match"
 };

@@ -3,7 +3,7 @@ import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext
 import {
   LinkCustomizationAttributes,
   toggleCustomLinkNode,
-  TOGGLE_CUSTOM_LINK_NODE_COMMAND,
+  TOGGLE_CUSTOM_LINK_NODE_COMMAND
 } from "./CustomLinkNode";
 
 const COMMAND_PRIORITY = 1;

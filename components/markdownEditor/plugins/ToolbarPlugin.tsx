@@ -2,7 +2,6 @@ import React from "react"
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { SELECTION_CHANGE_COMMAND, FORMAT_TEXT_COMMAND, $getSelection, $isRangeSelection, $createParagraphNode, $getNodeByKey } from "lexical";
-import { $isLinkNode, TOGGLE_LINK_COMMAND } from "@lexical/link";
 import { $wrapNodes, $isAtNodeEnd } from "@lexical/selection";
 import { $getNearestNodeOfType, mergeRegister } from "@lexical/utils";
 import { INSERT_ORDERED_LIST_COMMAND, INSERT_UNORDERED_LIST_COMMAND, REMOVE_LIST_COMMAND, $isListNode, ListNode } from "@lexical/list";
@@ -34,6 +33,7 @@ function Divider() {
   return <div className="divider" />;
 }
 
+/*
 function positionEditorElement(editor: any, rect: any) {
   if (rect === null) {
     editor.style.opacity = "0";
@@ -45,6 +45,7 @@ function positionEditorElement(editor: any, rect: any) {
     editor.style.left = `${rect.left + window.pageXOffset - editor.offsetWidth / 2 + rect.width / 2}px`;
   }
 }
+*/
 
 function Select({ onChange, className, options, value }: { onChange: any, className: any, options: any, value: any }) {
   return (
@@ -263,9 +264,7 @@ export function ToolbarPlugin(props: Props) {
   //const [isStrikethrough, setIsStrikethrough] = useState(false);
   const [linkUrl, setLinkUrl] = useState<string>("https://");
   const [targetAttribute, setTargetAttribute] = useState<string>("_self");
-  const [classNamesList, setClassNamesList] = useState<Array<string>>([
-    "primary",
-  ]);
+  const [classNamesList, setClassNamesList] = useState<Array<string>>(["primary"]);
 
   const updateToolbar = useCallback(() => {
     const selection = $getSelection();
@@ -343,9 +342,9 @@ export function ToolbarPlugin(props: Props) {
     editor.dispatchCommand(TOGGLE_CUSTOM_LINK_NODE_COMMAND, {
       url: linkUrl,
       classNames: classNamesList,
-      target: targetAttribute,
+      target: targetAttribute
     });
-  }, [editor, isLink]);
+  }, [editor, isLink]); //eslint-disable-line
 
   return (
     <div className="toolbar" ref={toolbarRef}>

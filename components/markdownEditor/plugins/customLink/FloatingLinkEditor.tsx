@@ -1,7 +1,5 @@
 import React, {
   useCallback,
-  ChangeEvent,
-  useState,
   useRef,
   FC,
   useEffect,
@@ -13,16 +11,12 @@ import {
   $getSelection,
   SELECTION_CHANGE_COMMAND,
   $isRangeSelection,
-  RangeSelection,
-  GridSelection,
-  NodeSelection,
-  $setSelection,
   $getNodeByKey
 } from "lexical";
 import { TOGGLE_CUSTOM_LINK_NODE_COMMAND } from "./CustomLinkNode";
 import { FloatingLinkEditorProps } from "./FloatingLinkEditor.types";
 import { getSelectedNode } from "../ToolbarPlugin";
-import { FormControl, InputLabel, Select, MenuItem, ListSubheader, TextField, Button } from "@mui/material";
+import { FormControl, InputLabel, Select, MenuItem, TextField, Button } from "@mui/material";
 
 const positionEditorElement = (editor: HTMLElement, rect: DOMRect | null) => {
   if (rect === null) {
@@ -33,13 +27,12 @@ const positionEditorElement = (editor: HTMLElement, rect: DOMRect | null) => {
     editor.style.opacity = "1";
     editor.style.top = `${rect.top + rect.height + window.pageYOffset + 10}px`;
     editor.style.left = `${
-      rect.left + window.pageXOffset - editor.offsetWidth / 2 + rect.width / 2 <
-      0
+      rect.left + window.pageXOffset - editor.offsetWidth / 2 + rect.width / 2 < 0
         ? 0
-        : rect.left +
-          window.pageXOffset -
-          editor.offsetWidth / 2 +
-          rect.width / 2
+        : rect.left
+          + window.pageXOffset
+          - editor.offsetWidth / 2
+          + rect.width / 2
     }px`;
   }
 };
@@ -61,9 +54,11 @@ const FloatingLinkEditor: FC<FloatingLinkEditorProps> = ({
 
   const mouseDownRef = useRef(false);
 
+  /*
   const [lastSelection, setLastSelection] = useState<
     GridSelection | NodeSelection | RangeSelection | null
   >(null);
+  */
 
   const updateLinkEditor = useCallback(() => {
     const selection = $getSelection();
@@ -96,10 +91,10 @@ const FloatingLinkEditor: FC<FloatingLinkEditorProps> = ({
 
     const rootElement = editor.getRootElement();
     if (
-      selection !== null &&
-      !nativeSelection?.isCollapsed &&
-      rootElement !== null &&
-      rootElement.contains(nativeSelection.anchorNode)
+      selection !== null
+      && !nativeSelection?.isCollapsed
+      && rootElement !== null
+      && rootElement.contains(nativeSelection.anchorNode)
     ) {
       const domRange = nativeSelection.getRangeAt(0);
       let rect;
@@ -116,17 +111,17 @@ const FloatingLinkEditor: FC<FloatingLinkEditorProps> = ({
       if (!mouseDownRef.current) {
         positionEditorElement(editorElem, rect);
       }
-      setLastSelection(selection);
+      //setLastSelection(selection);
     } else if (!activeElement || activeElement.className !== "link-input") {
       positionEditorElement(editorElem, null);
-      setLastSelection(null);
+      //setLastSelection(null);
     }
 
     return true;
-  }, [editor]);
+  }, [editor]); //eslint-disable-line
 
-  useEffect(() => {
-    return mergeRegister(
+  useEffect(() => (
+    mergeRegister(
       editor.registerUpdateListener(({ editorState }) => {
         editorState.read(() => {
           updateLinkEditor();
@@ -143,8 +138,8 @@ const FloatingLinkEditor: FC<FloatingLinkEditorProps> = ({
         },
         LowPriority
       )
-    );
-  }, [editor, updateLinkEditor]);
+    )
+  ), [editor, updateLinkEditor]);
 
   useEffect(() => {
     editor.getEditorState().read(() => {
@@ -156,7 +151,7 @@ const FloatingLinkEditor: FC<FloatingLinkEditorProps> = ({
     editor.getEditorState().read(() => {
       updateLinkEditor();
     });
-  }, []);
+  }, []); //eslint-disable-line
 
   const variants = ["Primary", "Secondary", "Success", "Danger", "Warning", "Info", "Light", "Dark"];
   let appearance = "link";
@@ -168,7 +163,7 @@ const FloatingLinkEditor: FC<FloatingLinkEditorProps> = ({
     editor.dispatchCommand(TOGGLE_CUSTOM_LINK_NODE_COMMAND, {
       url: linkUrl,
       classNames: classNamesList,
-      target: targetAttribute,
+      target: targetAttribute
     });
 
     editor.update(() => {
@@ -183,43 +178,39 @@ const FloatingLinkEditor: FC<FloatingLinkEditorProps> = ({
   return (
     <div ref={editorRef} className="link-editor">
 
-        <TextField label="Url" value={linkUrl} onChange={e => { setLinkUrl(e.target.value) }} fullWidth size="small" />
+      <TextField label="Url" value={linkUrl} onChange={e => { setLinkUrl(e.target.value) }} fullWidth size="small" />
 
-        <FormControl fullWidth>
-          <InputLabel>Appearance</InputLabel>
-          <Select name="classNames" fullWidth label="Appearance" size="small" value={appearance} onChange={(e) => {
-            let className = "";
-            if (e.target.value.toString()!=="link") className = e.target.value.toString() + " btn-primary";
-            setClassNamesList([className])
-          }}>
-            <MenuItem value="link">Standard Link</MenuItem>
-            <MenuItem value="btn">Button</MenuItem>
-            <MenuItem value="btn btn-block">Full Width Button</MenuItem>
-          </Select>
-        </FormControl>
+      <FormControl fullWidth>
+        <InputLabel>Appearance</InputLabel>
+        <Select name="classNames" fullWidth label="Appearance" size="small" value={appearance} onChange={(e) => {
+          let className = "";
+          if (e.target.value.toString()!=="link") className = e.target.value.toString() + " btn-primary";
+          setClassNamesList([className])
+        }}>
+          <MenuItem value="link">Standard Link</MenuItem>
+          <MenuItem value="btn">Button</MenuItem>
+          <MenuItem value="btn btn-block">Full Width Button</MenuItem>
+        </Select>
+      </FormControl>
 
-        {appearance!=="link" &&
-          <FormControl fullWidth>
-            <InputLabel>Variant</InputLabel>
-            <Select name="classNames" fullWidth label="Variant" size="small" value={classNamesList[0]} onChange={(e) => { setClassNamesList([e.target.value.toString()]) }}>
-              {variants.map((optionValue: string) => (
-                <MenuItem value={appearance + " btn-" + optionValue.toLowerCase()}>{optionValue}</MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        }
+      {appearance!=="link" && <FormControl fullWidth>
+        <InputLabel>Variant</InputLabel>
+        <Select name="classNames" fullWidth label="Variant" size="small" value={classNamesList[0]} onChange={(e) => { setClassNamesList([e.target.value.toString()]) }}>
+          {variants.map((optionValue: string) => (
+            <MenuItem value={appearance + " btn-" + optionValue.toLowerCase()}>{optionValue}</MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+      }
 
-        <div className="target-check">
-          <input type="checkbox" checked={targetAttribute === "_blank"} onClick={() => {
-              setTargetAttribute((currentValue: string) => currentValue === "_blank" ? "_self" : "_blank" );
-            }}
-          />
-          - Open in new window
-        </div><br/>
+      <div className="target-check">
+        <input type="checkbox" checked={targetAttribute === "_blank"} onClick={() => {
+          setTargetAttribute((currentValue: string) => currentValue === "_blank" ? "_self" : "_blank" );
+        }} />
+        - Open in new window
+      </div><br />
 
-        <Button fullWidth={true} variant="contained" onClick={handleSave}>Save</Button>
-
-
+      <Button fullWidth={true} variant="contained" onClick={handleSave}>Save</Button>
     </div>
   );
 };

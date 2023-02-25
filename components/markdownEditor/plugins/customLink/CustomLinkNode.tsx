@@ -4,8 +4,6 @@ import {
   LexicalCommand,
   $isElementNode,
   $getSelection,
-  EditorConfig,
-  $setSelection,
   ElementNode,
   NodeKey,
   $applyNodeReplacement,
@@ -31,13 +29,13 @@ export class CustomLinkNode extends LinkNode {
     key?: NodeKey
   ) {
     super(url, { target }, key);
-    this.__url = url || 'https://';
-    this.__target = target || '_self';
+    this.__url = url || "https://";
+    this.__target = target || "_self";
     this.__classNames = classNames || [];
   }
 
   static getType() : string {
-    return 'customlinknode';
+    return "customlinknode";
   }
 
   static clone(node : CustomLinkNode) : CustomLinkNode {
@@ -69,8 +67,7 @@ export class CustomLinkNode extends LinkNode {
   }
 }
 
-export const TOGGLE_CUSTOM_LINK_NODE_COMMAND: LexicalCommand<LinkCustomizationAttributes> =
-  createCommand();
+export const TOGGLE_CUSTOM_LINK_NODE_COMMAND: LexicalCommand<LinkCustomizationAttributes> = createCommand();
 
 export function $createCustomLinkNode(
   url: string,
@@ -91,27 +88,27 @@ export const toggleCustomLinkNode = (
     url,
     target = "_blank",
     classNames = [],
-    getNodeByKey,
+    getNodeByKey
   } : LinkCustomizationAttributes & {
     getNodeByKey: (key: NodeKey) => HTMLElement | null;
   }): void => {
-    const addAttributesToLinkNode = (linkNode: CustomLinkNode, { url, target, classNames}: LinkCustomizationAttributes) => {
-      const dom = getNodeByKey(linkNode.getKey());
+  const addAttributesToLinkNode = (linkNode: CustomLinkNode, { url, target, classNames}: LinkCustomizationAttributes) => {
+    const dom = getNodeByKey(linkNode.getKey());
 
-      if (!dom) return;
+    if (!dom) return;
 
-      const uniqueClassNames = classNames[0].split(' ');
+    const uniqueClassNames = classNames[0].split(" ");
 
-      linkNode.setURL(url);
-      linkNode.setTarget(target);
+    linkNode.setURL(url);
+    linkNode.setTarget(target);
 
-      linkNode.setClassNames(uniqueClassNames);
+    linkNode.setClassNames(uniqueClassNames);
 
-      dom.setAttribute("href", url);
-      dom.setAttribute("target", target);
+    dom.setAttribute("href", url);
+    dom.setAttribute("target", target);
 
-      dom.setAttribute('class', uniqueClassNames.join(' '));
-    };
+    dom.setAttribute("class", uniqueClassNames.join(" "));
+  };
 
   const selection = $getSelection();
 
@@ -158,9 +155,9 @@ export const toggleCustomLinkNode = (
       const parent = node.getParent();
 
       if (
-        parent === linkNode ||
-        parent === null ||
-        ($isElementNode(node) && !node.isInline())
+        parent === linkNode
+        || parent === null
+        || ($isElementNode(node) && !node.isInline())
       ) {
         return;
       }
@@ -211,19 +208,19 @@ export const toggleCustomLinkNode = (
   }
 }
 
-const $getLinkAncestor = (node: LexicalNode): null | LexicalNode => {
-  return $getAncestor(node, (ancestor) => $isCustomLinkNode(ancestor));
-}
+const $getLinkAncestor = (node: LexicalNode): null | LexicalNode => (
+  $getAncestor(node, (ancestor) => $isCustomLinkNode(ancestor))
+)
 
 const $getAncestor = (
   node: LexicalNode,
-  predicate: (ancestor: LexicalNode) => boolean,
+  predicate: (ancestor: LexicalNode) => boolean
 ): null | LexicalNode => {
   let parent: null | LexicalNode = node;
   while (
-    parent !== null &&
-    (parent = parent.getParent()) !== null &&
-    !predicate(parent)
+    parent !== null
+    && (parent = parent.getParent()) !== null
+    && !predicate(parent)
   );
   return parent;
 }
