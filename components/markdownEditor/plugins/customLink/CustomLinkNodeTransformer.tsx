@@ -11,7 +11,7 @@ const CUSTOM_LINK_NODE_MARKDOWN_REGEX_QUERY = /(?:\[([^[]+)\])(?:\(([^(]+)\))(?:
 
 const CUSTOM_LINK_NODE_MARKDOWN_REGEX = new RegExp(CUSTOM_LINK_NODE_MARKDOWN_REGEX_QUERY);
 
-const replaceCustomLinkNode = (textNode, match) => {
+const replaceCustomLinkNode = (textNode:any, match:any) => {
   const linkUrl = match[2],
     linkText = match[1];
 
