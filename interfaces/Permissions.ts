@@ -70,4 +70,10 @@ export class Permissions {
 
   }
 
+  static contentApi = {
+    settings: {
+      edit: { api: "ContentApi", contentType: "Settings", action: "Edit" }
+    }
+  };
+
 }
