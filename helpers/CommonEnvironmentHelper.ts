@@ -12,7 +12,6 @@ export class CommonEnvironmentHelper {
   static ContentRoot = "";
   static B1Root = "";
   static ChumsRoot = "";
-  static StreamingLiveRoot = "";
   static LessonsRoot = "";
 
   static init = (stage: string) => {
@@ -37,7 +36,6 @@ export class CommonEnvironmentHelper {
     CommonEnvironmentHelper.ContentRoot = process.env.REACT_APP_CONTENT_ROOT || process.env.NEXT_PUBLIC_CONTENT_ROOT || CommonEnvironmentHelper.ContentRoot;
     CommonEnvironmentHelper.B1Root = process.env.REACT_APP_B1_ROOT || process.env.NEXT_PUBLIC_B1_ROOT || CommonEnvironmentHelper.B1Root;
     CommonEnvironmentHelper.ChumsRoot = process.env.REACT_APP_CHUMS_ROOT || process.env.NEXT_PUBLIC_CHUMS_ROOT || CommonEnvironmentHelper.ChumsRoot;
-    CommonEnvironmentHelper.StreamingLiveRoot = process.env.REACT_APP_STREAMINGLIVE_ROOT || process.env.NEXT_PUBLIC_STREAMINGLIVE_ROOT || CommonEnvironmentHelper.StreamingLiveRoot;
     CommonEnvironmentHelper.LessonsRoot = process.env.REACT_APP_LESSONS_ROOT || process.env.NEXT_PUBLIC_LESSONS_ROOT || CommonEnvironmentHelper.LessonsRoot;
   }
 
@@ -55,7 +53,6 @@ export class CommonEnvironmentHelper {
     CommonEnvironmentHelper.ContentRoot = "https://content.staging.churchapps.org";
     CommonEnvironmentHelper.B1Root = "https://{key}.staging.b1.church";
     CommonEnvironmentHelper.ChumsRoot = "https://app.staging.chums.org";
-    CommonEnvironmentHelper.StreamingLiveRoot = "https://{key}.staging.streaminglive.church";
     CommonEnvironmentHelper.LessonsRoot = "https://staging.lessons.church";
   }
 
@@ -73,7 +70,6 @@ export class CommonEnvironmentHelper {
     CommonEnvironmentHelper.ContentRoot = "https://content.churchapps.org";
     CommonEnvironmentHelper.B1Root = "https://{key}.b1.church";
     CommonEnvironmentHelper.ChumsRoot = "https://app.chums.org";
-    CommonEnvironmentHelper.StreamingLiveRoot = "https://{key}.streaminglive.church";
     CommonEnvironmentHelper.LessonsRoot = "https://lessons.church";
   }
 
