@@ -11,6 +11,7 @@ interface Props {
   unRestrictedFormId?: string,
   personId?: string,
   churchId?: string,
+  showHeader?: boolean,
   updatedFunction: () => void,
   cancelFunction?: () => void
 }
@@ -101,7 +102,7 @@ export const FormSubmissionEdit: React.FC<Props> = (props) => {
   }
 
   return (
-    <InputBox id="formSubmissionBox" headerText={formSubmission?.form?.name || "Edit Form"} headerIcon="person" saveFunction={handleSave} cancelFunction={props.cancelFunction} deleteFunction={getDeleteFunction()}>
+    <InputBox id="formSubmissionBox" headerText={props.showHeader ? (formSubmission?.form?.name || "Edit Form") : ""} headerIcon={props.showHeader ? "person" : ""} saveFunction={handleSave} cancelFunction={props.cancelFunction} deleteFunction={getDeleteFunction()}>
       <ErrorMessages errors={errors} />
       {questionList}
     </InputBox>
