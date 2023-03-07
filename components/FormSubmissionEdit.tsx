@@ -16,7 +16,7 @@ interface Props {
   cancelFunction?: () => void
 }
 
-export const FormSubmissionEdit: React.FC<Props> = (props) => {
+export const FormSubmissionEdit: React.FC<Props> = ({showHeader = true, ...props}) => {
   const [formSubmission, setFormSubmission] = React.useState(null);
   const [errors, setErrors] = React.useState([]);
 
@@ -102,7 +102,7 @@ export const FormSubmissionEdit: React.FC<Props> = (props) => {
   }
 
   return (
-    <InputBox id="formSubmissionBox" headerText={props.showHeader ? (formSubmission?.form?.name || "Edit Form") : ""} headerIcon={props.showHeader ? "person" : ""} saveFunction={handleSave} cancelFunction={props.cancelFunction} deleteFunction={getDeleteFunction()}>
+    <InputBox id="formSubmissionBox" headerText={showHeader ? (formSubmission?.form?.name || "Edit Form") : ""} headerIcon={showHeader ? "person" : ""} saveFunction={handleSave} cancelFunction={props.cancelFunction} deleteFunction={getDeleteFunction()}>
       <ErrorMessages errors={errors} />
       {questionList}
     </InputBox>
