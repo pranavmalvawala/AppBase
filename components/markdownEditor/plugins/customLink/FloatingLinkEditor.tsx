@@ -187,7 +187,7 @@ const FloatingLinkEditor: FC<FloatingLinkEditorProps> = ({
         <InputLabel>Variant</InputLabel>
         <Select name="classNames" fullWidth label="Variant" size="small" value={classNamesList[0]} onChange={(e) => { setClassNamesList([e.target.value.toString()]) }}>
           {variants.map((optionValue: string) => (
-            <MenuItem value={appearance + " btn-" + optionValue.toLowerCase()}>{optionValue}</MenuItem>
+            <MenuItem key={appearance + " btn-" + optionValue.toLowerCase()} value={appearance + " btn-" + optionValue.toLowerCase()}>{optionValue}</MenuItem>
           ))}
         </Select>
       </FormControl>
