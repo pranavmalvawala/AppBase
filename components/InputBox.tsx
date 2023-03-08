@@ -27,9 +27,8 @@ const CustomContextBox = styled(Box)({
   overflowX: "hidden",
   "& p": { color: "#666" },
   "& label": { color: "#999" },
-  "& ul": { paddingLeft: 0 },
+  "& ul": { paddingLeft: 15 },
   "& li": {
-    listStyleType: "none",
     marginBottom: 10,
     "& i": { marginRight: 5 }
   },
