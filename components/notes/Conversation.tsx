@@ -8,6 +8,7 @@ import { Note } from "./Note";
 interface Props {
   conversation: ConversationInterface;
   context: UserContextInterface;
+  showCommentCount?: boolean;
 }
 
 export function Conversation(props: Props) {
@@ -62,10 +63,12 @@ export function Conversation(props: Props) {
             </Stack>
           </Box>
         </div>
-        <div className="commentCount">
-          <div>{(conversation.postCount === 1) ? "1 comment" : conversation.postCount + " comments"}</div>
-          {(conversation.postCount > conversation.messages.length) ? <a href="about:blank" onClick={(e) => { e.preventDefault(); loadNotes(); }}>View all {conversation.postCount} comments</a> : <>&nbsp;</>}
-        </div>
+        {props.showCommentCount && (
+          <div className="commentCount">
+            <div>{(conversation.postCount === 1) ? "1 comment" : conversation.postCount + " comments"}</div>
+            {(conversation.postCount > conversation.messages.length) ? <a href="about:blank" onClick={(e) => { e.preventDefault(); loadNotes(); }}>View all {conversation.postCount} comments</a> : <>&nbsp;</>}
+          </div>
+        )}
         <div className="messages">
           {getNotes()}
           <AddNote context={props.context} conversationId={props.conversation.id} onUpdate={loadNotes} createConversation={async () => (props.conversation.id)} messageId={editMessageId} />

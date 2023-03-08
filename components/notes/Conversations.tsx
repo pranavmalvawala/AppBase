@@ -18,8 +18,6 @@ export function Conversations(props: Props) {
   //const [editMessageId, setEditMessageId] = React.useState(null)
 
   const loadConversations = async () => {
-    console.log("MADE IT");
-    console.log(props.contentId);
     const conversations: ConversationInterface[] = (props.contentId) ? await ApiHelper.get("/conversations/" + props.contentType + "/" + props.contentId, "MessagingApi") : [];
     if (conversations.length > 0) {
       const peopleIds: string[] = [];
