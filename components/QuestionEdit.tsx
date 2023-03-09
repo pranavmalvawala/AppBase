@@ -5,10 +5,11 @@ import { Select, MenuItem, SelectChangeEvent, FormControl, InputLabel, TextField
 interface Props {
   answer: AnswerInterface
   question: QuestionInterface,
+  noBackground?: boolean,
   changeFunction: (questionId: string, value: string) => void
 }
 
-export const QuestionEdit: React.FC<Props> = (props) => {
+export const QuestionEdit: React.FC<Props> = ({noBackground = false, ...props}) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement> | SelectChangeEvent<string>) => {
     props.changeFunction(props.question.id, e.target.value);
   }
@@ -24,10 +25,10 @@ export const QuestionEdit: React.FC<Props> = (props) => {
 
     let answerValue = (props.answer === null) ? "" : props.answer.value
     switch (q.fieldType) {
-      case "Textbox": input = <TextField fullWidth label={q.title} placeholder={q.placeholder} value={answerValue} onChange={handleChange} />; break;
+      case "Textbox": input = <TextField fullWidth style={noBackground ? {backgroundColor: "white", borderRadius: "4px"} : {}} label={q.title} placeholder={q.placeholder} value={answerValue} onChange={handleChange} />; break;
       case "Multiple Choice": {
         input = (
-          <FormControl fullWidth>
+          <FormControl fullWidth style={noBackground ? {backgroundColor: "white", borderRadius: "4px"} : {}}>
             <InputLabel>{q.title}</InputLabel>
             <Select fullWidth label={q.title} value={answerValue} onChange={handleChange}>{choiceOptions}</Select>
           </FormControl>);
@@ -35,7 +36,7 @@ export const QuestionEdit: React.FC<Props> = (props) => {
       }
       case "Yes/No": {
         input = (
-          <FormControl fullWidth>
+          <FormControl fullWidth style={noBackground ? {backgroundColor: "white", borderRadius: "4px"} : {}}>
             <InputLabel>{q.title}</InputLabel>
             <Select fullWidth label={q.title} value={answerValue} onChange={handleChange}>
               <MenuItem value="False">No</MenuItem>
@@ -46,12 +47,12 @@ export const QuestionEdit: React.FC<Props> = (props) => {
       }
       case "Whole Number":
       case "Decimal":
-        input = <TextField fullWidth type="number" label={q.title} placeholder={q.placeholder} value={answerValue} onChange={handleChange} />;
+        input = <TextField fullWidth style={noBackground ? {backgroundColor: "white", borderRadius: "4px"} : {}} type="number" label={q.title} placeholder={q.placeholder} value={answerValue} onChange={handleChange} />;
         break;
-      case "Date": input = <TextField fullWidth type="date" InputLabelProps={{shrink: true}} label={q.title} placeholder={q.placeholder} value={answerValue} onChange={handleChange} />; break;
-      case "Phone Number": input = <TextField fullWidth type="number" label={q.title} placeholder="555-555-5555" value={answerValue} onChange={handleChange} />; break;
-      case "Email": input = <TextField fullWidth type="email" label={q.title} placeholder="john@doe.com" value={answerValue} onChange={handleChange} />; break;
-      case "Text Area": input = <TextField fullWidth multiline rows={4} label={q.title} placeholder={q.placeholder} value={answerValue} onChange={handleChange} />; break;
+      case "Date": input = <TextField fullWidth style={noBackground ? {backgroundColor: "white", borderRadius: "4px"} : {}} type="date" InputLabelProps={{shrink: true}} label={q.title} placeholder={q.placeholder} value={answerValue} onChange={handleChange} />; break;
+      case "Phone Number": input = <TextField fullWidth style={noBackground ? {backgroundColor: "white", borderRadius: "4px"} : {}} type="number" label={q.title} placeholder="555-555-5555" value={answerValue} onChange={handleChange} />; break;
+      case "Email": input = <TextField fullWidth style={noBackground ? {backgroundColor: "white", borderRadius: "4px"} : {}} type="email" label={q.title} placeholder="john@doe.com" value={answerValue} onChange={handleChange} />; break;
+      case "Text Area": input = <TextField fullWidth style={noBackground ? {backgroundColor: "white", borderRadius: "4px"} : {}} multiline rows={4} label={q.title} placeholder={q.placeholder} value={answerValue} onChange={handleChange} />; break;
       default: return null;
     }
     return input;

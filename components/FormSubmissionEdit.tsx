@@ -12,11 +12,12 @@ interface Props {
   personId?: string,
   churchId?: string,
   showHeader?: boolean,
+  noBackground?:boolean,
   updatedFunction: () => void,
   cancelFunction?: () => void
 }
 
-export const FormSubmissionEdit: React.FC<Props> = ({showHeader = true, ...props}) => {
+export const FormSubmissionEdit: React.FC<Props> = ({showHeader = true, noBackground = false, ...props}) => {
   const [formSubmission, setFormSubmission] = React.useState(null);
   const [errors, setErrors] = React.useState([]);
 
@@ -98,11 +99,11 @@ export const FormSubmissionEdit: React.FC<Props> = ({showHeader = true, ...props
   let questionList = [];
   if (formSubmission != null) {
     let questions = formSubmission.questions;
-    for (let i = 0; i < questions.length; i++) questionList.push(<QuestionEdit key={questions[i].id} question={questions[i]} answer={getAnswer(questions[i].id)} changeFunction={handleChange} />);
+    for (let i = 0; i < questions.length; i++) questionList.push(<QuestionEdit noBackground={noBackground} key={questions[i].id} question={questions[i]} answer={getAnswer(questions[i].id)} changeFunction={handleChange} />);
   }
 
   return (
-    <InputBox id="formSubmissionBox" headerText={showHeader ? (formSubmission?.form?.name || "Edit Form") : ""} headerIcon={showHeader ? "person" : ""} saveFunction={handleSave} cancelFunction={props.cancelFunction} deleteFunction={getDeleteFunction()}>
+    <InputBox id="formSubmissionBox" headerText={showHeader ? (formSubmission?.form?.name || "Edit Form") : ""} headerIcon={showHeader ? "person" : ""} mainContainerCssProps={noBackground ? { sx: {backgroundColor: "transparent", boxShadow: 0}}: {}} saveFunction={handleSave} cancelFunction={props.cancelFunction} deleteFunction={getDeleteFunction()}>
       <ErrorMessages errors={errors} />
       {questionList}
     </InputBox>
