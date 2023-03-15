@@ -25,11 +25,12 @@ interface Props {
   value: string;
   onChange?: (value: string) => void;
   mode?: "interactive" | "preview";
-  style?: any
-  textAlign?: "left" | "center" | "right"
+  style?: any;
+  textAlign?: "left" | "center" | "right";
+  placeholder?: string;
 }
 
-export function Editor({ value, onChange = () => { }, mode = "interactive", textAlign = "left", style }: Props) {
+export function Editor({ value, onChange = () => { }, mode = "interactive", textAlign = "left", style, placeholder = "Enter some text..." }: Props) {
   const [fullScreen, setFullScreen] = React.useState(false);
 
   const handleChange = (editorState: any) => {
@@ -101,7 +102,7 @@ export function Editor({ value, onChange = () => { }, mode = "interactive", text
           <div className="editor-inner">
             <RichTextPlugin
               contentEditable={<ContentEditable className="editor-input" style={{ minHeight: mode === "preview" ? "auto" : "150px" }} />}
-              placeholder={mode !== "preview" ? <div className="editor-placeholder">Enter some text...</div> : null}
+              placeholder={mode !== "preview" ? <div className="editor-placeholder">{placeholder}</div> : null}
               ErrorBoundary={LexicalErrorBoundary}
 
             />
