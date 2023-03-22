@@ -34,6 +34,14 @@ export class CustomLinkNode extends LinkNode {
     this.__classNames = classNames || [];
   }
 
+  static importJSON(serializedNode: any) {
+    return super.importJSON(serializedNode);
+  }
+
+  exportJSON() {
+    return super.exportJSON();
+  }
+
   static getType() : string {
     return "customlinknode";
   }
