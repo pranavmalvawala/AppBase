@@ -20,6 +20,9 @@ import { ToolbarPlugin, CustomAutoLinkPlugin, ListMaxIndentLevelPlugin, PLAYGROU
 import { MarkdownModal } from "./MarkdownModal";
 import CustomLinkNodePlugin from "./plugins/customLink/CustomLinkNodePlugin";
 import { CustomLinkNode } from "./plugins/customLink/CustomLinkNode";
+import EmojisPlugin from "./plugins/emoji/EmojisPlugin";
+import { EmojiNode } from "./plugins/emoji/EmojiNode";
+import EmojiPickerPlugin from "./plugins/emoji/EmojiPickerPlugin";
 
 interface Props {
   value: string;
@@ -62,6 +65,7 @@ export function Editor({ value, onChange = () => { }, mode = "interactive", text
       AutoLinkNode,
       LinkNode,
       CustomLinkNode,
+      EmojiNode,
       {
         replace: LinkNode,
         with: (node: LexicalNode) => (
@@ -107,6 +111,8 @@ export function Editor({ value, onChange = () => { }, mode = "interactive", text
 
             />
             <CustomLinkNodePlugin />
+            {mode !== "preview" && <EmojiPickerPlugin />}
+            <EmojisPlugin />
             <OnChangePlugin onChange={handleChange} />
             {mode !== "preview" && <AutoFocusPlugin />}
             <HistoryPlugin />
