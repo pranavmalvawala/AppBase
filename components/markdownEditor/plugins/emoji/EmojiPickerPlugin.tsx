@@ -155,6 +155,10 @@ export default function EmojiPickerPlugin() {
     [editor],
   );
 
+  if (typeof document === "undefined") {
+    return null;
+  }
+
   return (
     <LexicalTypeaheadMenuPlugin
       onQueryChange={setQueryString}
