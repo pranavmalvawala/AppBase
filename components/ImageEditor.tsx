@@ -35,9 +35,44 @@ export function ImageEditor(props: Props) {
       const url = reader.result.toString();
       setPhotoSrc(url);
       setCroppedImageDataUrl(url);
+      setTimeout(selectDefaultCropZone, 500);
     };
     reader.readAsDataURL(files[0]);
   };
+
+  const selectDefaultCropZone = () => {
+    const imageElement: any = cropperRef?.current;
+    var cropper: any = imageElement?.cropper;
+    if (props.aspectRatio===0)
+    {
+      var containerData = cropper.getContainerData();
+      const imgWidth = cropper.getImageData().width;
+      const imgHeight = cropper.getImageData().height;
+      const effectiveWidth = (containerData.width > imgWidth) ? imgWidth : containerData.width;
+      const effectiveHeight = (containerData.height > imgHeight) ? imgHeight : containerData.height;
+      cropper.setCropBoxData({ width: effectiveWidth, height: effectiveHeight, left: (containerData.width - effectiveWidth) / 2.0 , top: (containerData.height - effectiveHeight) / 2.0 });
+    } else {
+      var desiredAspect = props.aspectRatio;
+      var containerData = cropper.getContainerData();
+      var imgAspect = cropper.getImageData().aspectRatio;
+      var scale = imgAspect / desiredAspect;
+      console.log("Aspect", desiredAspect, imgAspect, scale)
+      if (scale < 1) {
+        const imgWidth = cropper.getImageData().width;
+        let l = (containerData.width - imgWidth) / 2.0;
+        let t = (containerData.height - (containerData.height * scale)) / 2.0;
+        cropper.setCropBoxData({ width: imgWidth, height: imgWidth / desiredAspect, left: l, top: t });
+      } else {
+        const imgHeight = cropper.getImageData().height;
+        console.log("MADE IT", containerData.height, imgHeight)
+        let l = (containerData.width - (imgHeight * desiredAspect)) / 2.0;
+        let t = 0;
+        console.log({ width: imgHeight * desiredAspect, height: containerData.height, left: l, top: t })
+        cropper.setCropBoxData({ width: imgHeight * desiredAspect, height: imgHeight, left: l, top: t });
+      }
+    }
+
+  }
 
   const handleCrop = () => {
     if (timeout !== null) {
