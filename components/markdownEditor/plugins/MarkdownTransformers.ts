@@ -91,9 +91,12 @@ export const UNDERLINE: TextMatchTransformer = {
 };
 */
 
+const modifiedTextTransformers = [...TEXT_FORMAT_TRANSFORMERS];
+modifiedTextTransformers.splice(6,1)
+
 export const PLAYGROUND_TRANSFORMERS: Array<Transformer> = [
-  ...TEXT_FORMAT_TRANSFORMERS,
   UNDERLINE,
+  ...modifiedTextTransformers,
   HR,
   ...ELEMENT_TRANSFORMERS,
   
