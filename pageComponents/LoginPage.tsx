@@ -70,8 +70,9 @@ export const LoginPage: React.FC<Props> = ({ showLogo = true, loginContainerCssP
       if (props.jwt) {
         setWelcomeBackName(cookies.name);
         login({ jwt: props.jwt });
-      } else {
         setPendingAutoLogin(true);
+      } else {
+        setPendingAutoLogin(false);
       }
     }
   };
@@ -189,7 +190,7 @@ export const LoginPage: React.FC<Props> = ({ showLogo = true, loginContainerCssP
       setIsSubmitting(false);
       handleLoginSuccess(resp);
     } catch (e: any) {
-      setPendingAutoLogin(true);
+      setPendingAutoLogin(false);
       handleLoginErrors([e.toString()]);
       setIsSubmitting(false);
     }
@@ -202,6 +203,7 @@ export const LoginPage: React.FC<Props> = ({ showLogo = true, loginContainerCssP
   const handleChurchRegistered = (church: ChurchInterface) => { registeredChurch = church; }
 
   const getInputBox = () => {
+    console.log("showRegister: ", showRegister, " showForgot: ", showForgot, " auth: ", props.auth, " isSubmitting: ", isSubmitting)
     if (showRegister) return (
       <Box id="loginBox" sx={{ backgroundColor: "#FFF", border: "1px solid #CCC", borderRadius: "5px", padding: "20px" }}>
         <Typography component="h2" sx={{ fontSize: "32px", fontWeight: 500, lineHeight: 1.2, margin: "0 0 8px 0" }}>Create an Account</Typography>
@@ -215,13 +217,14 @@ export const LoginPage: React.FC<Props> = ({ showLogo = true, loginContainerCssP
 
   React.useEffect(init, []); //eslint-disable-line
 
+  console.log("PendingAutoLogin: ", pendingAutoLogin, " showSelectModal: ", showSelectModal, " loginResponse: ", loginResponse, " errors: ", errors, " showLogo: ", showLogo);
   return (
     <Box sx={{ maxWidth: "382px" }} px="16px" mx="auto">
       {showLogo && <img src={props.logo || "/images/logo-login.png"} alt="logo" style={{ width: "100%", marginTop: 100, marginBottom: 60 }} />}
       <ErrorMessages errors={errors} />
       {getWelcomeBack()}
       {getCheckEmail()}
-      {pendingAutoLogin && getInputBox()}
+      {!pendingAutoLogin && getInputBox()}
       <SelectChurchModal show={showSelectModal} userChurches={loginResponse?.userChurches} selectChurch={selectChurch} registeredChurchCallback={handleChurchRegistered} errors={errors} appName={props.appName} />
       <FloatingSupport appName={props.appName} />
     </Box>
