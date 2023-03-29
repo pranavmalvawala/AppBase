@@ -1,4 +1,4 @@
-export const iconNamesList = [
+const iconNamesList = [
   "10k",
   "10mp",
   "11mp",
@@ -2235,3 +2235,6 @@ export const iconNamesList = [
   "zoom_out",
   "zoom_out_map"
 ];
+
+
+export default iconNamesList;
