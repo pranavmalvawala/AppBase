@@ -1,5 +1,5 @@
 import { EmojiNode, $isEmojiNode, $createEmojiNode, $toggleEmojiNode } from './EmojiNode';
-import  { materialIcons } from './emoji-list';
+import  materialIcons from '../../../material/iconPicker/iconNamesList';
 
 import type { TextMatchTransformer } from "@lexical/markdown";
 import { TextNode, $createTextNode, $isTextNode } from "lexical";
@@ -8,8 +8,7 @@ const EMOJI_NODE_MARKDOWN_REGEX_QUERY = /:[A-Za-z_]+:$/;
 
 export const EMOJI_NODE_MARKDOWN_REGEX = new RegExp(EMOJI_NODE_MARKDOWN_REGEX_QUERY);
 
-const replaceEmojiMarkdownWithNode = (textNode: TextNode, match) => {
-  console.log(textNode.__text);
+const replaceEmojiMarkdownWithNode = (textNode: TextNode) => {
   const emojiNode = $createEmojiNode(
     textNode.__text.replaceAll(':', '')
   );

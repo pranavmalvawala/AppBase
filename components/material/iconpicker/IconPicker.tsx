@@ -1,8 +1,7 @@
 import * as React from "react";
 import { styled, Icon, InputBase, Typography, debounce, Grid, IconButton, Pagination, Stack } from "@mui/material";
 import MuiPaper from "@mui/material/Paper";
-import { iconNamesList } from "./iconNamesList"
-import synonyms from "./synonyms";
+import iconNamesList from "./iconNamesList"
 
 const UPDATE_SEARCH_INDEX_WAIT_MS = 220;
 
@@ -89,10 +88,6 @@ function createSearchIndex() {
   iconsAndComponentNames.forEach(icon => {
     let searchTerm = icon.iconName + " " + icon.componentName;
 
-    if (synonyms[icon.componentName]) {
-      searchTerm += ` ${synonyms[icon.componentName]}`
-    }
-
     searchIndex.addAsync(icon.iconName, searchTerm)
   })
 
@@ -146,7 +141,7 @@ export default function SearchIcons(props: Props) {
         </Paper>
         {(query === "") && <Typography sx={{ mb: 1 }}>{`${iconNamesList.length} icons available`}</Typography>}
         {(query !== "") && <Typography sx={{ mb: 1 }}>{`${icons.length} matching results`}</Typography>}
-        
+
         <Icons icons={paged(icons, page)} handleOpenClick={props.onSelect} />
       </Grid>
 

@@ -1,5 +1,5 @@
 import type { TextMatchTransformer } from "@lexical/markdown";
-import { $createTextNode, $isTextNode } from "lexical";
+import { TextNode, $createTextNode, $isTextNode } from "lexical";
 
 import {
   $isCustomLinkNode,
@@ -11,12 +11,13 @@ const CUSTOM_LINK_NODE_MARKDOWN_REGEX_QUERY = /(?:\[([^[]+)\])(?:\(([^(]+)\))(?:
 
 const CUSTOM_LINK_NODE_MARKDOWN_REGEX = new RegExp(CUSTOM_LINK_NODE_MARKDOWN_REGEX_QUERY);
 
-const replaceCustomLinkNode = (textNode:any, match:any) => {
-  const linkUrl = match[2],
+const replaceCustomLinkNode = (textNode : TextNode, match : any) => {
+  let linkUrl = match[2],
     linkText = match[1];
-
+  if (match.input.length > match.input.trim().length) {
+    linkText = ' '.repeat(match.input.length - match.input.trim().length) + linkText;
+  }
   const otherText = match[5];
-  console.log(otherText);
 
   const linkNode = $createCustomLinkNode(
     linkUrl,
@@ -37,8 +38,6 @@ const replaceCustomLinkNode = (textNode:any, match:any) => {
 
   if (otherText) {
     if (CUSTOM_LINK_NODE_MARKDOWN_REGEX.test(otherText)) {
-      console.log(otherText);
-
       const blankNode = $createTextNode("");
 
       linkNode.getParent().append(blankNode);
@@ -75,6 +74,6 @@ export const CUSTOM_LINK_NODE_TRANSFORMER: TextMatchTransformer = {
   importRegExp: CUSTOM_LINK_NODE_MARKDOWN_REGEX,
   regExp: CUSTOM_LINK_NODE_MARKDOWN_REGEX,
   replace: replaceCustomLinkNode,
-  trigger: "}",
+  trigger: "[",
   type: "text-match"
 };
