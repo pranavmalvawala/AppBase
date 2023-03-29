@@ -12,7 +12,7 @@ import { $convertFromMarkdownString } from "@lexical/markdown";
 import {useLexicalComposerContext} from '@lexical/react/LexicalComposerContext';
 import {$createTextNode, TextNode} from 'lexical';
 import {useEffect} from 'react';
-import materialIcons from '../../../material/iconPicker2/IconNamesList';
+import materialIcons from '../../../material/IconPicker/IconNamesList';
 
 import {$createEmojiNode, EmojiNode} from './EmojiNode';
 import { EMOJI_NODE_MARKDOWN_REGEX } from './EmojiNodeTransform';
