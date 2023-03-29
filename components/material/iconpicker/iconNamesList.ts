@@ -1,4 +1,4 @@
-const iconNamesList = [
+const IconNamesList = [
   "10k",
   "10mp",
   "11mp",
@@ -2237,4 +2237,4 @@ const iconNamesList = [
 ];
 
 
-export default iconNamesList;
+export default IconNamesList;

@@ -1,7 +1,7 @@
 import * as React from "react";
 import { styled, Icon, InputBase, Typography, debounce, Grid, IconButton, Pagination, Stack } from "@mui/material";
 import MuiPaper from "@mui/material/Paper";
-import iconNamesList from "./iconNamesList"
+import IconNamesList from "./IconNamesList"
 
 const UPDATE_SEARCH_INDEX_WAIT_MS = 220;
 
@@ -70,7 +70,7 @@ const searchIndex = new FlexSearch.Index({ tokenize: "full" });
 
 function createSearchIndex() {
   // create component names from icons list
-  const iconsAndComponentNames = iconNamesList.map(icon => {
+  const iconsAndComponentNames = IconNamesList.map(icon => {
     const split = icon.split("_");
     const capitalizedSplit = split.map(s => {
       if (isAlphabet(s[0])) {
@@ -126,7 +126,7 @@ export default function SearchIcons(props: Props) {
     return array.slice((p - 1) * pageSize, p * pageSize);
   }
 
-  const icons = keys || iconNamesList;
+  const icons = keys || IconNamesList;
 
   const pagesCount = Math.ceil(icons.length / pageSize);
 
@@ -139,7 +139,7 @@ export default function SearchIcons(props: Props) {
           </IconButton>
           <Input autoFocus value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search icons…" inputProps={{ "aria-label": "search icons" }} />
         </Paper>
-        {(query === "") && <Typography sx={{ mb: 1 }}>{`${iconNamesList.length} icons available`}</Typography>}
+        {(query === "") && <Typography sx={{ mb: 1 }}>{`${IconNamesList.length} icons available`}</Typography>}
         {(query !== "") && <Typography sx={{ mb: 1 }}>{`${icons.length} matching results`}</Typography>}
 
         <Icons icons={paged(icons, page)} handleOpenClick={props.onSelect} />
