@@ -75,7 +75,7 @@ export const RecurringDonations: React.FC<Props> = (props) => {
 
   const getTableHeader = () => {
     let result: JSX.Element[] = [];
-    result.push(<TableRow key="header"><th>Start Date</th><th>Amount</th><th>Interval</th><th>Payment Method</th>{props?.paymentMethods?.length > 0 && <th>Edit</th>}</TableRow>);
+    result.push(<TableRow key="header" sx={{textAlign: "left"}}><TableCell><b>Start Date</b></TableCell><TableCell><b>Amount</b></TableCell><TableCell><b>Interval</b></TableCell><TableCell><b>Payment Method</b></TableCell>{props?.paymentMethods?.length > 0 && <TableCell></TableCell>}</TableRow>);
     return result;
   }
 

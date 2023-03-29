@@ -1,10 +1,11 @@
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import React, { useState } from "react";
 import { ErrorMessages, InputBox } from "../../components";
-import { ApiHelper } from "../../helpers";
+import { ApiHelper, DateHelper } from "../../helpers";
 import { FundDonationInterface, FundInterface, PersonInterface, StripeDonationInterface, StripePaymentMethod, UserInterface } from "../../interfaces";
 import { FundDonations } from "./FundDonations";
 import { Grid, Alert, TextField, Button, FormControl, InputLabel, Select, MenuItem, PaperProps } from "@mui/material"
+import { DonationHelper } from "../../helpers/DonationHelper";
 
 interface Props { churchId: string, mainContainerCssProps?: PaperProps, showHeader?: boolean }
 
@@ -22,8 +23,8 @@ export const NonAuthDonationInner: React.FC<Props> = ({ mainContainerCssProps, s
   const [donationComplete, setDonationComplete] = React.useState(false);
   const [processing, setProcessing] = React.useState(false);
   const [donationType, setDonationType] = useState<"once" | "recurring">("once");
-  const [intervalNumber, setIntervalNumber] = useState<number>(1);
-  const [intervalType, setIntervalType] = useState("month");
+  const [interval, setInterval] = useState("one_month");
+  const [startDate, setStartDate] = useState(new Date().toDateString());
 
   const init = () => {
     ApiHelper.get("/funds/churchId/" + props.churchId, "GivingApi").then(data => {
@@ -80,10 +81,7 @@ export const NonAuthDonationInner: React.FC<Props> = ({ mainContainerCssProps, s
 
     if (donationType === "recurring") {
       donation.billing_cycle_anchor = + new Date();
-      donation.interval = {
-        interval_count: intervalNumber,
-        interval: intervalType
-      }
+      donation.interval = DonationHelper.getInterval(interval);
     }
 
     for (const fundDonation of fundDonations) {
@@ -108,7 +106,6 @@ export const NonAuthDonationInner: React.FC<Props> = ({ mainContainerCssProps, s
     if (!lastName) result.push("Please enter your last name.");
     if (!email) result.push("Please enter your email address.");
     if (amount === 0) result.push("Amount cannot be $0");
-    if (intervalNumber < 1) result.push("Invalid interval");
     if (result.length === 0) {
       if (!email.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)) result.push("Please enter a valid email address");  //eslint-disable-line
     }
@@ -123,6 +120,8 @@ export const NonAuthDonationInner: React.FC<Props> = ({ mainContainerCssProps, s
       case "firstName": setFirstName(val); break;
       case "lastName": setLastName(val); break;
       case "email": setEmail(val); break;
+      case "startDate": setStartDate(val); break;
+      case "interval": setInterval(val); break;
     }
   }
 
@@ -159,16 +158,12 @@ export const NonAuthDonationInner: React.FC<Props> = ({ mainContainerCssProps, s
         <Grid item md={6} xs={12}>
           <Button aria-label="recurring-donation" size="small" fullWidth style={{ minHeight: "50px" }} variant={donationType === "recurring" ? "contained" : "outlined"} onClick={() => setDonationType("recurring")}>Make a Recurring Donation</Button>
         </Grid>
-      </Grid>
-      <Grid container spacing={3}>
         <Grid item md={6} xs={12}>
           <TextField fullWidth label="First Name" name="firstName" value={firstName} onChange={handleChange} />
         </Grid>
         <Grid item md={6} xs={12}>
           <TextField fullWidth label="Last Name" name="lastName" value={lastName} onChange={handleChange} />
         </Grid>
-      </Grid>
-      <Grid container spacing={3}>
         <Grid item md={6} xs={12}>
           <TextField fullWidth label="Email" name="email" value={email} onChange={handleChange} />
         </Grid>
@@ -177,20 +172,21 @@ export const NonAuthDonationInner: React.FC<Props> = ({ mainContainerCssProps, s
         <CardElement options={formStyling} />
       </div>
       {donationType === "recurring"
-        && <Grid container spacing={3}>
-          <Grid item md={6} xs={12}>
-            <TextField fullWidth type="number" name="interval-number" label="Interval Number" value={intervalNumber} aria-label="interval-number" onChange={(e) => setIntervalNumber(Number(e.target.value))} />
-          </Grid>
+        && <Grid container spacing={3} style={{marginTop:0}}>
           <Grid item md={6} xs={12}>
             <FormControl fullWidth>
-              <InputLabel>Interval Type</InputLabel>
-              <Select label="Interval Type" name="interval-type" aria-label="interval-type" value={intervalType} onChange={(e) => setIntervalType(e.target.value)}>
-                <MenuItem value="day">Day(s)</MenuItem>
-                <MenuItem value="week">Week(s)</MenuItem>
-                <MenuItem value="month">Month(s)</MenuItem>
-                <MenuItem value="year">Year(s)</MenuItem>
+              <InputLabel>Frequency</InputLabel>
+              <Select label="Frequency" name="interval" aria-label="interval" value={interval} onChange={(e) => {setInterval(e.target.value) }}>
+                <MenuItem value="one_week">Weekly</MenuItem>
+                <MenuItem value="two_week">Bi-Weekly</MenuItem>
+                <MenuItem value="one_month">Monthly</MenuItem>
+                <MenuItem value="three_month">Quarterly</MenuItem>
+                <MenuItem value="one_year">Annually</MenuItem>
               </Select>
             </FormControl>
+          </Grid>
+          <Grid item md={6} xs={12}>
+            <TextField fullWidth name="startDate" type="date" aria-label="startDate" label="Start Date" value={DateHelper.formatHtml5Date(new Date(startDate))} onChange={handleChange} />
           </Grid>
         </Grid>
       }

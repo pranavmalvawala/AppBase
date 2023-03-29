@@ -6,6 +6,7 @@ import { DonationPreviewModal } from "../modals/DonationPreviewModal";
 import { ApiHelper, CurrencyHelper, DateHelper } from "../../helpers";
 import { PersonInterface, StripePaymentMethod, StripeDonationInterface, FundDonationInterface, FundInterface } from "../../interfaces";
 import { Grid, InputLabel, MenuItem, Select, TextField, FormControl, Button, SelectChangeEvent, FormControlLabel, Checkbox, FormGroup } from "@mui/material"
+import { DonationHelper } from "../../helpers";
 
 interface Props { person: PersonInterface, customerId: string, paymentMethods: StripePaymentMethod[], stripePromise: Promise<Stripe>, donationSuccess: (message: string) => void }
 
@@ -20,6 +21,7 @@ export const DonationForm: React.FC<Props> = (props) => {
   const [paymentMethodName, setPaymentMethodName] = React.useState<string>(`${props?.paymentMethods[0]?.name} ****${props?.paymentMethods[0]?.last4}`);
   const [donationType, setDonationType] = React.useState<string>();
   const [showDonationPreviewModal, setShowDonationPreviewModal] = React.useState<boolean>(false);
+  const [interval, setInterval] = React.useState("one_month");
   const [donation, setDonation] = React.useState<StripeDonationInterface>({
     id: props?.paymentMethods[0]?.id,
     type: props?.paymentMethods[0]?.type,
@@ -60,6 +62,7 @@ export const DonationForm: React.FC<Props> = (props) => {
     setErrorMessage(null);
     let d = { ...donation } as StripeDonationInterface;
     let value = e.target.value;
+    console.log(e.target.name, value)
     switch (e.target.name) {
       case "method":
         d.id = value;
@@ -69,8 +72,10 @@ export const DonationForm: React.FC<Props> = (props) => {
         break;
       case "type": setDonationType(value); break;
       case "date": d.billing_cycle_anchor = + new Date(value); break;
-      case "interval-number": d.interval.interval_count = Number(value); break;
-      case "interval-type": d.interval.interval = value; break;
+      case "interval": 
+        setInterval(value);
+        d.interval = DonationHelper.getInterval(value);
+        break;
       case "notes": d.notes = value; break;
       case "transaction-fee":
         const element = e.target as HTMLInputElement
@@ -151,7 +156,7 @@ export const DonationForm: React.FC<Props> = (props) => {
         {donationType
           && <div style={{ marginTop: "20px" }}>
             <Grid container spacing={3}>
-              <Grid item md={6} xs={12}>
+              <Grid item md={12} xs={12}>
                 <FormControl fullWidth>
                   <InputLabel>Method</InputLabel>
                   <Select label="Method" name="method" aria-label="method" value={donation.id} className="capitalize" onChange={handleChange}>
@@ -159,23 +164,21 @@ export const DonationForm: React.FC<Props> = (props) => {
                   </Select>
                 </FormControl>
               </Grid>
-              <Grid item md={6} xs={12}>
-                <TextField fullWidth name="date" type="date" aria-label="date" label={donationType === "once" ? "Donation Date" : "Recurring Donation Start Date"} value={DateHelper.formatHtml5Date(new Date(donation.billing_cycle_anchor))} onChange={handleChange} onKeyDown={handleKeyDown} />
-              </Grid>
             </Grid>
-            {donationType === "recurring"
-              && <Grid container spacing={3}>
+            {donationType === "recurring" &&
+              <Grid container spacing={3} style={{marginTop:10}}>
                 <Grid item md={6} xs={12}>
-                  <TextField fullWidth type="number" name="interval-number" label="Interval Number" value={donation.interval.interval_count} aria-label="interval-number" onChange={handleChange} />
+                  <TextField fullWidth name="date" type="date" aria-label="date" label="Start Date" value={DateHelper.formatHtml5Date(new Date(donation.billing_cycle_anchor))} onChange={handleChange} onKeyDown={handleKeyDown} />
                 </Grid>
                 <Grid item md={6} xs={12}>
                   <FormControl fullWidth>
-                    <InputLabel>Interval Type</InputLabel>
-                    <Select label="Interval Type" name="interval-type" aria-label="interval-type" value={donation.interval.interval} onChange={handleChange}>
-                      <MenuItem value="day">Day(s)</MenuItem>
-                      <MenuItem value="week">Week(s)</MenuItem>
-                      <MenuItem value="month">Month(s)</MenuItem>
-                      <MenuItem value="year">Year(s)</MenuItem>
+                    <InputLabel>Frequency</InputLabel>
+                    <Select label="Frequency" name="interval" aria-label="interval" value={interval} onChange={handleChange}>
+                      <MenuItem value="one_week">Weekly</MenuItem>
+                      <MenuItem value="two_week">Bi-Weekly</MenuItem>
+                      <MenuItem value="one_month">Monthly</MenuItem>
+                      <MenuItem value="three_month">Quarterly</MenuItem>
+                      <MenuItem value="one_year">Annually</MenuItem>
                     </Select>
                   </FormControl>
                 </Grid>

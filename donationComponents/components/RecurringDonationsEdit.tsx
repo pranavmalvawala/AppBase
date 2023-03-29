@@ -3,11 +3,13 @@ import { ApiHelper } from "../../helpers";
 import { InputBox } from "../../components";
 import { StripePaymentMethod, SubscriptionInterface } from "../../interfaces";
 import { FormControl, Grid, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material"
+import { DonationHelper } from "../../helpers"
 
 interface Props { subscriptionUpdated: (message?: string) => void, customerId: string, paymentMethods: StripePaymentMethod[], editSubscription: SubscriptionInterface };
 
 export const RecurringDonationsEdit: React.FC<Props> = (props) => {
   const [editSubscription, setEditSubscription] = React.useState<SubscriptionInterface>(props.editSubscription);
+  const [interval, setInterval] = React.useState("one_month");
 
   const handleCancel = () => { props.subscriptionUpdated(); }
   const handleSave = () => {
@@ -39,8 +41,12 @@ export const RecurringDonationsEdit: React.FC<Props> = (props) => {
         sub.default_payment_method = pm.type === "card" ? value : null;
         sub.default_source = pm.type === "bank" ? value : null;
         break;
-      case "interval-number": sub.plan.interval_count = Number(value); break;
-      case "interval-type": sub.plan.interval = value; break;
+      case "interval": 
+        setInterval(value);
+        const inter = DonationHelper.getInterval(value);
+        sub.plan.interval_count = inter.interval_count;
+        sub.plan.interval = inter.interval;
+        break;
     }
     setEditSubscription(sub);
   }
@@ -56,25 +62,28 @@ export const RecurringDonationsEdit: React.FC<Props> = (props) => {
             </Select>
           </FormControl>
         </Grid>
-      </Grid>
-      <Grid container spacing={3}>
-        <Grid item md={6} xs={12}>
-          <TextField fullWidth label="Interval Number" name="interval-number" aria-label="interval-number" type="number" value={editSubscription.plan.interval_count} InputProps={{ inputProps: { min: 0, max: 10 } }} onChange={handleChange} />
-        </Grid>
         <Grid item md={6} xs={12}>
           <FormControl fullWidth>
-            <InputLabel>Interval Type</InputLabel>
-            <Select label="Interval Type" name="interval-type" aria-label="interval-type" value={editSubscription.plan.interval} onChange={handleChange}>
-              <MenuItem value="day">Day(s)</MenuItem>
-              <MenuItem value="week">Week(s)</MenuItem>
-              <MenuItem value="month">Month(s)</MenuItem>
-              <MenuItem value="year">Year(s)</MenuItem>
+            <InputLabel>Frequency</InputLabel>
+            <Select label="Frequency" name="interval" aria-label="interval" value={interval} onChange={handleChange}>
+              <MenuItem value="one_week">Weekly</MenuItem>
+              <MenuItem value="two_week">Bi-Weekly</MenuItem>
+              <MenuItem value="one_month">Monthly</MenuItem>
+              <MenuItem value="three_month">Quarterly</MenuItem>
+              <MenuItem value="one_year">Annually</MenuItem>
             </Select>
           </FormControl>
         </Grid>
       </Grid>
     </>
   )
+
+  React.useEffect(() => {
+    if (props.editSubscription) {
+      const keyName = DonationHelper.getIntervalKeyName(props.editSubscription.plan.interval_count, props.editSubscription.plan.interval);
+      setInterval(keyName);
+    }
+  }, [props.editSubscription]);
 
   return (
     <InputBox aria-label="person-details-box" headerIcon="person" headerText="Edit Recurring Donation" ariaLabelSave="save-button" ariaLabelDelete="delete-button" cancelFunction={handleCancel} deleteFunction={handleDelete} saveFunction={handleSave}>

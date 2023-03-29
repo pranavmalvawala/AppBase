@@ -9,4 +9,5 @@ export { Themes } from "./Themes"
 export { UserHelper } from "./UserHelper";
 export { UniqueIdHelper } from "./UniqueIdHelper";
 export { createEmotionCache } from "./createEmotionCache";
+export { DonationHelper } from "./DonationHelper";
 export * from "./AppearanceHelper";
