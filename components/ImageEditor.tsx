@@ -42,20 +42,20 @@ export function ImageEditor(props: Props) {
 
   const selectDefaultCropZone = () => {
     const imageElement: any = cropperRef?.current;
-    var cropper: any = imageElement?.cropper;
+    let cropper: any = imageElement?.cropper;
     if (props.aspectRatio===0)
     {
-      var containerData = cropper.getContainerData();
+      let containerData = cropper.getContainerData();
       const imgWidth = cropper.getImageData().width;
       const imgHeight = cropper.getImageData().height;
       const effectiveWidth = (containerData.width > imgWidth) ? imgWidth : containerData.width;
       const effectiveHeight = (containerData.height > imgHeight) ? imgHeight : containerData.height;
       cropper.setCropBoxData({ width: effectiveWidth, height: effectiveHeight, left: (containerData.width - effectiveWidth) / 2.0 , top: (containerData.height - effectiveHeight) / 2.0 });
     } else {
-      var desiredAspect = props.aspectRatio;
-      var containerData = cropper.getContainerData();
-      var imgAspect = cropper.getImageData().aspectRatio;
-      var scale = imgAspect / desiredAspect;
+      let desiredAspect = props.aspectRatio;
+      let containerData = cropper.getContainerData();
+      let imgAspect = cropper.getImageData().aspectRatio;
+      let scale = imgAspect / desiredAspect;
       console.log("Aspect", desiredAspect, imgAspect, scale)
       if (scale < 1) {
         const imgWidth = cropper.getImageData().width;

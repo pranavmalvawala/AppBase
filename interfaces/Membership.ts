@@ -40,7 +40,8 @@ export interface PersonInterface {
   givingUser?: boolean,
   groupsUser?: boolean,
   conversationId?: string,
-  optedOut?: boolean
+  optedOut?: boolean,
+  nametagNotes?: string
 }
 export interface QuestionInterface { id?: string, formId?: string, title?: string, fieldType?: string, placeholder?: string, description?: string, required?: boolean, choices?: [{ value?: string, text?: string }] }
 export interface ServiceInterface { id?: string, campusId?: string, name?: string, campus?: CampusInterface }
