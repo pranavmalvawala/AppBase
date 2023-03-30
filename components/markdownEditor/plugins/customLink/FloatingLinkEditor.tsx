@@ -144,6 +144,7 @@ const FloatingLinkEditor: FC<FloatingLinkEditorProps> = ({
   }, []); //eslint-disable-line
 
   const variants = ["Primary", "Secondary", "Success", "Danger", "Warning", "Info", "Light", "Dark"];
+  const sizes = ["Small", "Medium", "Large"];
   let appearance = "link";
   if (classNamesList[0].indexOf("btn")>-1) appearance="btn";
   if (classNamesList[0].indexOf("btn-block")>-1) appearance="btn btn-block";
@@ -174,8 +175,8 @@ const FloatingLinkEditor: FC<FloatingLinkEditorProps> = ({
         <InputLabel>Appearance</InputLabel>
         <Select name="classNames" fullWidth label="Appearance" size="small" value={appearance} onChange={(e) => {
           let className = "";
-          if (e.target.value.toString()!=="link") className = e.target.value.toString() + " btn-primary";
-          setClassNamesList([className])
+          if (e.target.value.toString()!=="link") className = e.target.value.toString();
+          setClassNamesList([className, "btn-primary", "btn-medium"])
         }}>
           <MenuItem value="link">Standard Link</MenuItem>
           <MenuItem value="btn">Button</MenuItem>
@@ -183,14 +184,49 @@ const FloatingLinkEditor: FC<FloatingLinkEditorProps> = ({
         </Select>
       </FormControl>
 
-      {appearance!=="link" && <FormControl fullWidth>
-        <InputLabel>Variant</InputLabel>
-        <Select name="classNames" fullWidth label="Variant" size="small" value={classNamesList[0]} onChange={(e) => { setClassNamesList([e.target.value.toString()]) }}>
-          {variants.map((optionValue: string) => (
-            <MenuItem key={appearance + " btn-" + optionValue.toLowerCase()} value={appearance + " btn-" + optionValue.toLowerCase()}>{optionValue}</MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+      {appearance!=="link" && 
+      <div>
+        <FormControl fullWidth>
+          <InputLabel>Variant</InputLabel>
+          <Select name="classNames" fullWidth label="Variant" size="small" value={ classNamesList[1] } onChange={(e) => {
+            const newArray = [...classNamesList];
+            let index = 0;
+            newArray.forEach((item, i) => {
+              variants.forEach((element) => {
+                if (item.includes(element.toLowerCase())) {   
+                  index = i;
+                };
+              })
+            })
+            newArray.splice(index, 1, e.target.value.toString());
+            setClassNamesList(newArray);
+            }}>
+            {variants.map((optionValue: string) => (
+              <MenuItem key={appearance + " btn-" + optionValue.toLowerCase()} value={"btn-" + optionValue.toLowerCase()}>{optionValue}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <FormControl fullWidth>
+          <InputLabel>Size</InputLabel>
+          <Select name="classNames" fullWidth label="Size" size="small" value={ classNamesList[2] } onChange={(e) => {
+            const newArray = [...classNamesList];
+            let index = 0;
+            newArray.forEach((item, i) => {
+              sizes.forEach((element) => {
+                if(item.includes(element.toLowerCase())) {
+                  index = i;
+                };
+              })
+            })
+            newArray.splice(index, 1, e.target.value.toString());
+            setClassNamesList(newArray);            
+            }}>
+            {sizes.map((optionValue: string) => (
+              <MenuItem key={appearance + " btn-" + optionValue.toLowerCase()} value={"btn-" + optionValue.toLowerCase()}>{optionValue}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </div>
       }
 
       <div className="target-check">

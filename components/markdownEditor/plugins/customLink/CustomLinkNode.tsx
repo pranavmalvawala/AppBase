@@ -105,7 +105,7 @@ export const toggleCustomLinkNode = (
 
     if (!dom) return;
 
-    const uniqueClassNames = classNames[0].split(" ");
+    const uniqueClassNames = classNames;
 
     linkNode.setURL(url);
     linkNode.setTarget(target);
