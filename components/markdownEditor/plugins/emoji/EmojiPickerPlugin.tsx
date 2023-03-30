@@ -72,13 +72,11 @@ export default function EmojiPickerPlugin() {
     minLength: 0,
   });
 
-  const options: Array<string> = useMemo(() => {
-    return materialIcons
-      .filter((option: string) => {
-        return queryString != null
-          ? new RegExp(queryString, 'gi').exec(option) : materialIcons;
-      })
-      .slice(0, MAX_EMOJI_SUGGESTION_COUNT);
+  const options: Array<any> = useMemo(() => {
+    let result = materialIcons.filter((option: string) =>
+      (queryString != null) ? new RegExp(queryString, 'gi').exec(option) : materialIcons
+    );
+    return result.slice(0, MAX_EMOJI_SUGGESTION_COUNT);
   }, [queryString]);
 
   const onSelectOption = useCallback(
@@ -126,28 +124,28 @@ export default function EmojiPickerPlugin() {
 
         return anchorElementRef.current && options.length
           ? ReactDOM.createPortal(
-              <div className="typeahead-popover emoji-menu">
-                <ul>
-                  {options.map((option: string, index) => (
-                    <div key={option}>
-                      <EmojiMenuItem
-                        index={index}
-                        isSelected={selectedIndex === index}
-                        onClick={() => {
-                          setHighlightedIndex(index);
-                          selectOptionAndCleanUp(option);
-                        }}
-                        onMouseEnter={() => {
-                          setHighlightedIndex(index);
-                        }}
-                        option={option}
-                      />
-                    </div>
-                  ))}
-                </ul>
-              </div>,
-              anchorElementRef.current,
-            )
+            <div className="typeahead-popover emoji-menu">
+              <ul>
+                {options.map((option: string, index) => (
+                  <div key={option}>
+                    <EmojiMenuItem
+                      index={index}
+                      isSelected={selectedIndex === index}
+                      onClick={() => {
+                        setHighlightedIndex(index);
+                        selectOptionAndCleanUp(option);
+                      }}
+                      onMouseEnter={() => {
+                        setHighlightedIndex(index);
+                      }}
+                      option={option}
+                    />
+                  </div>
+                ))}
+              </ul>
+            </div>,
+            anchorElementRef.current,
+          )
           : null;
       }}
     />

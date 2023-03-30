@@ -48,16 +48,10 @@ const replaceCustomLinkNode = (textNode : TextNode, match : any) => {
 
   const emojiText = otherText.replace(CUSTOM_LINK_NODE_MARKDOWN_REGEX, '').trim();
 
-
-
-
-
   if (match[5]) {
     const otherTextNode = $createTextNode(match[5].replace(CUSTOM_LINK_NODE_MARKDOWN_REGEX, ''));
-
     linkNode.getParent().append(otherTextNode);
-}
-
+  }
 
   if (CUSTOM_LINK_NODE_MARKDOWN_REGEX.test(match[5])) {
     const blankNode = $createTextNode("");
