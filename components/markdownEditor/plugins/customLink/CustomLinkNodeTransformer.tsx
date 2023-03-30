@@ -14,7 +14,8 @@ import {
   EMOJI_NODE_MARKDOWN_REGEX
 } from "../emoji/EmojiNodeTransform";
 
-import IconNamesList from '../../../material/iconPicker/IconNamesList';
+
+import iconNamesList from '../../../material/iconPicker/IconNamesList';
 
 const CUSTOM_LINK_NODE_MARKDOWN_REGEX_QUERY = /(?:\[([^[]+?)\])(?:\(([^(]+)\))(?:({([^}]*)})?)(?:((.*)\)?))$/;
 
@@ -48,10 +49,16 @@ const replaceCustomLinkNode = (textNode : TextNode, match : any) => {
 
   const emojiText = otherText.replace(CUSTOM_LINK_NODE_MARKDOWN_REGEX, '').trim();
 
+
+
+
+
   if (match[5]) {
     const otherTextNode = $createTextNode(match[5].replace(CUSTOM_LINK_NODE_MARKDOWN_REGEX, ''));
+
     linkNode.getParent().append(otherTextNode);
-  }
+}
+
 
   if (CUSTOM_LINK_NODE_MARKDOWN_REGEX.test(match[5])) {
     const blankNode = $createTextNode("");
@@ -62,7 +69,7 @@ const replaceCustomLinkNode = (textNode : TextNode, match : any) => {
   }
 
   if (emojiText) {
-    if (!IconNamesList.includes(emojiText.replaceAll(':', ''))) return;
+    if (!iconNamesList.includes(emojiText.replaceAll(':', ''))) return;
 
     linkNode.getParent().append($createEmojiNode(emojiText.replaceAll(':', '')));
   }
@@ -74,10 +81,13 @@ export const CUSTOM_LINK_NODE_TRANSFORMER: TextMatchTransformer = {
     if (!$isCustomLinkNode(node)) {
       return null;
     }
-    const linkContent = `[${node.getTextContent()}](${node.__url}){:target="${node.__target}" ${node
-      .__classNames
-      .map((className: string) => "." + className)
-      .join(" ")}}`;
+
+      const linkContent = `[${node.getTextContent()}](${node.__url}){:target="${node.__target}" ${node
+        .__classNames
+        .join(' ')
+        .split(' ')
+        .map((className: string) => "." + className.replaceAll('.', ''))
+        .join(" ")}}`;
 
     const firstChild = node.getFirstChild();
 
@@ -85,6 +95,7 @@ export const CUSTOM_LINK_NODE_TRANSFORMER: TextMatchTransformer = {
       return exportFormat(firstChild, linkContent);
     } else {
       return linkContent;
+
     }
   },
   importRegExp: CUSTOM_LINK_NODE_MARKDOWN_REGEX,
