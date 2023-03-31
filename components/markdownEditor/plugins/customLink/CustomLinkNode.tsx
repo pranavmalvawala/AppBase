@@ -1,14 +1,4 @@
-import {
-  LexicalNode,
-  createCommand,
-  LexicalCommand,
-  $isElementNode,
-  $getSelection,
-  ElementNode,
-  NodeKey,
-  $applyNodeReplacement,
-  $isRangeSelection
-} from "lexical";
+import { LexicalNode, createCommand, LexicalCommand, $isElementNode, $getSelection, ElementNode, NodeKey, $applyNodeReplacement, $isRangeSelection } from "lexical";
 import { LinkNode } from "@lexical/link";
 import utils from "@lexical/utils";
 

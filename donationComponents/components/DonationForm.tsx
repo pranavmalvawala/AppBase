@@ -72,7 +72,7 @@ export const DonationForm: React.FC<Props> = (props) => {
         break;
       case "type": setDonationType(value); break;
       case "date": d.billing_cycle_anchor = + new Date(value); break;
-      case "interval": 
+      case "interval":
         setInterval(value);
         d.interval = DonationHelper.getInterval(value);
         break;
@@ -165,8 +165,8 @@ export const DonationForm: React.FC<Props> = (props) => {
                 </FormControl>
               </Grid>
             </Grid>
-            {donationType === "recurring" &&
-              <Grid container spacing={3} style={{marginTop:10}}>
+            {donationType === "recurring"
+              && <Grid container spacing={3} style={{marginTop:10}}>
                 <Grid item md={6} xs={12}>
                   <TextField fullWidth name="date" type="date" aria-label="date" label="Start Date" value={DateHelper.formatHtml5Date(new Date(donation.billing_cycle_anchor))} onChange={handleChange} onKeyDown={handleKeyDown} />
                 </Grid>

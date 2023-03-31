@@ -28,19 +28,19 @@ export class EmojiNode extends TextNode {
     const json = {
       ...super.exportJSON(),
       type: 'emoji'
-   };
-   return json;
- }
+    };
+    return json;
+  }
 
-static getType(): string {
-  return 'emoji';
-}
+  static getType(): string {
+    return 'emoji';
+  }
 
-static clone(node: EmojiNode): EmojiNode {
-  return new EmojiNode(node.__text, node.__key);
-}
+  static clone(node: EmojiNode): EmojiNode {
+    return new EmojiNode(node.__text, node.__key);
+  }
 
- static importJSON(serializedNode: SerializedEmojiNode): EmojiNode {
+  static importJSON(serializedNode: SerializedEmojiNode): EmojiNode {
     const node = new EmojiNode(serializedNode.text);
     return node;
   }

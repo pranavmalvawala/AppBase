@@ -41,7 +41,7 @@ export const RecurringDonationsEdit: React.FC<Props> = (props) => {
         sub.default_payment_method = pm.type === "card" ? value : null;
         sub.default_source = pm.type === "bank" ? value : null;
         break;
-      case "interval": 
+      case "interval":
         setInterval(value);
         const inter = DonationHelper.getInterval(value);
         sub.plan.interval_count = inter.interval_count;

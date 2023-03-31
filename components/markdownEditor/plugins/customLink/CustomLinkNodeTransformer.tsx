@@ -10,10 +10,6 @@ import {
   EmojiNode,
   $createEmojiNode
 } from "../emoji/EmojiNode";
-import {
-  EMOJI_NODE_MARKDOWN_REGEX
-} from "../emoji/EmojiNodeTransform";
-
 
 import iconNamesList from '../../../material/iconPicker/IconNamesList';
 
@@ -57,7 +53,7 @@ const replaceCustomLinkNode = (textNode : TextNode, match : any) => {
     const otherTextNode = $createTextNode(match[5].replace(CUSTOM_LINK_NODE_MARKDOWN_REGEX, ''));
 
     linkNode.getParent().append(otherTextNode);
-}
+  }
 
 
   if (CUSTOM_LINK_NODE_MARKDOWN_REGEX.test(match[5])) {
@@ -82,12 +78,12 @@ export const CUSTOM_LINK_NODE_TRANSFORMER: TextMatchTransformer = {
       return null;
     }
 
-      const linkContent = `[${node.getTextContent()}](${node.__url}){:target="${node.__target}" ${node
-        .__classNames
-        .join(' ')
-        .split(' ')
-        .map((className: string) => "." + className.replaceAll('.', ''))
-        .join(" ")}}`;
+    const linkContent = `[${node.getTextContent()}](${node.__url}){:target="${node.__target}" ${node
+      .__classNames
+      .join(' ')
+      .split(' ')
+      .map((className: string) => "." + className.replaceAll('.', ''))
+      .join(" ")}}`;
 
     const firstChild = node.getFirstChild();
 
