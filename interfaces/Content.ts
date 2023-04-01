@@ -3,5 +3,5 @@ export interface SermonInterface { id?: string, churchId?: string, playlistId?: 
 export interface PlaylistInterface { id?: string, churchId?: string, title?: string, description?: string, publishDate?: Date, thumbnail?: string }
 export interface StreamingServiceInterface { id?: string, churchId?: string, serviceTime?: Date, earlyStart?: number, duration: number, chatBefore: number, chatAfter: number, provider: string, providerKey: string, videoUrl: string, timezoneOffset: number, recurring: boolean, label: string, sermonId?: string }
 export interface EventInterface { id?: string; churchId?: string; groupId?: string; start?: Date; end?:Date, title?: string; description?: string; allDay?: boolean; }
-export interface RecurringEventInterface { id?: string; churchId?: string; groupId?: string; rule?: string; }
+export interface RecurringEventInterface { id?: string; churchId?: string; groupId?: string; start?: Date, rule?: string; }
 export interface RecurringExceptionInterface { id?: string; churchId?: string; recurringEventId?: string; eventId?: string; originalStart?: Date; }
