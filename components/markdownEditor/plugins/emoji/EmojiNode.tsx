@@ -45,10 +45,11 @@ export class EmojiNode extends TextNode {
     return node;
   }
 
-
+  /*
   constructor(text: string, key?: NodeKey) {
     super(text, key);
   }
+*/
 
   createDOM(config: EditorConfig): HTMLElement {
     const dom = document.createElement('span');
