@@ -1,6 +1,6 @@
 import React, { FormEventHandler } from "react";
 import { LoginResponseInterface, RegisterUserInterface, UserInterface } from "../../interfaces";
-import { ApiHelper } from "../../helpers";
+import { AnalyticsHelper, ApiHelper } from "../../helpers";
 import { ErrorMessages } from "../../components";
 import { Button, Stack, TextField, Link } from "@mui/material";
 
@@ -34,6 +34,7 @@ export const Register: React.FC<Props> = (props) => {
 
   const handleRegisterSuccess = (resp: LoginResponseInterface) => {
     setRegistered(true);
+    AnalyticsHelper.logEvent("User", "Register");
     if (props.userRegisteredCallback) props.userRegisteredCallback(resp.user);
   }
 

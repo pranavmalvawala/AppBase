@@ -1,4 +1,5 @@
 
+export { AnalyticsHelper } from "./AnalyticsHelper";
 export { ApiHelper } from "./ApiHelper";
 export { ArrayHelper } from "./ArrayHelper";
 export { CurrencyHelper } from "./CurrencyHelper"

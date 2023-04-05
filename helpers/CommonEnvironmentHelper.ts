@@ -8,6 +8,7 @@ export class CommonEnvironmentHelper {
   public static MessagingApi = "";
   public static MessagingApiSocket = "";
   public static ContentApi = "";
+  public static GoogleAnalyticsTag = "";
 
   static ContentRoot = "";
   static B1Root = "";
@@ -32,6 +33,7 @@ export class CommonEnvironmentHelper {
     CommonEnvironmentHelper.MessagingApi = process.env.REACT_APP_MESSAGING_API || process.env.NEXT_PUBLIC_MESSAGING_API || CommonEnvironmentHelper.MessagingApi;
     CommonEnvironmentHelper.MessagingApiSocket = process.env.REACT_APP_MESSAGING_API_SOCKET || process.env.NEXT_PUBLIC_MESSAGING_API_SOCKET || CommonEnvironmentHelper.MessagingApiSocket;
     CommonEnvironmentHelper.ContentApi = process.env.REACT_APP_CONTENT_API || process.env.NEXT_PUBLIC_CONTENT_API || CommonEnvironmentHelper.ContentApi;
+    CommonEnvironmentHelper.GoogleAnalyticsTag = process.env.REACT_APP_GOOGLE_ANALYTICS || process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS || CommonEnvironmentHelper.GoogleAnalyticsTag;
 
     CommonEnvironmentHelper.ContentRoot = process.env.REACT_APP_CONTENT_ROOT || process.env.NEXT_PUBLIC_CONTENT_ROOT || CommonEnvironmentHelper.ContentRoot;
     CommonEnvironmentHelper.B1Root = process.env.REACT_APP_B1_ROOT || process.env.NEXT_PUBLIC_B1_ROOT || CommonEnvironmentHelper.B1Root;
@@ -49,6 +51,7 @@ export class CommonEnvironmentHelper {
     CommonEnvironmentHelper.MessagingApi = "https://messagingapi.staging.churchapps.org";
     CommonEnvironmentHelper.MessagingApiSocket = "wss://socket.staging.churchapps.org";
     CommonEnvironmentHelper.ContentApi = "https://contentapi.staging.churchapps.org";
+    CommonEnvironmentHelper.GoogleAnalyticsTag = "";
 
     CommonEnvironmentHelper.ContentRoot = "https://content.staging.churchapps.org";
     CommonEnvironmentHelper.B1Root = "https://{key}.staging.b1.church";

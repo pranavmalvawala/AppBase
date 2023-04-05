@@ -1,7 +1,7 @@
 import * as React from "react";
 import { ErrorMessages, FloatingSupport, Loading } from "../components";
 import { LoginResponseInterface, UserContextInterface, ChurchInterface, UserInterface, LoginUserChurchInterface } from "../interfaces";
-import { ApiHelper, ArrayHelper, UserHelper } from "../helpers";
+import { AnalyticsHelper, ApiHelper, ArrayHelper, UserHelper } from "../helpers";
 import { useCookies } from "react-cookie"
 import jwt_decode from "jwt-decode"
 import { Register } from "./components/Register"
@@ -105,6 +105,10 @@ export const LoginPage: React.FC<Props> = ({ showLogo = true, loginContainerCssP
 
   const selectChurchById = async () => {
     await UserHelper.selectChurch(props.context, selectedChurchId, undefined);
+
+    if (registeredChurch) AnalyticsHelper.logEvent("Church", "Register", UserHelper.currentUserChurch.church.name);
+    else AnalyticsHelper.logEvent("Church", "Select", UserHelper.currentUserChurch.church.name);
+
     if (props.churchRegisteredCallback && registeredChurch) {
       await props.churchRegisteredCallback(registeredChurch)
       registeredChurch = null;
