@@ -336,8 +336,6 @@ export function ToolbarPlugin(props: Props) {
     [editor, selectedElementKey]
   );
 
-  useEffect(() => console.log(linkUrl), [linkUrl]);
-
   const insertLink = useCallback(() => {
     editor.dispatchCommand(TOGGLE_CUSTOM_LINK_NODE_COMMAND, {
       url: linkUrl,

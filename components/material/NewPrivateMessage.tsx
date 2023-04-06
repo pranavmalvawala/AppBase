@@ -24,7 +24,6 @@ export const NewPrivateMessage: React.FC<Props> = (props) => {
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(e.currentTarget.value);
     setSearchText(e.currentTarget.value);
   }
 

@@ -150,7 +150,6 @@ const FloatingLinkEditor: FC<FloatingLinkEditorProps> = ({
   if (classNamesList[0].indexOf("btn-block")>-1) appearance="btn btn-block";
 
   const handleSave = () => {
-    console.log("Saving!");
     editor.dispatchCommand(TOGGLE_CUSTOM_LINK_NODE_COMMAND, {
       url: linkUrl,
       classNames: classNamesList,

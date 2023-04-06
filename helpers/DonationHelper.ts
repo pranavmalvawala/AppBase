@@ -13,7 +13,6 @@ export class DonationHelper {
       intervalType = parts[1];
     }
     let result = { interval_count: intervalCount, interval: intervalType };
-    console.log(result);
     return result;
   }
 

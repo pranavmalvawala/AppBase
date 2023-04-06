@@ -56,7 +56,6 @@ export function ImageEditor(props: Props) {
       let containerData = cropper.getContainerData();
       let imgAspect = cropper.getImageData().aspectRatio;
       let scale = imgAspect / desiredAspect;
-      console.log("Aspect", desiredAspect, imgAspect, scale)
       if (scale < 1) {
         const imgWidth = cropper.getImageData().width;
         let l = (containerData.width - imgWidth) / 2.0;
@@ -64,10 +63,8 @@ export function ImageEditor(props: Props) {
         cropper.setCropBoxData({ width: imgWidth, height: imgWidth / desiredAspect, left: l, top: t });
       } else {
         const imgHeight = cropper.getImageData().height;
-        console.log("MADE IT", containerData.height, imgHeight)
         let l = (containerData.width - (imgHeight * desiredAspect)) / 2.0;
         let t = 0;
-        console.log({ width: imgHeight * desiredAspect, height: containerData.height, left: l, top: t })
         cropper.setCropBoxData({ width: imgHeight * desiredAspect, height: imgHeight, left: l, top: t });
       }
     }
