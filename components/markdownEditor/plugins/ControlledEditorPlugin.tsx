@@ -6,18 +6,17 @@ import { PLAYGROUND_TRANSFORMERS } from "./MarkdownTransformers";
 interface Props {
   value: string
   isPreview?: boolean;
+  isFullscreen?: boolean;
 }
 
-export function ControlledEditorPlugin({ value, isPreview = false }: Props): any {
+export function ControlledEditorPlugin({ isFullscreen, value, isPreview = false }: Props): any {
   const [editor] = useLexicalComposerContext();
-  const [hasInit, setHasInit] = useState<boolean>(false);
 
   useEffect(() => {
-    if (!hasInit || isPreview || !value) {
-      setHasInit(true)
+    if (isFullscreen || isPreview) {
       editor.update(() => {
         $convertFromMarkdownString(value, PLAYGROUND_TRANSFORMERS);
-      })
+      });
     }
   }, [value]) //eslint-disable-line
 
