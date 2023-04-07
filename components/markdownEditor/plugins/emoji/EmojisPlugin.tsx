@@ -35,7 +35,7 @@ function useEmojis(editor: LexicalEditor): void {
 
         const leftoverTextNodes : Array<TextNode> = [];
 
-        initialTextInput.split(':').forEach((leftoverTextString : string, index : number) => {
+        initialTextInput?.split(':').forEach((leftoverTextString : string, index : number) => {
           if (materialIcons.includes(leftoverTextString)) {
             const emojiNode = $createEmojiNode(leftoverTextString);
 
