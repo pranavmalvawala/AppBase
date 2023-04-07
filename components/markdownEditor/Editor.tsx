@@ -51,7 +51,7 @@ export function Editor({ value, onChange = () => { }, mode = "interactive", text
     onChange(value);
   };
 
-  const handleCloseFullScreen = (newValue: string) => {
+  const handleCloseFullScreen = () => {
     setFullScreen(false);
   };
 
