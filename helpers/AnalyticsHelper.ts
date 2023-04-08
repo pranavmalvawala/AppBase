@@ -21,7 +21,7 @@ export class AnalyticsHelper {
   static logEvent = (category: string, action: string, label?:string) => {
     if (CommonEnvironmentHelper.GoogleAnalyticsTag !== "" && typeof(window)!=="undefined") {
       this.setChurchKey();
-      ReactGA.event({ category, action, label });
+      ReactGA.event(category.toLowerCase() + "_" + action.toLowerCase(), { category, action, label });
     }
   }
 
