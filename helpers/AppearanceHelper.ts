@@ -1,5 +1,5 @@
 
-export interface AppearanceInterface { primaryColor?: string, primaryContrast?: string, secondaryColor?: string, secondaryContrast?: string, logoLight?: string, logoDark?: string }
+export interface AppearanceInterface { primaryColor?: string, primaryContrast?: string, secondaryColor?: string, secondaryContrast?: string, logoLight?: string, logoDark?: string, favicon_400x400?: string, favicon_16x16?: string }
 
 export class AppearanceHelper {
 
@@ -9,6 +9,18 @@ export class AppearanceHelper {
 
   public static getLogoLight(appearanceSettings: AppearanceInterface, defaultLogo: string) {
     return (appearanceSettings?.logoLight) ? appearanceSettings.logoLight : defaultLogo;
+  }
+
+  public static getFavicon(appearanceSettings: AppearanceInterface, size: "400" | "16") {
+    if (size === "400") {
+      return appearanceSettings?.favicon_400x400;
+    }
+
+    if (size === "16") {
+      return appearanceSettings?.favicon_16x16;
+    }
+
+    return;
   }
 
   public static getLogo(appearanceSettings: AppearanceInterface, defaultLogoLight: string, defaultLogoDark: string, backgroundColor: string) {
