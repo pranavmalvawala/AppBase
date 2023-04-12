@@ -14,15 +14,13 @@ const guideLink = <a href="https://www.markdownguide.org/cheat-sheet/" target="_
 export const MarkdownModal: React.FC<Props> = ({ value, onChange, hideModal }) => {
   const [inputVal, setInputVal] = useState(value);
 
+
   useEffect(() => {
     if (value.trim() === inputVal.trim()) return;
-
     setInputVal(value);
-  }, [value]);
+  }, [value, inputVal]);
 
-  useEffect(() => {
-    onChange(inputVal);
-  }, [inputVal]);
+  useEffect(() => { onChange(inputVal); }, [inputVal, onChange]);
 
   return (<Dialog open={true} onClose={() => { hideModal() }} fullScreen={true}>
     <DialogTitle>Markdown Editor</DialogTitle>
