@@ -47,10 +47,10 @@ export const QuestionEdit: React.FC<Props> = ({noBackground = false, ...props}) 
       }
       case "Whole Number":
       case "Decimal":
-        input = <TextField fullWidth style={noBackground ? {backgroundColor: "white", borderRadius: "4px"} : {}} type="number" label={q.title} placeholder={q.placeholder} value={answerValue} onChange={handleChange} />;
+        input = <TextField fullWidth style={noBackground ? {backgroundColor: "white", borderRadius: "4px"} : {}} type="number" InputLabelProps={{shrink: true}} label={q.title} placeholder={q.placeholder} value={answerValue} onChange={handleChange} />;
         break;
       case "Date": input = <TextField fullWidth style={noBackground ? {backgroundColor: "white", borderRadius: "4px"} : {}} type="date" InputLabelProps={{shrink: true}} label={q.title} placeholder={q.placeholder} value={answerValue} onChange={handleChange} />; break;
-      case "Phone Number": input = <TextField fullWidth style={noBackground ? {backgroundColor: "white", borderRadius: "4px"} : {}} type="number" label={q.title} placeholder="555-555-5555" value={answerValue} onChange={handleChange} />; break;
+      case "Phone Number": input = <TextField fullWidth style={noBackground ? {backgroundColor: "white", borderRadius: "4px"} : {}} type="number" InputLabelProps={{shrink: true}} label={q.title} placeholder="555-555-5555" value={answerValue} onChange={handleChange} />; break;
       case "Email": input = <TextField fullWidth style={noBackground ? {backgroundColor: "white", borderRadius: "4px"} : {}} type="email" label={q.title} placeholder="john@doe.com" value={answerValue} onChange={handleChange} />; break;
       case "Text Area": input = <TextField fullWidth style={noBackground ? {backgroundColor: "white", borderRadius: "4px"} : {}} multiline rows={4} label={q.title} placeholder={q.placeholder} value={answerValue} onChange={handleChange} />; break;
       default: return null;
